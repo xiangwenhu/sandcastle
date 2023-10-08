@@ -1,6 +1,6 @@
 import Activity from "./Activity";
 
-export class AssertActivity<C = any> extends Activity<C> {
+export class CodeActivity<C = any> extends Activity<C> {
     constructor(context: C, private code: string) {
         super(context);
     }
@@ -11,3 +11,4 @@ export class AssertActivity<C = any> extends Activity<C> {
         return this.fn;
     }
 }
+

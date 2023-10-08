@@ -2,33 +2,33 @@ export enum EnumActivityStatus {
     /**
      未初始化
      */
-    UNINITIALIZED = "UNINITIALIZED",
+    UNINITIALIZED = "0",
     /**
      * 初始化
      */
-    INITIALIZED = "INITIALIZED",
+    INITIALIZED = "1",
     /**
      * 构建中
      */
-    BUILDING = "BUILDING",
+    BUILDING = "2",
     /**
      * 构建完毕
      */
-    BUILDED = "BUILDED",
+    BUILDED = "3",
     /**
      * 执行中
      */
-    EXECUTING = "EXECUTING",
+    EXECUTING = "4",
     /**
      * 执行完毕
      */
-    EXECUTED = "EXECUTED",
+    EXECUTED = "5",
     /**
      * 异常
      */
-    EXCEPTION = "EXCEPTION",
+    EXCEPTION = "9",
     /**
      * 终止
      */
-    TERMINATED = "TERMINATED",
+    TERMINATED = "10",
 }
