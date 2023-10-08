@@ -1,6 +1,7 @@
 import { EnumActivityStatus } from "../enum";
 
 class Activity<C = any> {
+    public root: Activity | null;
     /**
      * 父节点
      */
@@ -8,21 +9,33 @@ class Activity<C = any> {
     /**
      * name
      */
-    private name: string | null;
+    public name: string | null;
     /**
      * 类型
      */
-    private type: string | null;
+    public type: string | null;
     /**
      * 状态
      */
-    private status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
+    public status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
 
-    constructor(public children: Activity[], public context: C) {
+    public globalContext: any;
+
+    constructor(public context: C) {
         this.parent = null;
         this.name = null;
-        this.type  =  this.constructor.name || "Activity";
+        this.type = this.constructor.name || "Activity";
+        this.root = null;
     }
+
+    run() {
+        throw new Error("not implemented")
+    }
+
+    build() {
+        throw new Error("not implemented");
+    }
+
 }
 
 
