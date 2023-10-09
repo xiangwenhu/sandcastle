@@ -78,7 +78,7 @@ class Activity<C = any> {
 
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
-        let result = this.fn
+        return this.fn!
             .apply(self, [realContext, res, globalContext, ...otherParams])
             .then((res: any) => {
                 this.status = EnumActivityStatus.EXECUTED;
@@ -89,7 +89,6 @@ class Activity<C = any> {
                 self.status = EnumActivityStatus.EXCEPTION;
                 throw err;
             });
-        return result;
     }
 
     build(...args: any[]): Function {
