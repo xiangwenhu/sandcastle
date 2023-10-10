@@ -9,7 +9,7 @@ export default (_factory: ActivityFactoryFactory) =>
     <C = any, GC = any>(props: IDelayActivityProps<C>, globalContext?: GC) => {
         const activity = new Activity(props.context, props.timeout)
         activity.name = props.name || activity.name;
-        activity.globalContext = globalContext
+        activity.globalCtx = globalContext
 
         activity.build(props.timeout);
         return activity

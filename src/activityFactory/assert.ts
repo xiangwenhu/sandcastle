@@ -7,11 +7,10 @@ export interface ICodeActivityProps<C = any> extends IActivityProps<C> {
 
 export default (_factory: ActivityFactoryFactory) =>
     <C = any, GC = any>(props: ICodeActivityProps<C>, globalContext?: GC) => {
-
-        const code = `return ${props.code}`;
+        const code = props.code;
         const activity = new Activity<C>(props.context, code)
         activity.name = props.name || activity.name;
-        activity.globalContext = globalContext;
+        activity.globalCtx = globalContext;
         activity.build(code);
         return activity
     }

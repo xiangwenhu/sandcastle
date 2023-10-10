@@ -12,15 +12,15 @@ const activityProps: IActivityProps = {
     children: [{
         type: 'code',
         name: 'count加1',
-        code: 'ctx.count++'
+        code: 'parent.ctx.count++'
     }, {
         type: 'delay',
-        name: '睡2s',
-        timeout: 1500
+        name: '睡500ms',
+        timeout: 500
     }, {
         type: 'code',
         name: '输出count',
-        code: 'console.log("count:" + ctx.count)'
+        code: 'console.log("count:" + parent.ctx.count)'
     }]
 }
 

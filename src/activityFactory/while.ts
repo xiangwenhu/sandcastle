@@ -10,7 +10,7 @@ export default (factory: ActivityFactoryFactory) => <C = any, GC = any>(props: I
     const children: Activity[] = [] as any;
     const activity = new Activity(props.context, props.assert, children)
     activity.name = props.name || activity.name;
-    activity.globalContext = globalContext;
+    activity.globalCtx = globalContext;
     activity.children = factory.createChildren(props.children, globalContext)
     activity.build();
     return activity

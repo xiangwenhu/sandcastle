@@ -19,7 +19,7 @@ class Activity<C = any, R = any> {
         return "res";
     }
 
-    get globalCtx() {
+    get globalCtxName() {
         return "gCtx";
     }
 
@@ -44,11 +44,11 @@ class Activity<C = any, R = any> {
      */
     public status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
 
-    public globalContext: any;
+    public globalCtx: any;
 
     protected fn: Function | null;
 
-    constructor(public context: C) {
+    constructor(public ctx: C) {
         this.parent = null;
         this.name = null;
         this.type =
@@ -64,7 +64,7 @@ class Activity<C = any, R = any> {
      * @param {其他参数} otherParams
      */
     async run(ctx: any = undefined, preRes: any = undefined, ...otherParams: any[]) {
-        const globalContext = this.globalContext;
+        const globalCtx = this.globalCtx;
         if (this.status >= EnumActivityStatus.EXECUTING) {
             throw Error("活动已经执行");
         }
@@ -81,11 +81,11 @@ class Activity<C = any, R = any> {
             );
         }
 
-        let realContext = this.context || ctx || {};
+        let realContext = ctx || this.ctx ||  {};
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
-            const res: R = await this.fn!.apply(self, [realContext, preRes, globalContext, ...otherParams]);
+            const res: R = await this.fn!.apply(self, [realContext, preRes, globalCtx, this.parent, ...otherParams]);
             this.status = EnumActivityStatus.EXECUTED;
             return res;
         } catch (err) {
@@ -119,7 +119,8 @@ class Activity<C = any, R = any> {
         this.fn = createPromiseFunction(
             this.ctxName,
             this.resName,
-            this.globalCtx,
+            this.globalCtxName,
+            "parent",
             code
         );
         this.status = EnumActivityStatus.BUILDED;
