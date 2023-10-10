@@ -1,13 +1,11 @@
-import Activity from "./Activity";
+import CodeActivity from "./Code";
 
-export default class AssertActivity<C = any, R = any>extends Activity<C, R> {
-    constructor(context: C, private code: string) {
-        super(context);
-    }
+export default class AssertActivity<C = any> extends CodeActivity<C, boolean> {
 
-    protected buildFunction(code: string) {
-        this.code = code || this.code;
-        this.fn = this.buildWithCode(this.code);
-        return this.fn;
+    async run(ctx?: any, preRes?: any, ...otherParams: any[]): Promise<boolean> {
+        const res = await super.run(ctx, preRes, ...otherParams);
+        return !!res
     }
 }
+
+

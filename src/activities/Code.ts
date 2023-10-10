@@ -1,7 +1,7 @@
 import Activity from "./Activity";
 
 export default class CodeActivity<C = any, R = any>extends Activity<C, R> {
-    constructor(context: C = {} as C, private code: string) {
+    constructor(context: C = {} as C, protected code: string) {
         super(context);
     }
 

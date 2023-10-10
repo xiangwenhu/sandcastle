@@ -7,9 +7,9 @@ export default class SequenceActivity<C = any, R = any> extends ContainerActivit
         super(context, children);
     }
 
-    protected buildFunction(children: Activity[]) {
+    protected buildFunction(children?: Activity[]) {
         this.children = children || this.children ;
-        return (ctx: C, preRes: any) => new Promise(async (resolve, reject) => {
+        return (ctx?: C, preRes?: any) => new Promise(async (resolve, reject) => {
             for (let i = 0; i < this.children.length; i++) {
                 const child = this.children[i];
                 try {
