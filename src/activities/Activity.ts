@@ -4,11 +4,17 @@ import { isFunction, isString, isBoolean } from "lodash";
 import { createPromiseFunction } from "../factory/function";
 import { firstToLower } from "../util";
 
-class Activity<C = any> {
+class Activity<C = any, R = any> {
+    /**
+     * 上下文名
+     */
     get ctxName() {
         return "ctx";
     }
 
+    /**
+    * 返回值名
+    */
     get resName() {
         return "res";
     }
@@ -17,7 +23,10 @@ class Activity<C = any> {
         return "gCtx";
     }
 
-    public root: Activity | null;
+    pre: Activity | null  = null;
+
+    next: Activity | null  = null;
+
     /**
      * 父节点
      */
@@ -45,25 +54,23 @@ class Activity<C = any> {
         this.type =
             firstToLower(this.constructor.name.replace("Activity", "")) ||
             "activity";
-        this.root = null;
         this.fn = null;
     }
 
     /**
      *
      * @param {执行上下文} ctx
-     * @param {上一次执行结果} res
+     * @param {上一次执行结果} preRes
      * @param {其他参数} otherParams
      */
-    run(ctx: any, res: any, ...otherParams: any[]) {
+    async run(ctx: any = undefined, preRes: any = undefined, ...otherParams: any[]) {
         const globalContext = this.globalContext;
-
         if (this.status >= EnumActivityStatus.EXECUTING) {
             throw Error("活动已经执行");
         }
 
         if (this.status < EnumActivityStatus.BUILDED) {
-            this.fn = this.build();
+            this.buildFunction();
         }
 
         // 如果接受到终止命令
@@ -75,31 +82,33 @@ class Activity<C = any> {
         }
 
         let realContext = this.context || ctx || {};
-
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
-        return this.fn!
-            .apply(self, [realContext, res, globalContext, ...otherParams])
-            .then((res: any) => {
-                this.status = EnumActivityStatus.EXECUTED;
-                //XXX:: status = Exception 不是在此设置的，没法知道result的状态
-                return res;
-            })
-            .catch((err: any) => {
-                self.status = EnumActivityStatus.EXCEPTION;
-                throw err;
-            });
+        try {
+            const res: R = await this.fn!.apply(self, [realContext, preRes, globalContext, ...otherParams]);
+            this.status = EnumActivityStatus.EXECUTED;
+            return res;
+        } catch (err) {
+            self.status = EnumActivityStatus.EXCEPTION;
+            throw err;
+        }
     }
 
-    build(...args: any[]): Function {
-        return () => {};
+    protected buildFunction(...args: any[]): Function {
+        return () => { }
+    }
+
+    build(...args: any[]) {
+        this.status = EnumActivityStatus.BUILDING;
+        this.fn = this.buildFunction(...args);
+        this.status = EnumActivityStatus.BUILDED;
     }
 
     /**
      *
      * @param {代码} code
      */
-    buildWithCode(code: string): Function {
+    protected buildWithCode(code: string): Function {
         if (!isString(code) && !isBoolean(code)) {
             throw new ActivityError(
                 "buildWithCode方法的code参数必须是字符串",
