@@ -4,7 +4,7 @@ import ContainerActivity from "../activities/ContainerActivity";
 export type IActivityProps<C = any>  = {
     type: string;
     context?: C,
-    name?: string;
+    name: string;
     children?: IActivityProps[]
 } & Record<string, any>
 

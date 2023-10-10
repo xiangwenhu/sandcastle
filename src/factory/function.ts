@@ -1,6 +1,7 @@
 function innerCreateFunction(params: string[], code: string): Function {
     const paramsStr = params.map((c) => `'${c}'`).join();
-    const funStr = `return new Function(${paramsStr}, '${code}') `;
+
+    const funStr = `return new Function(${paramsStr}, \`${code}\`) `;
     return new Function(funStr)();
 }
 
