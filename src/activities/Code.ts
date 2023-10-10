@@ -5,10 +5,10 @@ export default class CodeActivity<C = any, R = any>extends Activity<C, R> {
         super(context);
     }
 
-    protected buildFunction(code: string) {
+    protected buildTask(code: string) {
         this.code = code || this.code;
-        this.fn = this.buildWithCode(this.code);
-        return this.fn;
+        this.task = this.buildWithCode(this.code);
+        return this.task;
     }
 }
 

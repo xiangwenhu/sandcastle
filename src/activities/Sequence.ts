@@ -10,7 +10,7 @@ export default class SequenceActivity<
         super(context, children);
     }
 
-    protected buildFunction(children?: Activity[]) {
+    protected buildTask(children?: Activity[]) {
         this.children = children || this.children;
         return (ctx?: C, preRes?: any) =>
             new Promise(async (resolve, reject) => {

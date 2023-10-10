@@ -46,7 +46,7 @@ class Activity<C = any, R = any> {
 
     public globalCtx: any;
 
-    protected fn: Function | null;
+    protected task: Function | null;
 
     constructor(public ctx: C) {
         this.parent = null;
@@ -54,7 +54,7 @@ class Activity<C = any, R = any> {
         this.type =
             firstToLower(this.constructor.name.replace("Activity", "")) ||
             "activity";
-        this.fn = null;
+        this.task = null;
     }
 
     /**
@@ -70,11 +70,11 @@ class Activity<C = any, R = any> {
         }
 
         if (this.status < EnumActivityStatus.BUILDED) {
-            this.buildFunction();
+            this.buildTask();
         }
 
         // 如果接受到终止命令
-        if (!isFunction(this.fn)) {
+        if (!isFunction(this.task)) {
             throw new ActivityError(
                 "fn应该为函数，请确保先build然后再execute",
                 this
@@ -85,7 +85,7 @@ class Activity<C = any, R = any> {
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
-            const res: R = await this.fn!.apply(self, [realContext, preRes, globalCtx, this.parent, ...otherParams]);
+            const res: R = await this.task!.apply(self, [realContext, preRes, globalCtx, this.parent, ...otherParams]);
             this.status = EnumActivityStatus.EXECUTED;
             return res;
         } catch (err) {
@@ -94,13 +94,13 @@ class Activity<C = any, R = any> {
         }
     }
 
-    protected buildFunction(...args: any[]): Function {
+    protected buildTask(...args: any[]): Function {
         return () => { }
     }
 
     build(...args: any[]) {
         this.status = EnumActivityStatus.BUILDING;
-        this.fn = this.buildFunction(...args);
+        this.task = this.buildTask(...args);
         this.status = EnumActivityStatus.BUILDED;
     }
 
@@ -116,7 +116,7 @@ class Activity<C = any, R = any> {
             );
         }
         this.status = EnumActivityStatus.BUILDING;
-        this.fn = createPromiseFunction(
+        this.task = createPromiseFunction(
             this.ctxName,
             this.resName,
             this.globalCtxName,
@@ -124,7 +124,7 @@ class Activity<C = any, R = any> {
             code
         );
         this.status = EnumActivityStatus.BUILDED;
-        return this.fn;
+        return this.task;
     }
 }
 

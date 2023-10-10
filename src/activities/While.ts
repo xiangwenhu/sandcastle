@@ -12,13 +12,13 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
     }
 
     // @ts-ignore
-    buildFunction(condition: string, children: Activity[]) {
+    buildTask(condition: string, children: Activity[]) {
         this.condition = condition || this.condition;
 
         // 构建子活动
         this.children = children || this.children;
 
-        let childrenFun = super.buildFunction();
+        let childrenFun = super.buildTask();
         let assert = this.getAssert(this.condition);
 
         // 构建执行函数

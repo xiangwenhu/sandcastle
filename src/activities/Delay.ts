@@ -5,7 +5,7 @@ export default class CodeActivity<C = any, R = any>extends Activity<C, R> {
         super(context);
     }
 
-    protected buildFunction(timeout?: number) {
+    protected buildTask(timeout?: number) {
         this.timeout = timeout || this.timeout;
         return (_ctx: C, res: any) => {
             return new Promise((resolve, _reject) => {

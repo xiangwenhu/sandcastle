@@ -6,7 +6,7 @@ export default class AllActivity<C = any, R = any> extends ContainerActivity<C, 
         super(context, children)
     }
 
-    buildFunction(children: Activity[]) {
+    buildTask(children: Activity[]) {
         // 构建子活动
         this.children = children || this.children
 
