@@ -28,7 +28,7 @@ const activityProps: IActivityProps = {
             name: '延时4秒',
             time: 4000
         }, {
-            type: 'break',
+            type: 'terminate',
             name: '跳出break测试',
             message: '哈喽'
         }, {

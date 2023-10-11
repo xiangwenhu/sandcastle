@@ -1,16 +1,16 @@
 import Activity from "../activities/Assert"
-import { ActivityFactoryFactory, IActivityProps } from "./types";
+import { ActivityFactoryFactory, IActivityProps } from "../types/activity";
 
 export interface IAssertActivityProps<C = any> extends IActivityProps<C> {
     code: string;
 }
 
 export default (_factory: ActivityFactoryFactory) =>
-    <C = any, GC = any>(props: IAssertActivityProps<C>, globalContext?: GC) => {
+    <C = any, GC = any>(props: IAssertActivityProps<C>, globalContext: GC) => {
         const code = props.code;
         const activity = new Activity<C>(props.context, code)
         activity.name = props.name || activity.name;
-        activity.globalCtx = globalContext;
+        activity.globalCtx = globalContext || {};
         activity.build(code);
         return activity
     }

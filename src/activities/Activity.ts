@@ -1,10 +1,10 @@
-import { ActivityError } from "../ActivityError";
+import { ActivityError, TerminateError } from "../ActivityError";
 import { EnumActivityStatus } from "../enum";
 import { isFunction, isString, isBoolean } from "lodash";
 import { createPromiseFunction } from "../factory/function";
 import { firstToLower } from "../util";
 import { replaceVariable } from "./util/variable";
-import { BaseActivityType } from "../activityFactory/types";
+import { BaseActivityType, GK_TERMINATED, GK_TERMINATED_MESSAGE, GlobalActivityContext } from "../types/activity";
 
 class Activity<C = any, R = any> {
     pre: Activity | null = null;
@@ -28,7 +28,7 @@ class Activity<C = any, R = any> {
      */
     public status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
 
-    public globalCtx: any;
+    public globalCtx: GlobalActivityContext = {};
 
     protected task: Function | null;
 
@@ -50,6 +50,11 @@ class Activity<C = any, R = any> {
      */
     async run(ctx: any = undefined, preRes: any = undefined, ...otherParams: any[]) {
         const globalCtx = this.globalCtx;
+        // 如果已经终止
+        if (globalCtx[GK_TERMINATED]) {
+            return;
+        }
+
         if (this.status >= EnumActivityStatus.EXECUTING) {
             throw new ActivityError("活动已经执行", this);
         }
@@ -58,20 +63,19 @@ class Activity<C = any, R = any> {
             this.buildTask();
         }
 
-        // 如果接受到终止命令
-        if (!isFunction(this.task)) {
-            throw new ActivityError(
-                "fn应该为函数，请确保先build然后再execute",
-                this
-            );
-        }
-
         let realContext = ctx || this.ctx || {};
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
             const res: R = await this.task!.apply(self, [realContext, preRes, globalCtx, this.parent, ...otherParams]);
             this.status = EnumActivityStatus.EXECUTED;
+
+            if (this.type == "terminate") {
+                globalCtx[GK_TERMINATED] = true;
+                globalCtx[GK_TERMINATED_MESSAGE] = res as string;
+                throw new TerminateError(res as string, this);
+            }
+
             return res;
         } catch (err) {
             self.status = EnumActivityStatus.EXCEPTION;

@@ -11,6 +11,7 @@ import assertSequenceActivityFactory from "./assertSequence"
 import ifElseActivityFactory from "./ifElse";
 import requestActivityFactory from "./request";
 import breakActivityFactory from "./break";
+import terminateActivityFactory from "./terminate";
 
 const factory = {
     create,
@@ -27,7 +28,8 @@ register("while", whileActivityFactory(factory));
 register("assertSequence", assertSequenceActivityFactory(factory));
 register("ifElse", ifElseActivityFactory(factory));
 register("request", requestActivityFactory(factory));
-register("break", breakActivityFactory(factory))
+register("break", breakActivityFactory(factory));
+register("terminate", terminateActivityFactory(factory))
 
 
 export default factory;

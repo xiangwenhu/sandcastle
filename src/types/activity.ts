@@ -21,4 +21,13 @@ export interface ActivityFactoryFactory<P extends IActivityProps = any> {
     createChildren: ActivityChildrenFactory<P>;
 }
 
-export type BaseActivityType = 'delay' | 'code' | 'sequence' | 'parallel' | 'race' | 'assert' | 'while' | 'assertSequence' | 'ifElse' | 'request' | 'break' | 'terminate''
+export type BaseActivityType = 'delay' | 'code' | 'sequence' | 'parallel' | 'race' | 'assert' | 'while' | 'assertSequence' | 'ifElse' | 'request' | 'break' | 'terminate';
+
+
+export const GK_TERMINATED = Symbol('terminated');
+export const GK_TERMINATED_MESSAGE = Symbol('terminated-message');
+
+export interface GlobalActivityContext {
+    [GK_TERMINATED]?: boolean;
+    [GK_TERMINATED_MESSAGE]?: string
+}

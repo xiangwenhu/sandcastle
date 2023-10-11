@@ -15,8 +15,9 @@
 - [x] AssertSequenceActivity 如果满足条件，顺序执行
 - [x] IFElseActivity
 - [x] RequestActivity
-- [ ] BreakActivity
-- [ ] TerminateActivity
+- [x] BreakActivity
+- [x] TerminateActivity
+- [ ] TryCatch
 
 
 

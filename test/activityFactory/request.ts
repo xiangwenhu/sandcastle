@@ -1,5 +1,5 @@
 
-import { IActivityProps } from './../../src/activityFactory/types';
+import { IActivityProps } from './../../src/types/activity';
 import createActivity from "../../src/factory/activity"
 
 const activityProps: IActivityProps = {
