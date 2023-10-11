@@ -1,7 +1,7 @@
 import Activity from "./Activity";
 import ContainerActivity from "./ContainerActivity";
 
-export default class AllActivity<C = any, R = any> extends ContainerActivity<C, R>  {
+export default class ParallelActivity<C = any, R = any> extends ContainerActivity<C, R>  {
     constructor(context: C, children: Activity[]) {
         super(context, children)
     }

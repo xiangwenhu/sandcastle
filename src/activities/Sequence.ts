@@ -1,6 +1,7 @@
 import ContainerActivity from "./ContainerActivity";
 import Activity from "./Activity";
 import { ActivityError } from "../ActivityError";
+import BreakActivity from "./Break";
 
 export default class SequenceActivity<
     C = any,
@@ -17,6 +18,10 @@ export default class SequenceActivity<
                 for (let i = 0; i < this.children.length; i++) {
                     const child = this.children[i];
                     try {
+                        // 终止
+                        if (child.type === "break") {
+                            return resolve((child as BreakActivity).message);
+                        }
                         preRes = await child.run(
                             ctx,
                             preRes,

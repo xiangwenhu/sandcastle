@@ -4,6 +4,7 @@ import { isFunction, isString, isBoolean } from "lodash";
 import { createPromiseFunction } from "../factory/function";
 import { firstToLower } from "../util";
 import { replaceVariable } from "./util/variable";
+import { BaseActivityType } from "../activityFactory/types";
 
 class Activity<C = any, R = any> {
     pre: Activity | null = null;
@@ -21,7 +22,7 @@ class Activity<C = any, R = any> {
     /**
      * 类型
      */
-    public type: string | null;
+    public type: BaseActivityType;
     /**
      * 状态
      */
@@ -34,6 +35,7 @@ class Activity<C = any, R = any> {
     constructor(public ctx: C) {
         this.parent = null;
         this.name = null;
+        // @ts-ignore
         this.type =
             firstToLower(this.constructor.name.replace("Activity", "")) ||
             "activity";
@@ -77,7 +79,7 @@ class Activity<C = any, R = any> {
         }
     }
 
-    protected buildTask(...args: any[]): Function {
+    protected buildTask(..._args: any[]): Function {
         return () => { }
     }
 

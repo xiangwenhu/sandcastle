@@ -1,8 +1,8 @@
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 
-export type IActivityProps<C = any>  = {
-    type: string;
+export type IActivityProps<C = any> = {
+    type: BaseActivityType;
     context?: C,
     name: string;
     children?: IActivityProps[]
@@ -20,3 +20,5 @@ export interface ActivityFactoryFactory<P extends IActivityProps = any> {
     create: ActivityFactory<P>;
     createChildren: ActivityChildrenFactory<P>;
 }
+
+export type BaseActivityType = 'delay' | 'code' | 'sequence' | 'parallel' | 'race' | 'assert' | 'while' | 'assertSequence' | 'ifElse' | 'request' | 'break' | 'terminate''
