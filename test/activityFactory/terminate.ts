@@ -30,7 +30,7 @@ const activityProps: IActivityProps = {
         }, {
             type: 'terminate',
             name: '跳出break测试',
-            message: '哈喽'
+            message: '终止啦阿拉啦啦'
         }, {
             type: 'code',
             name: '输出22222',

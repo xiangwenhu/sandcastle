@@ -10,7 +10,7 @@ const activityProps: IActivityProps = {
             name: "打印all开始时间",
             code: `console.log('all开始时间:', new Date())`
         }, {
-            type: "all",
+            type: "sequence",
             name: "all哈哈",
             children: [{
                 name: "delay 3000",
