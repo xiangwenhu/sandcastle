@@ -1,13 +1,13 @@
 import AssertActivity from "../activities/Assert";
-import Activity from "../activities/While"
+import Activity from "../activities/AssertSequence"
 import { ActivityFactoryFactory, IActivityProps } from "./types";
 
-export interface IWhileActivityProps<C = any> extends IActivityProps<C> {
+export interface IAssertSequenceActivityProps<C = any> extends IActivityProps<C> {
     assert: string;
     children: IActivityProps[];
 }
 
-export default (factory: ActivityFactoryFactory) => <C = any, GC = any>(props: IWhileActivityProps<C>, globalContext?: GC) => {
+export default (factory: ActivityFactoryFactory) => <C = any, GC = any>(props: IAssertSequenceActivityProps<C>, globalContext?: GC) => {
     const children: Activity[] = [] as any;
     const activity = new Activity(props.context, children)
     activity.name = props.name || activity.name;

@@ -7,6 +7,7 @@ import allActivityFactory from "./all";
 import raceActivityFactory from "./race";
 import assertActivityFactory from "./assert";
 import whileActivityFactory from "./while";
+import assertSequenceActivity from "./assertSequence"
 
 const factory = {
     create,
@@ -20,6 +21,7 @@ register("all", allActivityFactory(factory));
 register("race", raceActivityFactory(factory));
 register("assert", assertActivityFactory(factory));
 register("while", whileActivityFactory(factory))
+register("assertSequence", assertSequenceActivity(factory))
 
 
 export default factory;

@@ -66,7 +66,7 @@ class Activity<C = any, R = any> {
     async run(ctx: any = undefined, preRes: any = undefined, ...otherParams: any[]) {
         const globalCtx = this.globalCtx;
         if (this.status >= EnumActivityStatus.EXECUTING) {
-            throw Error("活动已经执行");
+            throw new ActivityError("活动已经执行", this);
         }
 
         if (this.status < EnumActivityStatus.BUILDED) {

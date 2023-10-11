@@ -1,3 +1,4 @@
+import { ActivityError } from "../ActivityError";
 import { EnumActivityStatus } from "../enum";
 import Activity from "./Activity";
 import AssertActivity from "./Assert";
@@ -7,33 +8,36 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
     C,
     R
 > {
-    constructor(context: C, protected condition: string, children: Activity[]) {
+    constructor(context: C, children: Activity[]) {
         super(context, children);
     }
 
+    accessor assert: AssertActivity | null = null;
+
     // @ts-ignore
-    buildTask(condition: string, children: Activity[]) {
-        this.condition = condition || this.condition;
+    buildTask(assert: AssertActivity | null, children: Activity[]) {
 
         // 构建子活动
         this.children = children || this.children;
 
         let childrenFun = super.buildTask();
-        let assert = this.getAssert(this.condition);
-
+        this.assert = assert || this.assert;
+        if (!this.assert) {
+            throw new ActivityError("assert 未定义", this);
+        }
         // 构建执行函数
         return (...args: any[]) => {
             return new Promise(async (resolve, reject) => {
                 try {
                     let r;
                     let assertR: boolean;
-                    while ((assertR = await assert.run(...args))) {
+                    while ((assertR = await this.assert!.run(...args))) {
                         // @ts-ignore
                         r = await childrenFun.apply(this);
 
-                        assert = this.getAssert(this.condition);
                         // 重复执行，需要调整状态值
-                        this.children.forEach(c=> c.status = EnumActivityStatus.BUILDED);
+                        this.children.forEach(c => c.status = EnumActivityStatus.BUILDED);
+                        this.assert!.status = EnumActivityStatus.BUILDED;
                     }
                     return resolve(r);
                 } catch (err) {
@@ -43,17 +47,6 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
         };
     }
 
-
-    private getAssert(condition: string) {
-        // 创建断言Activity
-        const assert = new AssertActivity(
-            this.ctx,
-            `return (${condition})`
-        );
-        assert.build();
-        assert.globalCtx = this.globalCtx;
-        return assert;
-    }
 }
 
 module.exports = WhileActivity;

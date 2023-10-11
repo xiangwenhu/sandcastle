@@ -10,8 +10,8 @@
 - [x] AllActivity 类似Promise.all
 - [x] RaceActivity 类似Promise.race
 - [x] SequenceActivity 顺序执行的活动
-- [ ] WhileActivity
-- [ ] AssertActivity
+- [x] WhileActivity
+- [x] AssertActivity
 - [ ] BreakActivity
 - [ ] TerminateActivity
 - [ ] FetchActivity
