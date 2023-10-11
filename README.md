@@ -14,9 +14,9 @@
 - [x] AssertActivity 断言，主要是配合while, ifelse使用
 - [x] AssertSequenceActivity 如果满足条件，顺序执行
 - [x] IFElseActivity
+- [ ] RequestActivity
 - [ ] BreakActivity
 - [ ] TerminateActivity
-- [ ] FetchActivity
 
 
 

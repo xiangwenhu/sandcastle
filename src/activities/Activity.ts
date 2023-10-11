@@ -5,24 +5,6 @@ import { createPromiseFunction } from "../factory/function";
 import { firstToLower } from "../util";
 
 class Activity<C = any, R = any> {
-    /**
-     * 上下文名
-     */
-    get ctxName() {
-        return "ctx";
-    }
-
-    /**
-    * 返回值名
-    */
-    get resName() {
-        return "res";
-    }
-
-    get globalCtxName() {
-        return "gCtx";
-    }
-
     pre: Activity | null  = null;
 
     next: Activity | null  = null;
@@ -30,7 +12,7 @@ class Activity<C = any, R = any> {
     /**
      * 父节点
      */
-    public parent: Activity | null;
+    accessor parent: Activity | null;
     /**
      * name
      */
@@ -117,10 +99,10 @@ class Activity<C = any, R = any> {
         }
         this.status = EnumActivityStatus.BUILDING;
         this.task = createPromiseFunction(
-            this.ctxName,
-            this.resName,
-            this.globalCtxName,
-            "parent",
+            "ctx",    // 上下文
+            "res",    // res
+            "gCtx",   // 全局上下文
+            "parent", // 父活动
             code
         );
         this.status = EnumActivityStatus.BUILDED;

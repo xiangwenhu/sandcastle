@@ -13,11 +13,13 @@ export default (factory: ActivityFactoryFactory) => <C = any, GC = any>(props: I
     activity.name = props.name || activity.name;
     activity.globalCtx = globalContext;
     activity.children = factory.createChildren(props.children, globalContext);
+
     activity.assert = factory.create({
         type: "assert",
         code: `return (${props.assert})`,
         context: props.context
     }) as AssertActivity;
+    activity.assert.parent = activity;
 
     activity.build();
     return activity

@@ -7,8 +7,9 @@ import allActivityFactory from "./all";
 import raceActivityFactory from "./race";
 import assertActivityFactory from "./assert";
 import whileActivityFactory from "./while";
-import assertSequenceActivity from "./assertSequence"
-import ifElseActivity from "./ifElse";
+import assertSequenceActivityFactory from "./assertSequence"
+import ifElseActivityFactory from "./ifElse";
+import requestActivityFactory from "./request";
 
 const factory = {
     create,
@@ -22,8 +23,9 @@ register("all", allActivityFactory(factory));
 register("race", raceActivityFactory(factory));
 register("assert", assertActivityFactory(factory));
 register("while", whileActivityFactory(factory));
-register("assertSequence", assertSequenceActivity(factory));
-register("ifElse", ifElseActivity(factory))
+register("assertSequence", assertSequenceActivityFactory(factory));
+register("ifElse", ifElseActivityFactory(factory));
+register("request", requestActivityFactory(factory));
 
 
 export default factory;

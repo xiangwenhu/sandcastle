@@ -19,6 +19,8 @@ export default (factory: ActivityFactoryFactory) => <C = any, GC = any>(props: I
         context: props.context
     }) as AssertActivity;
 
+    activity.assert.parent = activity.parent;
+
     activity.build();
     return activity
 }
