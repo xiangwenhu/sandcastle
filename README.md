@@ -10,13 +10,14 @@
 - [x] AllActivity 类似Promise.all
 - [x] RaceActivity 类似Promise.race
 - [x] SequenceActivity 顺序执行的活动
-- [x] WhileActivity
-- [x] AssertActivity
+- [x] WhileActivity while
+- [x] AssertActivity 断言，主要是配合while, ifelse使用
+- [x] AssertSequenceActivity 如果满足条件，顺序执行
+- [x] IFElseActivity
 - [ ] BreakActivity
 - [ ] TerminateActivity
 - [ ] FetchActivity
-- [ ] IFElseActivity
-- [ ] AssertSequenceActivity?
+
 
 
 ## 爬网相关Activity 和关联的Factory

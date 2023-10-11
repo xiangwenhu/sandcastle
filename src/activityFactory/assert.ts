@@ -1,12 +1,12 @@
 import Activity from "../activities/Assert"
 import { ActivityFactoryFactory, IActivityProps } from "./types";
 
-export interface ICodeActivityProps<C = any> extends IActivityProps<C> {
+export interface IAssertActivityProps<C = any> extends IActivityProps<C> {
     code: string;
 }
 
 export default (_factory: ActivityFactoryFactory) =>
-    <C = any, GC = any>(props: ICodeActivityProps<C>, globalContext?: GC) => {
+    <C = any, GC = any>(props: IAssertActivityProps<C>, globalContext?: GC) => {
         const code = props.code;
         const activity = new Activity<C>(props.context, code)
         activity.name = props.name || activity.name;
