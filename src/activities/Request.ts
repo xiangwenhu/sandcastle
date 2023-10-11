@@ -8,7 +8,10 @@ export default class RequestActivity<C = any, R = any> extends Activity<C, R> {
 
     protected buildTask(config: AxiosRequestConfig) {
         this.config = config || this.config;
-        return () => axios(this.config)
+        return (...args: any) => {
+            const cg = this.replaceVariable<AxiosRequestConfig>(this.config, ...args);
+            return axios(cg)
+        }
     }
 }
 

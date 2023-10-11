@@ -7,14 +7,14 @@ function innerCreateFunction(params: string[], code: string): Function {
 
 export function createFunction(...args: any[]) {
     if (args.length < 0) {
-        return null;
+        return () => { };
     }
     const code = args.pop();
     return innerCreateFunction(args, `${code}`);
 }
 export function createPromiseFunction(...args: any[]) {
     if (args.length < 0) {
-        return () => {};
+        return () => { };
     }
     const code = args.pop();
     return innerCreateFunction(

@@ -9,11 +9,13 @@ const activityProps: IActivityProps = {
         url: "https://www.baidu.com"
     },
     config: {
-        url: "https://www.baidu.com"
+        url: "{{gCtx.url}}" // "${ctx.url}"
     }
 }
 
-const activity = createActivity(activityProps);
+const activity = createActivity(activityProps, {
+    url: "https://www.jd.com"
+});
 
 activity.run().then(res => {
     console.log("res:", res.data);
