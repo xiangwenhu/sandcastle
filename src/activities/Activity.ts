@@ -4,7 +4,12 @@ import { isFunction, isString, isBoolean } from "lodash";
 import { createPromiseFunction } from "../factory/function";
 import { firstToLower } from "../util";
 import { replaceVariable } from "./util/variable";
-import { BaseActivityType, GK_TERMINATED, GK_TERMINATED_MESSAGE, GlobalActivityContext } from "../types/activity";
+import {
+    BaseActivityType,
+    GK_TERMINATED,
+    GK_TERMINATED_MESSAGE,
+    GlobalActivityContext,
+} from "../types/activity";
 
 class Activity<C = any, R = any> {
     pre: Activity | null = null;
@@ -48,7 +53,11 @@ class Activity<C = any, R = any> {
      * @param {上一次执行结果} preRes
      * @param {其他参数} otherParams
      */
-    async run(ctx: any = undefined, preRes: any = undefined, ...otherParams: any[]) {
+    async run(
+        ctx: any = undefined,
+        preRes: any = undefined,
+        ...otherParams: any[]
+    ) {
         const globalCtx = this.globalCtx;
         // 如果已经终止
         if (globalCtx[GK_TERMINATED]) {
@@ -67,7 +76,13 @@ class Activity<C = any, R = any> {
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
-            const res: R = await this.task!.apply(self, [realContext, preRes, globalCtx, this.parent, ...otherParams]);
+            const res: R = await this.task!.apply(self, [
+                realContext,
+                preRes,
+                globalCtx,
+                this.parent,
+                ...otherParams,
+            ]);
             this.status = EnumActivityStatus.EXECUTED;
 
             if (this.type == "terminate") {
@@ -84,7 +99,7 @@ class Activity<C = any, R = any> {
     }
 
     protected buildTask(..._args: any[]): Function {
-        return () => { }
+        return () => {};
     }
 
     build(...args: any[]) {
@@ -106,9 +121,9 @@ class Activity<C = any, R = any> {
         }
         this.status = EnumActivityStatus.BUILDING;
         this.task = createPromiseFunction(
-            "ctx",    // 上下文
-            "res",    // res
-            "gCtx",   // 全局上下文
+            "ctx", // 上下文
+            "res", // res
+            "gCtx", // 全局上下文
             "parent", // 父活动
             code
         );
@@ -116,8 +131,30 @@ class Activity<C = any, R = any> {
         return this.task;
     }
 
-    replaceVariable<C>(config: string | Record<string, any>, ctx?: any, preRes?: any) {
-        return replaceVariable(config).apply(this, [ctx || this.ctx || {}, preRes, this.globalCtx, this.parent]) as C
+    replaceVariable<C>(
+        config: string | Record<string, any>,
+        ctx?: any,
+        preRes?: any
+    ) {
+        return replaceVariable(config).apply(this, [
+            ctx || this.ctx || {},
+            preRes,
+            this.globalCtx,
+            this.parent,
+        ]) as C;
+    }
+
+    getProperty<P = any>(
+        property: PropertyKey,
+        recurse: boolean = false
+    ): undefined | P {
+        if (!recurse) {
+            return (this as any)[property] as P;
+        }
+        if (this == null) {
+            return undefined;
+        }
+        return this.getProperty.call(this.parent, property, recurse) as P;
     }
 }
 
