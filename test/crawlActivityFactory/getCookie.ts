@@ -4,10 +4,38 @@ import createActivity from "../../src/factory/activity";
 const activityProps: IActivityProps = {
     type: "c.browser",
     name: "创建浏览器",
-    children: [
+    options: {
+        headless: true
+    },
+    children: [{
+        type: "parallel",
+        name: "并行",
+        children: [{
+            type: "c.page",
+            name: "快手页面啊",
+            children: [
+                {
+                    type: "c.page.goto",
+                    name: "跳转",
+                    url: "https://www.kuaishou.com/?isHome=1",
+                    options: {
+                        "waitUntil": "load"
+                    }
+                },
+                {
+                    type: "c.page.getCookie",
+                    name: "获取cookie"
+                },
+                {
+                    type: "code",
+                    name: "输出cookie",
+                    code: "console.log('快手res', res);"
+                }
+            ]
+        },
         {
             type: "c.page",
-            name: "页面啊",
+            name: "抖音页面",
             children: [
                 {
                     type: "c.page.goto",
@@ -24,11 +52,11 @@ const activityProps: IActivityProps = {
                 {
                     type: "code",
                     name: "输出cookie",
-                    code: "console.log('res', res);"
+                    code: "console.log('抖音res', res);"
                 }
             ]
-        }
-    ]
+        }]
+    }]
 };
 
 const activity = createActivity(activityProps);
