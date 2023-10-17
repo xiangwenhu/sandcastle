@@ -2,7 +2,7 @@ import ContainerActivity from "../activities/ContainerActivity";
 import { ActivityFactory, BaseActivityType, IActivityProps } from "../types/activity";
 const factoryMap = new Map<string, ActivityFactory>();
 
-export function register(type: BaseActivityType, factory: ActivityFactory) {
+export function register(type: BaseActivityType | string, factory: ActivityFactory) {
     factoryMap.set(type, factory)
 }
 

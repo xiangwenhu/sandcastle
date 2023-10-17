@@ -99,7 +99,7 @@ class Activity<C = any, R = any> {
     }
 
     protected buildTask(..._args: any[]): Function {
-        return () => {};
+        return () => { };
     }
 
     build(...args: any[]) {
@@ -148,11 +148,17 @@ class Activity<C = any, R = any> {
         property: PropertyKey,
         recurse: boolean = false
     ): undefined | P {
-        if (!recurse) {
-            return (this as any)[property] as P;
-        }
-        if (this == null) {
+        const context: any = this;
+        if (context == null) {
             return undefined;
+        }
+        // TODO:: hasOwn ??
+        const val = context[property];
+        if (!recurse) {
+            return val as P;
+        }
+        if (val !== undefined) {
+            return val;
         }
         return this.getProperty.call(this.parent, property, recurse) as P;
     }

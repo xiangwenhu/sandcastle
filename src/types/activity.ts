@@ -2,7 +2,7 @@ import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 
 export type IActivityProps<C = any> = {
-    type: BaseActivityType;
+    type: BaseActivityType | string;
     context?: C,
     name: string;
     children?: IActivityProps[]
@@ -22,6 +22,8 @@ export interface ActivityFactoryFactory<P extends IActivityProps = any> {
 }
 
 export type BaseActivityType = 'delay' | 'code' | 'sequence' | 'parallel' | 'race' | 'assert' | 'while' | 'assertSequence' | 'ifElse' | 'request' | 'break' | 'terminate' | "tryCatch";
+
+export type CrawlActivityType = "c.browser" | "c.page" | "c.page.getCookie";
 
 
 export const GK_TERMINATED = Symbol('terminated');
