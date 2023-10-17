@@ -13,7 +13,7 @@ export default class GotoActivity<
         this.url = url || this.url;
         this.options = options || this.options;
         return (..._args: any[]) => {
-            return this.page!.goto(this.url, this.options);
+            return this.action("goto", this.url, this.options)
         }
     }
 }

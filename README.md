@@ -23,6 +23,7 @@
 |Break            |break          |  ✅    |  ✅ | break，作用于继承于ContainerActivity的活动 |
 |Terminate        |terminate      |  ❌    |  ✅ | 终止整个流程 |
 |TryCatch         |tryCatch       |  ❌    |  ✅ | try catch |
+|For              |for            |  ❌    |  ❌ | for       |
 |WriteJsonFile    |writeJsonFile  |  ❌    |  ❌ | 写JSON文件   |
 |ReadJSONFile     |readFile       |  ❌    |  ❌ | 读JSON文件   |
 
@@ -37,24 +38,25 @@
 |SetCookie       |c.page.setCookie        |  ❌    |  ✅ | 设置cookie |
 |PageChild       |-                       |  ❌    |  ✅ | page孩子，自带page,browser属性 |
 |Goto            |c.page.goto             |  ❌    |  ✅ | page.goto |
-|Evaluate        |c.page.evaluate         |  ❌    |  ❌ | page.evaluate |
-|Reload          |c.page.reload           |  ❌    |  ❌ | page.reload |
-|Click           |c.page.click            |  ❌    |  ❌ | page.click |
-|SetUserAgent    |c.page.setUserAgent     |  ❌    |  ❌ | page.setUserAgent |
-|Url             |c.page.url              |  ❌    |  ❌ | page.url |
-|Content         |c.page.content          |  ❌    |  ❌ | page.content |
-|WaitForNav      |c.page.waitForNav       |  ❌    |  ❌ | page.waitForNavigation |
-|WaitForRequest  |c.page.waitForRequest   |  ❌    |  ❌ | page.waitForRequest |
-|WaitForResponse |c.page.waitForResponse  |  ❌    |  ❌ | page.waitForResponse |
-|GoBack          |c.page.goBack           |  ❌    |  ❌ | page.goBack |
-|GoForward       |c.page.goForward        |  ❌    |  ❌ | page.goForward |
-|Title           |c.page.title            |  ❌    |  ❌ | page.title |
-|Close           |c.page.close            |  ❌    |  ❌ | page.close |
-|IsClosed        |c.page.isClosed         |  ❌    |  ❌ | page.IsClosed |
-|EvaluateClick   |c.page.eClick           |  ❌    |  ❌ | page.evaluate((el)=> el.click()) |
-|Type            |c.page.type             |  ❌    |  ❌ | page.type  |
-|WaitForSelector |c.page.waitForSelector  |  ❌    |  ❌ | page.waitForSelector  |
-|Fetch           |c.page.fetch            |  ❌    |  ❌ | page.evaluate(()=>fetch())  |
+|Evaluate        |c.page.evaluate         |  ❌    |  ✅ | page.evaluate |
+|Reload          |c.page.reload           |  ❌    |  ✅ | page.reload |
+|Click           |c.page.click            |  ❌    |  ✅ | page.click |
+|SetUserAgent    |c.page.setUserAgent     |  ❌    |  ✅ | page.setUserAgent |
+|Url             |c.page.url              |  ❌    |  ✅ | page.url |
+|Content         |c.page.content          |  ❌    |  ✅ | page.content |
+|WaitForNav      |c.page.waitForNav       |  ❌    |  ✅ | page.waitForNavigation |
+|WaitForRequest  |c.page.waitForRequest   |  ❌    |  ✅ | page.waitForRequest |
+|WaitForResponse |c.page.waitForResponse  |  ❌    |  ✅ | page.waitForResponse |
+|GoBack          |c.page.goBack           |  ❌    |  ✅ | page.goBack |
+|GoForward       |c.page.goForward        |  ❌    |  ✅ | page.goForward |
+|Title           |c.page.title            |  ❌    |  ✅ | page.title |
+|Close           |c.page.close            |  ❌    |  ✅ | page.close |
+|IsClosed        |c.page.isClosed         |  ❌    |  ✅ | page.IsClosed |
+|EvaluateClick   |c.page.eClick           |  ❌    |  ✅ | page.evaluate((el)=> el.click()) |
+|Type            |c.page.type             |  ❌    |  ✅ | page.type  |
+|WaitForSelector |c.page.waitForSelector  |  ❌    |  ✅ | page.waitForSelector  |
+|FetchJSON       |c.page.fetchJSON        |  ❌    |  ✅ | page.evaluate(()=>fetch())  |
+|FetchText       |c.page.fetchText        |  ❌    |  ✅ | page.evaluate(()=>fetch())  |
 
 
 
