@@ -60,6 +60,7 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 |WaitForSelector |c.page.waitForSelector  |  ❌    |  ✅ | page.waitForSelector  |
 |FetchJSON       |c.page.fetchJSON        |  ❌    |  ✅ | page.evaluate(()=>fetch())  |
 |FetchText       |c.page.fetchText        |  ❌    |  ✅ | page.evaluate(()=>fetch())  |
+|UploadFile      |c.page.uploadFile       |  ❌    |  ❌ | 上传文件|
 
 
 
