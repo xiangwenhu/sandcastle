@@ -1,6 +1,6 @@
 import PageChildActivity from "./PageChildActivity";
 
-export default class GetCookie<
+export default class GetCookieActivity<
 C = any,
 R = any
 > extends PageChildActivity<C, R> {

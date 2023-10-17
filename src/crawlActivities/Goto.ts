@@ -1,7 +1,7 @@
 import { GoToOptions } from "puppeteer";
 import PageChildActivity from "./PageChildActivity";
 
-export default class GetCookie<
+export default class GotoActivity<
     C = any,
     R = any
 > extends PageChildActivity<C, R> {
