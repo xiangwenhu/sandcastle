@@ -9,7 +9,7 @@ export default class GoBackActivity<
         super(ctx)
     }
 
-    protected buildTask(options?: WaitForOptions | undefined): Function {
+    buildTask(options?: WaitForOptions | undefined): Function {
         return (..._args: any[]) => {
             return this.page?.goBack(options)
         }

@@ -5,7 +5,7 @@ export default class CodeActivity<C = any, R = any>extends Activity<C, R> {
         super(context);
     }
 
-    protected buildTask(code: string) {
+    buildTask(code: string) {
         this.code = code || this.code;
         return this.buildWithCode(this.code);
     }

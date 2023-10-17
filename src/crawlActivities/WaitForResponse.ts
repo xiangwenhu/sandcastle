@@ -5,7 +5,7 @@ export default class WaitForResponseActivity<
     C = any,
     R = any
 > extends PageChildActivity<C, R> {
-    protected buildTask(urlOrPredicate: string | ((res: HTTPResponse) => boolean | Promise<boolean>), options?: {
+    buildTask(urlOrPredicate: string | ((res: HTTPResponse) => boolean | Promise<boolean>), options?: {
         timeout?: number;
     }): Function {
         return async (..._args: any[]) => {

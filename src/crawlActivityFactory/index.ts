@@ -24,6 +24,10 @@ import waitForNavActivityFactory from "./waitForNav";
 import waitForRequestActivityFactory from "./waitForRequest";
 import waitForResponseActivityFactory from "./waitForResponse";
 import waitForSelectorActivityFactory from "./waitForSelector";
+import $evalActivityFactory from "./$eval";
+import $$evalActivityFactory from "./$$eval";
+import focusActivityFactory from "./focus";
+import hoverActivityFactory from "./hover";
 
 
 register("c.browser", browserActivityFactory);
@@ -32,7 +36,6 @@ register("page", pageActivityFactory);
 
 register("c.page.click", clickActivityFactory);
 register("c.page.close", closeActivityFactory);
-
 register("c.page.content", contentActivityFactory);
 register("c.page.evaluate", evaluateActivityFactory);
 register("c.page.eClick", evaluateClickActivityFactory);
@@ -44,16 +47,18 @@ register("c.page.reload", reloadActivityFactory);
 register("c.page.setCookie", setCookieActivityFactory);
 register("c.page.setUserAgent", setUserAgentActivityFactory);
 register("c.page.title", titleActivityFactory);
-
 register("c.page.type", typeActivityFactory);
 register("c.page.url", urlActivityFactory);
 register("c.page.waitForNav", waitForNavActivityFactory);
 register("c.page.waitForRequest", waitForRequestActivityFactory);
 register("c.page.waitForResponse", waitForResponseActivityFactory);
 register("c.page.waitForSelector", waitForSelectorActivityFactory);
-
 register("c.page.getCookie", getCookieActivityFactory);
 register("c.page.goto", gotoActivityFactory);
+register("c.page.$eval", $evalActivityFactory);
+register("c.page.$$eval", $$evalActivityFactory);
+register("c.page.focus", focusActivityFactory);
+register("c.page.hover", hoverActivityFactory);
 
 export default factory;
 export { register } from "../activityFactory";

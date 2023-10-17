@@ -11,7 +11,7 @@ export default class SequenceActivity<
         super(context, children);
     }
 
-    protected buildTask(children?: Activity[]) {
+    buildTask(children?: Activity[]) {
         this.children = children || this.children;
         return (ctx?: C, preRes?: any) =>
             new Promise(async (resolve, reject) => {

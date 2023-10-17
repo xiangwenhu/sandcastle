@@ -6,7 +6,7 @@ C = any,
 R = any
 > extends PageChildActivity<C, R> {
 
-    protected buildTask(options: WaitForOptions): Function {
+    buildTask(options: WaitForOptions): Function {
         return (..._args: any[]) => {
             return this.page?.reload(options)
         }

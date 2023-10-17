@@ -9,7 +9,7 @@ export default class GotoActivity<
         super(ctx)
     }
 
-    protected buildTask(url: string, options: GoToOptions | undefined = undefined): Function {
+    buildTask(url: string, options: GoToOptions | undefined = undefined): Function {
         this.url = url || this.url;
         this.options = options || this.options;
         return (..._args: any[]) => {

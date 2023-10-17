@@ -8,7 +8,7 @@ export default class EvaluateActivity<
         super(ctx)
     }
 
-    protected buildTask(code: string, ...args: any[]): Function {
+    buildTask(code: string, ...args: any[]): Function {
         return (ctx: C, preRes: any = undefined, ..._otherParams: any[]) => {
             // 替换code变量
             const rCode = this.replaceVariable(code, ctx, preRes) as string;

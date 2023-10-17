@@ -9,7 +9,7 @@ export default class GoForwardActivity<
         super(ctx)
     }
 
-    protected buildTask(options?: WaitForOptions | undefined): Function {
+    buildTask(options?: WaitForOptions | undefined): Function {
         return (..._args: any[]) => {
             return this.page?.goForward(options)
         }

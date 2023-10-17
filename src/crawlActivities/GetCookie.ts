@@ -5,7 +5,7 @@ C = any,
 R = any
 > extends PageChildActivity<C, R> {
 
-    protected buildTask(..._args: any[]): Function {
+    buildTask(..._args: any[]): Function {
         return (..._args: any[]) => {
             return this.action("cookies")
         }

@@ -98,7 +98,7 @@ class Activity<C = any, R = any> {
         }
     }
 
-    protected buildTask(..._args: any[]): Function {
+    public buildTask(..._args: any[]): Function {
         return () => { };
     }
 

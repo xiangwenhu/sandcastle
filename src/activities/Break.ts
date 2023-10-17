@@ -8,7 +8,7 @@ export default class BreakActivity<C = any> extends Activity<C, string> {
         super(context);
     }
 
-    protected buildTask(message: string) {
+    buildTask(message: string) {
         this.message = message || this.message
         return (_ctx: C, res: any) => Promise.resolve(this.message)
     }

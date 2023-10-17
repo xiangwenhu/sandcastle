@@ -6,7 +6,7 @@ C = any,
 R = any
 > extends PageChildActivity<C, R> {
 
-    protected buildTask(selector: string, text: string, options?: Readonly<KeyboardTypeOptions>): Function {
+    buildTask(selector: string, text: string, options?: Readonly<KeyboardTypeOptions>): Function {
         return (..._args: any[]) => {
             return this.page?.type(selector, text, options)
         }

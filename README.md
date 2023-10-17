@@ -30,6 +30,9 @@
 
 
 ## 爬网相关和关联的Factory
+
+Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppeteer.page)
+
 |类名|注册类型| 是否有children|状态| 说明|
 |----|----|----|----|----|
 |Browser         |c.browser               |  ✅    |  ✅ | 浏览器 |
