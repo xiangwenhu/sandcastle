@@ -4,7 +4,7 @@ import browserActivityFactory from "./browser";
 import pageActivityFactory from "./page";
 
 import clickActivityFactory from "./click";
-import closeActivityFactory from "./close"
+import closeActivityFactory from "./close";
 import contentActivityFactory from "./content";
 import evaluateActivityFactory from "./evaluate";
 import evaluateClickActivityFactory from "./evaluateClick";
@@ -29,10 +29,28 @@ import $$evalActivityFactory from "./$$eval";
 import focusActivityFactory from "./focus";
 import hoverActivityFactory from "./hover";
 
+// keyboard
+import downActivityFactory from "./keyboard/down";
+import pressActivityFactory from "./keyboard/press";
+import sendCharacterActivityFactory from "./keyboard/sendCharacter";
+import keyboardTypeActivityFactory from "./keyboard/type";
+import upActivityFactory from "./keyboard/up";
+
+// mouse
+import mouseClickActivityFactory from "./mouse/click";
+import mouseDownActivityFactory from "./mouse/down";
+import dragActivityFactory from "./mouse/drag";
+import dragAndDropActivityFactory from "./mouse/dragAndDrop";
+import dragEnterActivityFactory from "./mouse/dragEnter";
+import dragOverActivityFactory from "./mouse/dragOver";
+import dropActivityFactory from "./mouse/drop";
+import moveActivityFactory from "./mouse/move";
+import resetActivityFactory from "./mouse/reset";
+import mouseUpActivityFactory from "./mouse/up";
+import wheelActivityFactory from "./mouse/wheel";
 
 register("c.browser", browserActivityFactory);
 register("page", pageActivityFactory);
-
 
 register("c.page.click", clickActivityFactory);
 register("c.page.close", closeActivityFactory);
@@ -59,6 +77,26 @@ register("c.page.$eval", $evalActivityFactory);
 register("c.page.$$eval", $$evalActivityFactory);
 register("c.page.focus", focusActivityFactory);
 register("c.page.hover", hoverActivityFactory);
+
+// keyboard
+register("c.page.keyboard.down", downActivityFactory);
+register("c.page.keyboard.up", upActivityFactory);
+register("c.page.keyboard.sendCharacter", sendCharacterActivityFactory);
+register("c.page.keyboard.type", keyboardTypeActivityFactory);
+register("c.page.keyboard.press", pressActivityFactory);
+
+// mouse
+register("c.page.mouse.click", mouseClickActivityFactory);
+register("c.page.mouse.down", mouseDownActivityFactory);
+register("c.page.mouse.drag", dragActivityFactory);
+register("c.page.mouse.dragAndDrop", dragAndDropActivityFactory);
+register("c.page.mouse.dragEnter", dragEnterActivityFactory);
+register("c.page.mouse.dragOver", dragOverActivityFactory);
+register("c.page.mouse.drop", dropActivityFactory);
+register("c.page.mouse.move", moveActivityFactory);
+register("c.page.mouse.reset", resetActivityFactory);
+register("c.page.mouse.up", mouseUpActivityFactory);
+register("c.page.mouse.wheel", wheelActivityFactory);
 
 export default factory;
 export { register } from "../activityFactory";
