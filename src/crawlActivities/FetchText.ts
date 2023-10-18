@@ -6,7 +6,7 @@ export default class FetchTextActivity<
 > extends PageChildActivity<C, R> {
 
     buildTask(input: RequestInfo | URL, init?: RequestInit | undefined): Function {
-        return (..._args: any[]) => {
+        return this.task = (..._args: any[]) => {
             const rInput = this.replaceVariable<RequestInfo | URL>(input, ...arguments);
             const rInit = this.replaceVariable<RequestInit | undefined>(init || {}, ...arguments);
             return this.page?.evaluate((input, init) => {

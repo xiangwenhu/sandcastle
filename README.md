@@ -20,12 +20,12 @@
 |AssertSequence   |assertSequence |  ✅    |  ✅ | 如果满足条件，顺序执行 |
 |IFElse           |ifElse         |  ✅    |  ✅ | if else |
 |Request          |request        |  ❌    |  ✅ | 网络请求  |
-|Break            |break          |  ✅    |  ✅ | break，作用于继承于ContainerActivity的活动 |
+|Break            |break          |  ❌     |  ✅ | break，作用于继承于ContainerActivity的活动 |
 |Terminate        |terminate      |  ❌    |  ✅ | 终止整个流程 |
-|TryCatch         |tryCatch       |  ❌    |  ✅ | try catch |
-|For              |for            |  ❌    |  ✅ | for       |
-|ParallelFor      |parallelFor    |  ❌    |  ✅ | parallel For       |
-|WriteFile        |writeFile      |  ❌    |  ❌ | 写文件（txt/json）  |
+|TryCatch         |tryCatch       |  ✅    |  ✅ | try catch |
+|For              |for            |  ✅    |  ✅ | for       |
+|ParallelFor      |parallelFor    |  ✅    |  ✅ | parallel For       |
+|WriteFile        |writeFile      |  ❌    |  ❌ | 写文件  |
 |ReadFile         |readFile       |  ❌    |  ❌ | 读文件（txt/json） |
 |DownloadFile     |downloadFile   |  ❌    |  ❌ | 下载文件     |
 |DeleteFile       |deleteFile     |  ❌    |  ❌ | 删除文件     |

@@ -7,7 +7,7 @@ R = any
 > extends PageChildActivity<C, R> {
 
     buildTask(userAgent: string, userAgentMetadata?: Protocol.Emulation.UserAgentMetadata): Function {
-        return (..._args: any[]) => {
+        return this.task = (..._args: any[]) => {
             return this.page?.setUserAgent(userAgent, userAgentMetadata)
         }
     }

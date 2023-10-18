@@ -10,7 +10,7 @@ export default class GoForwardActivity<
     }
 
     buildTask(options?: WaitForOptions | undefined): Function {
-        return (..._args: any[]) => {
+        return this.task = (..._args: any[]) => {
             return this.page?.goForward(options)
         }
     }

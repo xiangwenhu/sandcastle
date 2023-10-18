@@ -17,6 +17,8 @@ import terminateActivityFactory from "./terminate";
 import tryCatchActivityFactory from "./tryCatch";
 import forActivityFactory from "./for";
 import parallelForActivityFactory from "./parallelFor";
+import readFileActivityFactory from "./readFile";
+import writeFileActivityFactory from "./writeFile";
 
 const factory = {
     create,
@@ -42,6 +44,8 @@ register("terminate", terminateActivityFactory);
 register("tryCatch", tryCatchActivityFactory);
 register("for", forActivityFactory);
 register("parallelFor", parallelForActivityFactory);
+register("readFile", readFileActivityFactory);
+register("writeFile", writeFileActivityFactory);
 
 
 export default factory;

@@ -6,7 +6,7 @@ export default class EvaluateClickActivity<
 > extends PageChildActivity<C, R> {
 
     buildTask(selector: string): Function {
-        return (..._args: any[]) => {
+        return this.task = (..._args: any[]) => {
             return this.page?.evaluate((selector) => {
                 return (document.querySelector(selector) as HTMLElement)?.click()
             }, selector)

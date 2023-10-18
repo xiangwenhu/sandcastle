@@ -9,7 +9,7 @@ export default class EvaluateActivity<
     }
 
     buildTask(code: string, ...args: any[]): Function {
-        return (ctx: C, preRes: any = undefined, ..._otherParams: any[]) => {
+        return this.task = (ctx: C, preRes: any = undefined, ..._otherParams: any[]) => {
             // 替换code变量
             const rCode = this.replaceVariable(code, ctx, preRes) as string;
             // 替换参数变量

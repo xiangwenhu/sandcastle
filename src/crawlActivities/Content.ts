@@ -6,7 +6,7 @@ R = any
 > extends PageChildActivity<C, R> {
 
     buildTask(): Function {
-        return (..._args: any[]) => {
+        return this.task = (..._args: any[]) => {
             return this.page?.content()
         }
     }

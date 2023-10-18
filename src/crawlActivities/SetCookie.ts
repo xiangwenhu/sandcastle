@@ -12,7 +12,7 @@ R = any
 
     buildTask(cookies: Protocol.Network.CookieParam[]): Function {
         this.cookies = cookies || this.cookies;
-        return (..._args: any[]) => {
+        return this.task = (..._args: any[]) => {
             return this.action("setCookie", ...this.cookies)
         }
     }

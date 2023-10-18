@@ -7,7 +7,7 @@ R = any
 > extends PageChildActivity<C, R> {
 
     buildTask(options: WaitForOptions): Function {
-        return (..._args: any[]) => {
+        return this.task = (..._args: any[]) => {
             return this.page?.waitForNavigation(options)
         }
     }

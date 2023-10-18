@@ -12,7 +12,7 @@ export default class GotoActivity<
     buildTask(url: string, options: GoToOptions | undefined = undefined): Function {
         this.url = url || this.url;
         this.options = options || this.options;
-        return (..._args: any[]) => {
+        return this.task = (..._args: any[]) => {
             return this.action("goto", this.url, this.options)
         }
     }

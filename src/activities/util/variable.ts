@@ -1,4 +1,4 @@
-import { isObjectLike, isString } from "lodash"
+import { isObjectLike, isPlainObject, isString } from "lodash"
 import { createFunction } from "../../factory/function"
 
 function createReplaceFunc(code: string) {

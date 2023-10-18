@@ -10,7 +10,7 @@ export default class $EvalActivity<
     }
 
     buildTask<Selector extends string, Params extends unknown[], Func extends EvaluateFuncWith<NodeFor<Selector>, Params> = EvaluateFuncWith<NodeFor<Selector>, Params>>(selector: Selector, pageFunction: Func | string, ...args: Params) {
-        return (..._args: any[]) => {
+        return this.task =  (..._args: any[]) => {
             return this.page?.$eval(selector, pageFunction, ...args)
         }
     }
