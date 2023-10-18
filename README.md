@@ -25,8 +25,8 @@
 |TryCatch         |tryCatch       |  ✅    |  ✅ | try catch |
 |For              |for            |  ✅    |  ✅ | for       |
 |ParallelFor      |parallelFor    |  ✅    |  ✅ | parallel For       |
-|WriteFile        |writeFile      |  ❌    |  ❌ | 写文件  |
-|ReadFile         |readFile       |  ❌    |  ❌ | 读文件（txt/json） |
+|WriteFile        |writeFile      |  ✅    |  ❌ | 写文件  |
+|ReadFile         |readFile       |  ✅    |  ❌ | 读文件（txt/json） |
 |DownloadFile     |downloadFile   |  ❌    |  ❌ | 下载文件     |
 |DeleteFile       |deleteFile     |  ❌    |  ❌ | 删除文件     |
 
