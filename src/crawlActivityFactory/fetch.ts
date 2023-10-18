@@ -1,9 +1,10 @@
-import Activity from "../crawlActivities/FetchText"
+import Activity from "../crawlActivities/Fetch"
 import { ActivityFactoryFactory, IActivityProps } from "../types/activity";
 
 export interface IFetchTextActivityProps<C = any> extends IActivityProps<C> {
-    input: RequestInfo | URL,
-    init?: RequestInit | undefined
+    url: RequestInfo | URL,
+    options?: RequestInit | undefined,
+    contentType?: "text" | "json"
 }
 
 export default (_factory: ActivityFactoryFactory) =>
@@ -11,6 +12,6 @@ export default (_factory: ActivityFactoryFactory) =>
         const activity = new Activity(props.context)
         activity.name = props.name || activity.name;
         activity.globalCtx = globalContext || {};
-        activity.build(props.input, props.init);
+        activity.build(props.url, props.options, props.contentType);
         return activity
     }

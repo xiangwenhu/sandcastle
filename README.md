@@ -59,12 +59,13 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 |EvaluateClick   |c.page.eClick           |  ❌    |  ✅ | page.evaluate((el)=> el.click()) |
 |Type            |c.page.type             |  ❌    |  ✅ | page.type  |
 |WaitForSelector |c.page.waitForSelector  |  ❌    |  ✅ | page.waitForSelector  |
-|Fetch           |c.page.fetch            |  ❌    |  ❌ | page.evaluate(()=>fetch())  |
+|Fetch           |c.page.fetch            |  ❌    |  ✅ | page.evaluate(()=>fetch()) (text|json)  |
 |$Eval           |c.page.$eval            |  ❌    |  ✅ | page.$eval  |
 |$$Eval          |c.page.$$val            |  ❌    |  ✅ | page.$$eval  |
 |Focus           |c.page.focus            |  ❌    |  ✅ | page.focus  |
 |Hover           |c.page.hover            |  ❌    |  ✅ | page.hover  |
-|UploadFile      |c.page.uploadFile       |  ❌    |  ❌ | 上传文件|
+|UploadFile      |c.page.uploadFile       |  ❌    |  ✅ | 上传文件|
+|clearValue      |c.page.clearValue       |  ❌    |  ✅ | 清除输入控制的值|
 |KeyboardDown    |c.page.keyboard.down    |  ❌    |  ✅ | 键down|
 |KeyboardPress   |c.page.keyboard.press   |  ❌    |  ✅ | 键press|
 |KeyboardSendCharacter  |c.page.keyboard.sendCharacter |  ❌    |  ✅ | 键盘输入|
