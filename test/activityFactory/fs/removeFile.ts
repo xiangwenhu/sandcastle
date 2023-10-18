@@ -1,14 +1,14 @@
-import { IActivityProps } from './../../src/types/activity';
-import createActivity from "../../src/factory/activity"
+import { IActivityProps } from '../../../src/types/activity';
+import createActivity from "../../../src/factory/activity"
 
 const activityProps: IActivityProps = {
     type: 'sequence',
     name: 'sequence',
     children: [ {
-        type: 'readFile',
+        type: 'fs.removeFile',
         name: '读取文件',
-        contentType: "text",
-        dist: `D:\\data\\tmp2\\txt.txt`
+        url: "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png",
+        dist: `D:\\data\\tmp2\\cc\\dd\\bd.png`
     }, {
         type: 'code',
         name: '输出内容',

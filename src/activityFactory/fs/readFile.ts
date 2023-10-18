@@ -1,11 +1,11 @@
 import { Mode, ObjectEncodingOptions, OpenMode } from "fs";
-import Activity from "../activities/WriteFile"
-import { EnumActivityStatus } from "../enum";
-import { ActivityFactoryFactory, IActivityProps } from "../types/activity";
+import Activity from "../../activities/fs/ReadFile"
+import { EnumActivityStatus } from "../../enum";
+import { ActivityFactoryFactory, IActivityProps } from "../../types/activity";
 
-export interface IWriteFileActivityProps<C = any> extends IActivityProps<C> {
-    dist: string,
-    content: any,
+export interface IReadFileActivityProps<C = any> extends IActivityProps<C> {
+    dist: string;
+    contentType: "text" | "json";
     options?:
     | (ObjectEncodingOptions & {
         mode?: Mode | undefined;
@@ -16,10 +16,10 @@ export interface IWriteFileActivityProps<C = any> extends IActivityProps<C> {
 }
 
 export default (_factory: ActivityFactoryFactory) =>
-    <C = any, GC = any>(props: IWriteFileActivityProps<C>, globalContext: GC) => {
+    <C = any, GC = any>(props: IReadFileActivityProps<C>, globalContext: GC) => {
         const activity = new Activity<C>(props.context)
         activity.name = props.name || activity.name;
         activity.globalCtx = globalContext || {};
-        activity.build(props.dist, props.content, props.options);
+        activity.build(props.dist, props.contentType, props.options);
         return activity
     }

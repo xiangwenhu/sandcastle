@@ -1,6 +1,6 @@
 import { ObjectEncodingOptions, OpenMode } from "fs";
 import fsp from "fs/promises";
-import Activity from "./Activity";
+import Activity from "../Activity";
 import path from "path";
 
 export default class ReadFileActivity<C = any> extends Activity<C, string> {
