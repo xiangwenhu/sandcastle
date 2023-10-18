@@ -1,4 +1,6 @@
 import { register as _register, create, createChildren } from "./factory";
+import { ActivityFactoryFactory } from "../types/activity";
+import Activity from "../activities/Activity";
 
 import codeActivityFactory from "./code";
 import delayActivityFactory from "./delay";
@@ -13,8 +15,8 @@ import requestActivityFactory from "./request";
 import breakActivityFactory from "./break";
 import terminateActivityFactory from "./terminate";
 import tryCatchActivityFactory from "./tryCatch";
-import Activity from "../activities/Activity";
-import { ActivityFactoryFactory } from "../types/activity";
+import forActivityFactory from "./for";
+import parallelForActivityFactory from "./parallelFor";
 
 const factory = {
     create,
@@ -38,6 +40,8 @@ register("request", requestActivityFactory);
 register("break", breakActivityFactory);
 register("terminate", terminateActivityFactory);
 register("tryCatch", tryCatchActivityFactory);
+register("for", forActivityFactory);
+register("parallelFor", parallelForActivityFactory);
 
 
 export default factory;

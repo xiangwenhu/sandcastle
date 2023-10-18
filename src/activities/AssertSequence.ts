@@ -12,7 +12,20 @@ export default class AssertSequenceActivity<
         super(context, children)
     }
 
-    accessor assert: AssertActivity | null = null;
+
+
+    #assert: AssertActivity | null = null;
+
+    get assert(): AssertActivity | null {
+        return this.#assert
+    }
+
+    set assert(value: AssertActivity) {
+        this.#assert = value;
+        if (value) {
+            value.parent = this;
+        }
+    }
 
     async run(ctx: C, preRes: any = undefined, ...otherParams: any[]) {
         if (!this.assert) {

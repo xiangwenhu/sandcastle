@@ -23,11 +23,12 @@
 |Break            |break          |  ✅    |  ✅ | break，作用于继承于ContainerActivity的活动 |
 |Terminate        |terminate      |  ❌    |  ✅ | 终止整个流程 |
 |TryCatch         |tryCatch       |  ❌    |  ✅ | try catch |
-|For              |for            |  ❌    |  ❌ | for       |
-|WriteJsonFile    |writeJsonFile  |  ❌    |  ❌ | 写JSON文件   |
-|ReadJSONFile     |readFile       |  ❌    |  ❌ | 读JSON文件   |
-
-
+|For              |for            |  ❌    |  ✅ | for       |
+|ParallelFor      |parallelFor    |  ❌    |  ✅ | parallel For       |
+|WriteFile        |writeFile      |  ❌    |  ❌ | 写文件（txt/json）  |
+|ReadFile         |readFile       |  ❌    |  ❌ | 读文件（txt/json） |
+|DownloadFile     |downloadFile   |  ❌    |  ❌ | 下载文件     |
+|DeleteFile       |deleteFile     |  ❌    |  ❌ | 删除文件     |
 
 ## 爬网相关和关联的Factory
 
@@ -47,7 +48,7 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 |SetUserAgent    |c.page.setUserAgent     |  ❌    |  ✅ | page.setUserAgent |
 |Url             |c.page.url              |  ❌    |  ✅ | page.url |
 |Content         |c.page.content          |  ❌    |  ✅ | page.content |
-|WaitForNav      |c.page.waitForNav       |  ❌    |  ✅ | page.waitForNavigation |
+|WaitForNav      |**c.page.waitForNav**   |  ❌    |  ✅ | page.waitForNavigation |
 |WaitForRequest  |c.page.waitForRequest   |  ❌    |  ✅ | page.waitForRequest |
 |WaitForResponse |c.page.waitForResponse  |  ❌    |  ✅ | page.waitForResponse |
 |GoBack          |c.page.goBack           |  ❌    |  ✅ | page.goBack |
@@ -58,9 +59,27 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 |EvaluateClick   |c.page.eClick           |  ❌    |  ✅ | page.evaluate((el)=> el.click()) |
 |Type            |c.page.type             |  ❌    |  ✅ | page.type  |
 |WaitForSelector |c.page.waitForSelector  |  ❌    |  ✅ | page.waitForSelector  |
-|FetchJSON       |c.page.fetchJSON        |  ❌    |  ✅ | page.evaluate(()=>fetch())  |
-|FetchText       |c.page.fetchText        |  ❌    |  ✅ | page.evaluate(()=>fetch())  |
+|Fetch           |c.page.fetch            |  ❌    |  ❌ | page.evaluate(()=>fetch())  |
+|$Eval           |c.page.$eval            |  ❌    |  ✅ | page.$eval  |
+|$$Eval          |c.page.$$val            |  ❌    |  ✅ | page.$$eval  |
+|Focus           |c.page.focus            |  ❌    |  ✅ | page.focus  |
+|Hover           |c.page.hover            |  ❌    |  ✅ | page.hover  |
 |UploadFile      |c.page.uploadFile       |  ❌    |  ❌ | 上传文件|
+|KeyboardDown    |c.page.keyboard.down    |  ❌    |  ✅ | 键down|
+|KeyboardPress   |c.page.keyboard.press   |  ❌    |  ✅ | 键press|
+|KeyboardSendCharacter  |c.page.keyboard.sendCharacter |  ❌    |  ✅ | 键盘输入|
+|KeyboardType    |c.page.keyboard.type    |  ❌    |  ✅  | 键盘输入|
+|MouseClick      |c.page.mouse.click      |  ❌    |  ✅  | 鼠标点|
+|MouseDown       |c.page.mouse.down       |  ❌    |  ✅  | 鼠标down|
+|MouseDrag       |c.page.mouse.drag       |  ❌    |  ✅  | 鼠标drag|
+|MouseDragAndDrop|c.page.mouse.dragAndDrop|  ❌    |  ✅  | 鼠标dragAndDrop|
+|MouseDragEnter  |c.page.mouse.dragEnter  |  ❌    |  ✅  | 鼠标dragEnter|
+|MouseDragOver   |c.page.mouse.dragOver   |  ❌    |  ✅  | 鼠标dragOver|
+|MouseDrop       |c.page.mouse.drop       |  ❌    |  ✅  | 鼠标drop|
+|MouseMove       |c.page.mouse.move       |  ❌    |  ✅  | 鼠标move|
+|MouseReset      |c.page.mouse.reset      |  ❌    |  ✅  | 鼠标reset|
+|MouseUp         |c.page.mouse.up         |  ❌    |  ✅  | 鼠标up|
+|MouseWheel      |c.page.mouse.wheel      |  ❌    |  ✅  | 鼠标wheel|
 
 
 

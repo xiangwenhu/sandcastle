@@ -6,11 +6,10 @@ export interface ISequenceActivityProps<C = any> extends IActivityProps<C> {
 }
 
 export default (factory: ActivityFactoryFactory) => <C = any, GC = any>(props: ISequenceActivityProps<C>, globalContext?: GC) => {
-    const children: Activity[] = [] as any;
+    const children: Activity[] =  factory.createChildren(props.children, globalContext);
     const activity = new Activity(props.context, children)
     activity.name = props.name || activity.name;
     activity.globalCtx = globalContext || {};;
-    activity.children = factory.createChildren(props.children, globalContext)
     activity.build();
     return activity
 }

@@ -1,15 +1,15 @@
+import { isBoolean, isString } from "lodash";
 import { ActivityError, TerminateError } from "../ActivityError";
 import { EnumActivityStatus } from "../enum";
-import { isFunction, isString, isBoolean } from "lodash";
 import { createPromiseFunction } from "../factory/function";
-import { firstToLower } from "../util";
-import { replaceVariable } from "./util/variable";
 import {
     BaseActivityType,
     GK_TERMINATED,
     GK_TERMINATED_MESSAGE,
     GlobalActivityContext,
 } from "../types/activity";
+import { firstToLower } from "../util";
+import { replaceVariable } from "./util/variable";
 
 class Activity<C = any, R = any> {
     pre: Activity | null = null;
@@ -36,6 +36,8 @@ class Activity<C = any, R = any> {
     public globalCtx: GlobalActivityContext = {};
 
     protected task: Function | null;
+
+    accessor checkStatus: boolean = true;
 
     constructor(public ctx: C) {
         this.parent = null;
@@ -64,15 +66,16 @@ class Activity<C = any, R = any> {
             return;
         }
 
-        if (this.status >= EnumActivityStatus.EXECUTING) {
-            throw new ActivityError("活动已经执行", this);
-        }
+        // TODO::
+        // if (this.checkStatus && this.status >= EnumActivityStatus.EXECUTING) {
+        //     throw new ActivityError("活动已经执行", this);
+        // }
 
         if (this.status < EnumActivityStatus.BUILDED) {
             this.buildTask();
         }
 
-        let realContext = ctx || this.ctx || {};
+        let realContext = Object.assign({}, ctx || {}, this.ctx || {});
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
