@@ -1,5 +1,6 @@
 import { MouseClickOptions } from "puppeteer";
 import PageChildActivity from "../PageChildActivity";
+import { IActivityRunParams } from "../../types/activity";
 
 export default class MouseClickActivity<
     C = any,
@@ -9,8 +10,8 @@ export default class MouseClickActivity<
         x: number,
         y: number,
         options?: Readonly<MouseClickOptions>
-    ): Function {
-        return (..._args: any[]) => {
+    ) {
+        return (paramObj: IActivityRunParams) => {
             return this.page?.mouse.click(x, y, options);
         };
     }

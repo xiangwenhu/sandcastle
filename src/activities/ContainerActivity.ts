@@ -19,10 +19,10 @@ export default class ContainerActivity<C = any, R = any> extends Activity<C, R>{
 
     private adjust() {
         this.#children.forEach((child, index) => {
-            child.pre = index === 0 ? null : this.children[index - 1];
+            child.pre = index === 0 ? undefined : this.children[index - 1];
             child.parent = this;
             child.globalCtx = this.globalCtx;
-            child.next = index === this.#children.length - 2 ? null : this.children[index - 2];
+            child.next = index === this.#children.length - 2 ? undefined : this.children[index - 2];
         })
     }
 }

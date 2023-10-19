@@ -1,5 +1,5 @@
 import { ActivityError, TerminateError } from "../ActivityError";
-import { GK_TERMINATED, GK_TERMINATED_MESSAGE } from "../types/activity";
+import { GK_TERMINATED, GK_TERMINATED_MESSAGE, IActivityRunParams } from "../types/activity";
 import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
 
@@ -11,10 +11,9 @@ export default class TryCatchActivity<C = any, R = any> extends SequenceActivity
         super(context, children)
     }
 
-    // @ts-ignore
-    async run(ctx?: any, preRes?: any, extra?: any) {
+    async run(paramObj: IActivityRunParams) {
         try {
-            const res = await super.run(ctx, preRes, extra);
+            const res = await super.run(paramObj);
             return res;
         } catch (err) {
             // 如果已经终止，不能catch TerminateError
@@ -24,7 +23,7 @@ export default class TryCatchActivity<C = any, R = any> extends SequenceActivity
                 }
                 throw new TerminateError(this.globalCtx[GK_TERMINATED_MESSAGE]!, this)
             }
-            await this.catch!.run(ctx, preRes, extra)
+            await this.catch!.run(paramObj)
         }
     }
 }

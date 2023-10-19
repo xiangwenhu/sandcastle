@@ -1,37 +1,39 @@
-import { isObjectLike, isString } from "lodash"
-import { createFunction } from "../../factory/function"
+import { isObjectLike, isString } from "lodash";
+import { createOneParamFunction } from "../../factory/function";
+import { IActivityCodeExecuteParams } from "../../types/activity";
 
 function createReplaceFunc(code: string) {
-    return createFunction(code,
-        "gCtx",      // 全局上下文
-        "ctx",       // 上下文
-        "$c",        // 内置常量
-        "$m",        // 内置方法
-        "$v",        // 全局变量
-        "parent",    // 父节点
-        "preRes",    // 上一个活动的返回值
-        "res",       // 本活动执行完毕的返回值
-        "extra",     // 额外的参数
-    )
-
+    return createOneParamFunction(code, [
+        "gCtx", // 全局上下文
+        "ctx", // 上下文
+        "$c", // 内置常量
+        "$m", // 内置方法
+        "$v", // 全局变量
+        "parent", // 父节点
+        "preRes", // 上一个活动的返回值
+        "res", // 本活动执行完毕的返回值
+        "extra", // 额外的参数
+    ]);
 }
 
 export function replaceStringVariable(value: string) {
-    return (ctx: any = {}, preRes: any = undefined, extra: any = {}) => {
+    return (paramObject: IActivityCodeExecuteParams) => {
         if (isString(value)) {
             if (value.includes("${")) {
-                const rValue = value.replace(/\$\{/img, "\\${");
-                return createReplaceFunc("return \\`" + rValue + "\\`")(ctx, preRes, extra)
+                const rValue = value.replace(/\$\{/gim, "\\${");
+                return createReplaceFunc("return \\`" + rValue + "\\`")(
+                    paramObject
+                );
             } else if (value.startsWith("{{") && value.endsWith("}}")) {
-                const vName = value.replace(/[{{|}}]/img, "");
-                return createReplaceFunc(`return ${vName}`)(ctx, preRes, extra)
+                const vName = value.replace(/[{{|}}]/gim, "");
+                return createReplaceFunc(`return ${vName}`)(paramObject);
             } else {
                 return value;
             }
         } else {
             return value;
         }
-    }
+    };
 }
 
 export function replaceVariable(config: Record<string, any> | string) {
@@ -40,26 +42,24 @@ export function replaceVariable(config: Record<string, any> | string) {
     }
 
     if (isString(config)) {
-        return function (ctx: any = {}, preRes: any = undefined, extra: any = {}) {
-            return replaceStringVariable(config)(ctx, preRes, extra)
-        }
+        return function (paramObject: IActivityCodeExecuteParams) {
+            return replaceStringVariable(config)(paramObject);
+        };
     }
 
     if (!isObjectLike(config)) {
-        return (...args: any) => config;
+        return (paramObject: IActivityCodeExecuteParams) => config;
     }
 
-    return function (ctx: any = {}, preRes: any = undefined, extra: any = {}) {
+    return function (paramObject: IActivityCodeExecuteParams) {
         const result: Record<string, any> = {};
         Object.entries(config).forEach(([key, value]) => {
             if (isString(value)) {
-                result[key] = replaceStringVariable(value)(ctx, preRes, extra);
-            }
-            else {
+                result[key] = replaceStringVariable(value)(paramObject);
+            } else {
                 result[key] = value;
             }
-        })
+        });
         return result;
-    }
-
+    };
 }

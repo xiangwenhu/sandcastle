@@ -1,5 +1,6 @@
 import { ActivityError } from "../ActivityError";
 import { EnumActivityStatus } from "../enum";
+import { IActivityRunParams } from "../types/activity";
 import Activity from "./Activity";
 import AssertActivity from "./Assert";
 import SequenceActivity from "./Sequence";
@@ -26,12 +27,12 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
             throw new ActivityError("assert 未定义", this);
         }
         // 构建执行函数
-        return (...args: any[]) => {
+        return (paramObj: IActivityRunParams) => {
             return new Promise(async (resolve, reject) => {
                 try {
                     let r;
                     let assertR: boolean;
-                    while ((assertR = await this.assert!.run(...args))) {
+                    while ((assertR = await this.assert!.run(paramObj))) {
                         // @ts-ignore
                         r = await childrenFun.apply(this);
 

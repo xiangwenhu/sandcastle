@@ -1,6 +1,7 @@
 import { Browser, PuppeteerLaunchOptions, launch } from "puppeteer";
 import Activity from "../activities/Activity";
 import SequenceActivity from "../activities/Sequence";
+import { IActivityRunParams } from "../types/activity";
 
 export default class BrowserActivity<
     C = any,
@@ -22,10 +23,10 @@ export default class BrowserActivity<
     }
 
 
-    async run(ctx?: any, preRes?: any, extra?: any): Promise<any> {
+    async run(paramObj: IActivityRunParams): Promise<any> {
         try {
             this.#browser = await launch(this.options);
-            const res = await super.run(ctx, preRes, extra);
+            const res = await super.run(paramObj);
             return res;
         } catch (err) {
 

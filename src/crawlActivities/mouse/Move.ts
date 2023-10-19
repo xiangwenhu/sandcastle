@@ -1,5 +1,6 @@
 import { MouseMoveOptions } from "puppeteer";
 import PageChildActivity from "../PageChildActivity";
+import { IActivityRunParams } from "../../types/activity";
 
 export default class MouseMoveActivity<
     C = any,
@@ -7,8 +8,8 @@ export default class MouseMoveActivity<
 > extends PageChildActivity<C, R> {
     buildTask(
         x: number, y: number, options?: Readonly<MouseMoveOptions>
-    ): Function {
-        return (..._args: any[]) => {
+    ) {
+        return (paramObj: IActivityRunParams) => {
             return this.page?.mouse.move(x, y, options);
         };
     }

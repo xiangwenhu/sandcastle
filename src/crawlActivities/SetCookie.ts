@@ -1,5 +1,6 @@
 import { Protocol } from "puppeteer";
 import PageChildActivity from "./PageChildActivity";
+import { IActivityRunParams } from "../types/activity";
 
 export default class SetCookieActivity<
 C = any,
@@ -10,9 +11,9 @@ R = any
         super(ctx);
     }
 
-    buildTask(cookies: Protocol.Network.CookieParam[]): Function {
+    buildTask(cookies: Protocol.Network.CookieParam[]) {
         this.cookies = cookies || this.cookies;
-        return this.task = (..._args: any[]) => {
+        return this.task = (paramObject: IActivityRunParams) => {
             return this.action("setCookie", ...this.cookies)
         }
     }

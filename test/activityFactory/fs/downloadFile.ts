@@ -12,7 +12,7 @@ const activityProps: IActivityProps = {
     }, {
         type: 'code',
         name: '输出内容',
-        code: 'console.log("res:", res)'
+        code: 'console.log("res:", preRes)'
     }]
 }
 

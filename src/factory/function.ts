@@ -1,7 +1,5 @@
-import { BuiltInMethods, BuiltInProperties } from "../types/factory";
-
 function innerCreateFunction(params: string[], code: string): Function {
-    const paramsStr = params.map((c) => `'${c}'`).join();
+    const paramsStr = params.map((c) => `'${c}'`).join(',');
 
     const funStr = `return new Function(${paramsStr}, \`${code}\`) `;
     return new Function(funStr)();
@@ -9,13 +7,13 @@ function innerCreateFunction(params: string[], code: string): Function {
 
 export function createFunction(code: string, ...args: string[]) {
     if (arguments.length < 0) {
-        return () => { };
+        return () => {};
     }
     return innerCreateFunction(args, `${code}`);
 }
-export function createPromiseFunction(code: string, ...args: string[]) {
+export function createAsyncFunction(code: string, ...args: string[]) {
     if (arguments.length < 0) {
-        return () => { };
+        return () => {};
     }
     return innerCreateFunction(
         args,
@@ -23,20 +21,13 @@ export function createPromiseFunction(code: string, ...args: string[]) {
     );
 }
 
+export function createOneParamFunction(code: string, paramKeys: string[]) {
+    const paramsStr = `{${paramKeys.join(",")}}`;
+    return createFunction(code, paramsStr);
+}
 
-export function createFunctionWithExtraParams(code: string, ...args: string[]) {
-    return (properties: BuiltInProperties = {
-        placeholder: "$c",
-        properties: {}
-    }, methods: BuiltInMethods = {
-        placeholder: "$m",
-        properties: {}
-    }) => {
-        const cArgNames = args.concat([properties.placeholder || "$c", methods.placeholder || "$m"]);
-        return (...args: any[]) => {
-             const argList = [...args, properties.properties, methods.properties];
-            return createFunction(code, ...cArgNames).apply(null, argList)
-        }
-    }
+export function createOneParamAsyncFunction(code: string, paramKeys: string[]) {
+    const paramsStr = `{${paramKeys.join(",")}}`;
+    return createAsyncFunction(code, paramsStr);
 }
 

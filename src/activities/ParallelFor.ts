@@ -1,6 +1,7 @@
 import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
 import { ActivityError } from "../ActivityError";
+import { IActivityRunParams } from "../types/activity";
 
 export default class ParallelForActivity<
     C = any,
@@ -17,15 +18,14 @@ export default class ParallelForActivity<
         return super.buildTask(this.children);
     }
 
-    // @ts-ignore
-    run(ctx?: any, preRes?: any, extra?: any): Promise<R | undefined> {
+    run(paramObj: IActivityRunParams): Promise<any> {
         const values = this.values;
-        new Promise(async (resolve, reject) => {
-            ctx = ctx || {};
+        return new Promise(async (resolve, reject) => {
+            paramObj.ctx = paramObj.ctx || {};
             try {
                 const ps = values.map(item => {
-                    ctx.item = item;
-                    return super.run(ctx, preRes, extra)
+                    paramObj.ctx.item = item;
+                    return super.run(paramObj)
                 })
                 const res = await Promise.all(ps);
                 resolve(res);

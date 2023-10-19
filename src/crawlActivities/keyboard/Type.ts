@@ -1,5 +1,6 @@
 import { KeyInput, KeyboardTypeOptions } from "puppeteer";
 import PageChildActivity from "../PageChildActivity";
+import { IActivityRunParams } from "../../types/activity";
 
 export default class KeyboardTypeActivity<C = any, R = any> extends PageChildActivity<
     C,
@@ -8,8 +9,8 @@ export default class KeyboardTypeActivity<C = any, R = any> extends PageChildAct
     buildTask(
         key: KeyInput,
         options?: Readonly<KeyboardTypeOptions>
-    ): Function {
-        return (..._args: any[]) => {
+    ) {
+        return (paramObj: IActivityRunParams) => {
             return this.page?.keyboard.type(key,options);
         };
     }

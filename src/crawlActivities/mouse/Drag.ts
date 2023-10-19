@@ -1,5 +1,6 @@
 import { Point } from "puppeteer";
 import PageChildActivity from "../PageChildActivity";
+import { IActivityRunParams } from "../../types/activity";
 
 export default class MouseDragActivity<
     C = any,
@@ -7,8 +8,8 @@ export default class MouseDragActivity<
 > extends PageChildActivity<C, R> {
     buildTask(
         start: Point, target: Point
-    ): Function {
-        return (..._args: any[]) => {
+    ) {
+        return (paramObj: IActivityRunParams) => {
             return this.page?.mouse.drag(start, target);
         };
     }

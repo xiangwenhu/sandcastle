@@ -1,5 +1,6 @@
 import { MouseOptions } from "puppeteer";
 import PageChildActivity from "../PageChildActivity";
+import { IActivityRunParams } from "../../types/activity";
 
 export default class MouseDownActivity<
     C = any,
@@ -7,8 +8,8 @@ export default class MouseDownActivity<
 > extends PageChildActivity<C, R> {
     buildTask(
         options?: Readonly<MouseOptions>
-    ): Function {
-        return (..._args: any[]) => {
+    ) {
+        return (paramObj: IActivityRunParams) => {
             return this.page?.mouse.down(options);
         };
     }

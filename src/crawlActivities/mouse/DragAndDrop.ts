@@ -1,5 +1,6 @@
 import { Point } from "puppeteer";
 import PageChildActivity from "../PageChildActivity";
+import { IActivityRunParams } from "../../types/activity";
 
 export default class MouseDragAndDropActivity<
     C = any,
@@ -11,8 +12,8 @@ export default class MouseDragAndDropActivity<
         options?: {
             delay?: number;
         }
-    ): Function {
-        return (..._args: any[]) => {
+    ) {
+        return (paramObj: IActivityRunParams) => {
             return this.page?.mouse.dragAndDrop(start, target, options);
         };
     }

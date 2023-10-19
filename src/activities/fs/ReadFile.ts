@@ -1,7 +1,7 @@
 import { ObjectEncodingOptions, OpenMode } from "fs";
 import fsp from "fs/promises";
+import { IActivityRunParams } from "../../types/activity";
 import Activity from "../Activity";
-import path from "path";
 
 export default class ReadFileActivity<C = any> extends Activity<C, string> {
     constructor(context: C = {} as C) {
@@ -17,8 +17,8 @@ export default class ReadFileActivity<C = any> extends Activity<C, string> {
         )
         | BufferEncoding
         | null) {
-        return async (_ctx: C, preRes: any, extra?: any) => {
-            const rDist = this.replaceVariable(dist, _ctx, preRes) as string;
+        return async (paramObj: IActivityRunParams) => {
+            const rDist = this.replaceVariable(dist, paramObj) as string;
 
             const res = await fsp.readFile(rDist, options || {
                 encoding: "utf-8",

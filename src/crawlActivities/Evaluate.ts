@@ -1,3 +1,4 @@
+import { IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
 export default class EvaluateActivity<
@@ -8,12 +9,12 @@ export default class EvaluateActivity<
         super(ctx)
     }
 
-    buildTask(code: string, ...args: any[]): Function {
-        return this.task = (ctx: C, preRes: any = undefined, ..._otherParams: any[]) => {
+    buildTask(code: string, ...args: any[]) {
+        return this.task = (paramObj: IActivityRunParams)  => {
             // 替换code变量
-            const rCode = this.replaceVariable(code, ctx, preRes) as string;
+            const rCode = this.replaceVariable(code, paramObj) as string;
             // 替换参数变量
-            const rArgs = args.map(arg => this.replaceVariable(arg, ctx, preRes))
+            const rArgs = args.map(arg => this.replaceVariable(arg, paramObj))
             return this.page?.evaluate((_code, ..._args) => {
                 const f = new Function(_code);
                 return f(..._args)

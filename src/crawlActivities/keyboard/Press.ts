@@ -1,5 +1,6 @@
 import { KeyInput, KeyPressOptions } from "puppeteer";
 import PageChildActivity from "../PageChildActivity";
+import { IActivityRunParams } from "../../types/activity";
 
 export default class KeyboardUpActivity<
     C = any,
@@ -8,8 +9,8 @@ export default class KeyboardUpActivity<
     buildTask(
         key: KeyInput,
         options?: Readonly<KeyPressOptions>
-    ): Function {
-        return (..._args: any[]) => {
+    ) {
+        return (_paramObj: IActivityRunParams) => {
             return this.page?.keyboard.press(key, options);
         };
     }

@@ -1,5 +1,6 @@
 import { KeyInput } from "puppeteer";
 import PageChildActivity from "../PageChildActivity";
+import { IActivityRunParams } from "../../types/activity";
 
 export default class KeyboardUpActivity<C = any, R = any> extends PageChildActivity<
     C,
@@ -7,8 +8,8 @@ export default class KeyboardUpActivity<C = any, R = any> extends PageChildActiv
 > {
     buildTask(
         key: KeyInput,
-    ): Function {
-        return (..._args: any[]) => {
+    ) {
+        return (paramObj: IActivityRunParams) => {
             return this.page?.keyboard.up(key);
         };
     }

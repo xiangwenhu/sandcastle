@@ -1,12 +1,15 @@
 import { isBoolean, isString } from "lodash";
 import { ActivityError, TerminateError } from "../ActivityError";
 import { EnumActivityStatus } from "../enum";
-import { createPromiseFunction } from "../factory/function";
+import { createOneParamAsyncFunction } from "../factory/function";
 import {
     BaseActivityType,
     GK_TERMINATED,
     GK_TERMINATED_MESSAGE,
     GlobalActivityContext,
+    IActivityRunParams,
+    IActivityCodeExecuteParams,
+    IActivityTaskFunction,
 } from "../types/activity";
 import { firstToLower } from "../util";
 import { replaceVariable } from "./util/variable";
@@ -14,21 +17,21 @@ import { GLOBAL_BUILTIN, GLOBAL_VARIABLES } from "../const";
 import { GlobalBuiltInObject } from "../types/factory";
 
 class Activity<C = any, R = any> {
-    pre: Activity | null = null;
+    pre: Activity | undefined = undefined;
 
-    next: Activity | null = null;
+    next: Activity | undefined = undefined;
 
-    before: Activity | null = null;
+    before: Activity | undefined = undefined;
 
-    after: Activity | null = null;
+    after: Activity | undefined = undefined;
     /**
      * 父节点
      */
-    accessor parent: Activity | null;
+    accessor parent: Activity | undefined;
     /**
      * name
      */
-    public name: string | null;
+    public name: string | undefined;
     /**
      * 类型
      */
@@ -40,63 +43,42 @@ class Activity<C = any, R = any> {
 
     public globalCtx: GlobalActivityContext = {};
 
-    protected task: Function | null;
+    protected task: IActivityTaskFunction | undefined;
 
     accessor checkStatus: boolean = true;
 
     protected get globalBuiltObject(): GlobalBuiltInObject {
         // @ts-ignore
-        return this.globalCtx[GLOBAL_BUILTIN]
+        return this.globalCtx[GLOBAL_BUILTIN];
     }
 
     protected get globalVariables(): Record<string, any> {
         // @ts-ignore
-        return this.globalCtx[GLOBAL_VARIABLES]
+        return this.globalCtx[GLOBAL_VARIABLES];
     }
 
     constructor(public ctx: C) {
-        this.parent = null;
-        this.name = null;
+        this.parent = undefined;
+        this.name = undefined;
         // @ts-ignore
         this.type =
             firstToLower(this.constructor.name.replace("Activity", "")) ||
             "activity";
-        this.task = null;
+        this.task = undefined;
     }
 
-    protected async runBefore(
-        _gCtx = this.globalCtx,
-        _ctx: any = this.ctx,
-        _$c: Record<string, any> = {},
-        _$m: Record<string, Function> = {},
-        _$v: Record<string, any>,
-        _parent: any = this.parent,
-        _preRes: any = undefined,
-        _res: any = undefined,
-        _extra: any = {}
-    ) {
+    protected async runBefore(paramObject: IActivityRunParams) {
         if (!this.before || !(this.before instanceof Activity)) {
-            return
+            return;
         }
-        await this.before.task?.apply(this.before, arguments);
+        await this.before.task?.call(this.before, paramObject);
     }
 
-
-    protected async runAfter(
-        _gCtx = this.globalCtx,
-        _ctx: any = this.ctx,
-        _$c: Record<string, any> = {},
-        _$m: Record<string, Function> = {},
-        _$v: Record<string, any>,
-        _parent: any = this.parent,
-        _preRes: any = undefined,
-        _res: any = undefined,
-        _extra: any = {}
-    ) {
+    protected async runAfter(paramObject: IActivityCodeExecuteParams) {
         if (!this.after || !(this.after instanceof Activity)) {
-            return
+            return;
         }
-        return this.after.task?.apply(this.after, arguments)
+        return this.after.task?.call(this.after, paramObject);
     }
 
     /**
@@ -105,17 +87,16 @@ class Activity<C = any, R = any> {
      * @param {上一次执行结果} preRes
      * @param {其他参数} otherParams
      */
-    async run(
-        ctx: any = {},
-        preRes: any = undefined,
-        extra: any = {}
-    ) {
+    async run({ ctx, preRes, extra }: IActivityRunParams = {
+        ctx:{},
+        preRes:undefined,
+        extra:{}
+    }) {
         const globalCtx = this.globalCtx;
         // 如果已经终止
         if (globalCtx[GK_TERMINATED]) {
             return;
         }
-
         // TODO::
         // if (this.checkStatus && this.status >= EnumActivityStatus.EXECUTING) {
         //     throw new ActivityError("活动已经执行", this);
@@ -130,18 +111,25 @@ class Activity<C = any, R = any> {
         const self = this;
         try {
             const gb = this.globalBuiltObject;
-            const argsList = [
-                globalCtx, mContext, gb.properties.properties, gb.methods.properties,
-                this.globalVariables, this.parent, preRes, undefined, extra
-            ];
+            const argObject: IActivityCodeExecuteParams = {
+                gCtx: globalCtx,
+                ctx: mContext,
+                $c: gb.properties.properties,
+                $m: gb.methods.properties,
+                $v: this.globalVariables,
+                parent: this.parent,
+                preRes,
+                res: undefined,
+                extra,
+            };
             // 执行前
-            await this.runBefore.apply(self, argsList as any);
+            await this.runBefore.call(self, argObject);
 
-            const res: R = await this.task!.apply(self, argsList as any);
+            const res: R = await this.task!.call(self, argObject);
             this.status = EnumActivityStatus.EXECUTED;
             // 执行后
-            argsList[6] = res;
-            const afterRes = await this.runAfter.apply(self, argsList as any);
+            argObject.res = res;
+            const afterRes = await this.runAfter.call(self, argObject);
 
             if (this.type == "terminate") {
                 globalCtx[GK_TERMINATED] = true;
@@ -156,8 +144,10 @@ class Activity<C = any, R = any> {
         }
     }
 
-    public buildTask(..._args: any[]): Function {
-        return () => { };
+    public buildTask(
+        ..._args: any[]
+    ): IActivityTaskFunction {
+        return () => {};
     }
 
     build(...args: any[]) {
@@ -170,7 +160,7 @@ class Activity<C = any, R = any> {
      *
      * @param {代码} code
      */
-    protected buildWithCode(code: string): Function {
+    protected buildWithCode(code: string): IActivityTaskFunction {
         if (!isString(code) && !isBoolean(code)) {
             throw new ActivityError(
                 "buildWithCode方法的code参数必须是字符串",
@@ -181,35 +171,40 @@ class Activity<C = any, R = any> {
         const g = this.globalBuiltObject;
         const $c = g.properties.placeholder || "$c";
         const $m = g.methods.placeholder || "$m";
-        this.task = createPromiseFunction(
-            code,
-            "gCtx",    // 全局上下文
-            "ctx",     // 上下文
-            $c,        // 内置变量
-            $m,        // 内置方法
+        this.task = createOneParamAsyncFunction(code, [
+            "gCtx", // 全局上下文
+            "ctx", // 上下文
+            $c, // 内置变量
+            $m, // 内置方法
             "$v",
-            "parent",  // 父节点
-            "preRes",  // 上一个活动的返回值
-            "res",     // 本活动执行完毕的返回值
-            "extra",   // 额外的参数
-        );
+            "parent", // 父节点
+            "preRes", // 上一个活动的返回值
+            "res", // 本活动执行完毕的返回值
+            "extra", // 额外的参数
+        ]) as IActivityTaskFunction;
         this.status = EnumActivityStatus.BUILDED;
         return this.task;
     }
 
     replaceVariable<C>(
         config: string | Record<string, any>,
-        ctx: any = {},
-        preRes: any = undefined,
-        extra: any = {}
+        paramObj: IActivityRunParams
     ) {
         const gb = this.globalBuiltObject;
-        let mContext = Object.assign({}, ctx || {}, this.ctx || {});
-        const argsList = [
-            this.globalCtx, mContext, gb.properties.properties, gb.methods.properties,
-            this.globalVariables, this.parent, preRes, undefined, extra
-        ];
-        return replaceVariable(config).apply(this, argsList) as C;
+        let mContext = Object.assign({}, paramObj.ctx || {}, this.ctx || {});
+        const paramObject: IActivityCodeExecuteParams = {
+            gCtx: this.globalCtx,
+            ctx: mContext,
+            $c: gb.properties.properties,
+            $m: gb.methods.properties,
+            $v: this.globalVariables,
+            parent: this.parent,
+            preRes: paramObj.preRes,
+            res: undefined,
+            extra: paramObj.extra
+        };
+
+        return replaceVariable(config).call(this, paramObject) as C;
     }
 
     getProperty<P = any>(
@@ -232,9 +227,9 @@ class Activity<C = any, R = any> {
     }
 
     getClosestParent<A>(targetActivity: Object) {
-        let act: Activity | null = this;
+        let act: Activity | undefined = this;
 
-        while (act != null) {
+        while (act != undefined) {
             if (act instanceof (targetActivity as any as Function)) {
                 return act as A;
             }

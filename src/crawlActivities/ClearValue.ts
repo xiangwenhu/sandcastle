@@ -1,14 +1,15 @@
 import { isString } from "lodash";
 import { ActivityError } from "../ActivityError";
 import PageChildActivity from "./PageChildActivity";
+import { IActivityRunParams } from "../types/activity";
 
 export default class ClearValueActivity<
     C = any,
     R = any
 > extends PageChildActivity<C, R> {
 
-    buildTask(selector: string): Function {
-        return this.task = async (..._args: any[]) => {
+    buildTask(selector: string) {
+        return this.task = async (paramObj: IActivityRunParams) => {
             const page = this.page;
             const el = await page!.$(selector);
             if (!el) {

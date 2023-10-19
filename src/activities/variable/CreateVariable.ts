@@ -1,10 +1,11 @@
+import { IActivityRunParams } from "../../types/activity";
 import Activity from "../Activity";
 
 export default class CreateVariableActivity<C = any> extends Activity<C, any> {
     buildTask(name: string, value: any) {
-        return (ctx: any = {}, preRes: any = undefined, extra: any = {}) => {
-            const rName = this.replaceVariable(name, ctx, preRes, extra) as string;
-            const rValue = this.replaceVariable(value, ctx, preRes, extra);
+        return (paramObj: IActivityRunParams) => {
+            const rName = this.replaceVariable(name,paramObj) as string;
+            const rValue = this.replaceVariable(value, paramObj);
             this.globalVariables[rName] = rValue;
         }
     }

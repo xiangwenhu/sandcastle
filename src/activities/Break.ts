@@ -1,3 +1,4 @@
+import { IActivityRunParams } from "../types/activity";
 import Activity from "./Activity";
 
 /**
@@ -10,7 +11,7 @@ export default class BreakActivity<C = any> extends Activity<C, string> {
 
     buildTask(message: string) {
         this.message = message || this.message
-        return (_ctx: C, res: any) => Promise.resolve(this.message)
+        return (paramObj: IActivityRunParams) => Promise.resolve(this.message)
     }
 }
 

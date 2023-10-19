@@ -2,6 +2,7 @@ import ContainerActivity from "./ContainerActivity";
 import Activity from "./Activity";
 import { ActivityError } from "../ActivityError";
 import BreakActivity from "./Break";
+import { IActivityRunParams } from "../types/activity";
 
 export default class SequenceActivity<
     C = any,
@@ -13,8 +14,9 @@ export default class SequenceActivity<
 
     buildTask(children?: Activity[]) {
         this.children = children || this.children;
-        return (ctx?: C, preRes?: any, extra?: any) =>
+        return (paramObj: IActivityRunParams) =>
             new Promise(async (resolve, reject) => {
+                let preRes: any;
                 for (let i = 0; i < this.children.length; i++) {
                     const child = this.children[i];
                     try {
@@ -22,11 +24,8 @@ export default class SequenceActivity<
                         if (child.type === "break") {
                             return resolve((child as BreakActivity).message);
                         }
-                        preRes = await child.run(
-                            ctx,
-                            preRes,
-                            extra
-                        );
+                        paramObj.preRes = preRes;
+                        preRes = await child.run(paramObj);
                     } catch (err: any) {
                         reject(new ActivityError(err && err.message, child));
                     }

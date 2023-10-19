@@ -1,3 +1,4 @@
+import { IActivityRunParams } from "../types/activity";
 import Activity from "./Activity";
 import ContainerActivity from "./ContainerActivity";
 
@@ -10,7 +11,7 @@ export default class ParallelActivity<C = any, R = any> extends ContainerActivit
         // 构建子活动
         this.children = children || this.children
 
-        return (ctx: C, preRes: any, extra?: any) =>
-            Promise.all(this.children.map(act => act.run(ctx, preRes, extra)))
+        return (paramObj: IActivityRunParams) =>
+            Promise.all(this.children.map(act => act.run(paramObj)))
     }
 }

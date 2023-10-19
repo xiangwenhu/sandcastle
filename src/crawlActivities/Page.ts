@@ -1,6 +1,7 @@
 import { Browser, Page } from "puppeteer";
 import SequenceActivity from "../activities/Sequence";
 import BrowserActivity from "./Browser";
+import { IActivityRunParams } from "../types/activity";
 
 export default class PageActivity<C = any, R = any> extends SequenceActivity<C, R>  {
 
@@ -14,10 +15,10 @@ export default class PageActivity<C = any, R = any> extends SequenceActivity<C, 
         return this.getClosestParent<BrowserActivity>(BrowserActivity)?.browser;
     }
 
-    async run(ctx?: any, preRes?: any, extra?: any): Promise<any> {
+    async run(paramObj: IActivityRunParams): Promise<any> {
         try {
             this.#page = await this.browser!.newPage();
-            const res = await super.run(ctx, preRes, extra);
+            const res = await super.run(paramObj);
             return res;
         } catch (err) {
             console.log("error:", err);

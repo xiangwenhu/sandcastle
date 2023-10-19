@@ -1,4 +1,5 @@
 import { ActivityError } from "../ActivityError";
+import { IActivityRunParams } from "../types/activity";
 import Activity from "./Activity";
 import AssertActivity from "./Assert";
 import SequenceActivity from "./Sequence";
@@ -12,29 +13,27 @@ export default class AssertSequenceActivity<
         super(context, children)
     }
 
+    #assert: AssertActivity | undefined = undefined;
 
-
-    #assert: AssertActivity | null = null;
-
-    get assert(): AssertActivity | null {
+    get assert(): AssertActivity | undefined {
         return this.#assert
     }
 
     set assert(value: AssertActivity) {
         this.#assert = value;
         if (value) {
-            value.parent = this;
+            value.parent = this as Activity;
         }
     }
 
-    async run(ctx: C, preRes: any = undefined, extra?: any) {
+    async run(paramObj: IActivityRunParams) {
         if (!this.assert) {
             throw new ActivityError("assert未定义", this);
         }
-        const res = await this.assert.run(ctx, preRes, extra);
-        if (!res) {
-            return preRes;
+        const res = await this.assert.run(paramObj);
+        if (res === undefined) {
+            return paramObj.preRes;
         }
-        return super.run(ctx, preRes, extra);
+        return super.run(paramObj);
     }
 }

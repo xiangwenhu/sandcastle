@@ -1,6 +1,7 @@
 import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
 import { ActivityError } from "../ActivityError";
+import { IActivityRunParams } from "../types/activity";
 
 export default class ForActivity<
     C = any,
@@ -17,15 +18,16 @@ export default class ForActivity<
         return super.buildTask(this.children);
     }
 
-    run(ctx?: any, preRes?: any, extra?: any): Promise<R | undefined> {
+    run(paramObj: IActivityRunParams): Promise<R | undefined> {
         const that = this as Activity;
         return new Promise(async (resolve, reject) => {
+            let preRes;
             for (let i = 0; i < this.values.length; i++) {
                 const val = this.values[i];
-                ctx = ctx || {};
-                ctx.item = val;
+                paramObj.ctx.item = val;
                 try {
-                    preRes = await super.run(ctx, preRes, extra)
+                    preRes = await super.run(paramObj)
+                    paramObj.preRes = preRes;
                 } catch (err: any) {
                     reject(new ActivityError(err && err.message, that));
                 } finally {

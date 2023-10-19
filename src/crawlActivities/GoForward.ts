@@ -1,5 +1,6 @@
 import { WaitForOptions } from "puppeteer";
 import PageChildActivity from "./PageChildActivity";
+import { IActivityRunParams } from "../types/activity";
 
 export default class GoForwardActivity<
     C = any,
@@ -9,8 +10,8 @@ export default class GoForwardActivity<
         super(ctx)
     }
 
-    buildTask(options?: WaitForOptions | undefined): Function {
-        return this.task = (..._args: any[]) => {
+    buildTask(options?: WaitForOptions | undefined) {
+        return this.task = (paramObj: IActivityRunParams)  => {
             return this.page?.goForward(options)
         }
     }

@@ -1,5 +1,6 @@
 import { GoToOptions } from "puppeteer";
 import PageChildActivity from "./PageChildActivity";
+import { IActivityRunParams } from "../types/activity";
 
 export default class GotoActivity<
     C = any,
@@ -9,10 +10,10 @@ export default class GotoActivity<
         super(ctx)
     }
 
-    buildTask(url: string, options: GoToOptions | undefined = undefined): Function {
+    buildTask(url: string, options: GoToOptions | undefined = undefined) {
         this.url = url || this.url;
         this.options = options || this.options;
-        return this.task = (..._args: any[]) => {
+        return this.task = (paramObject: IActivityRunParams) => {
             return this.action("goto", this.url, this.options)
         }
     }
