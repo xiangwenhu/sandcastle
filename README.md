@@ -24,11 +24,16 @@
 |Terminate        |terminate      |  ❌    |  ✅ | 终止整个流程 |
 |TryCatch         |tryCatch       |  ✅    |  ✅ | try catch |
 |For              |for            |  ✅    |  ✅ | for       |
-|ParallelFor      |parallelFor    |  ✅    |  ✅ | parallel For       |
-|WriteFile        |writeFile      |  ❌    |  ✅ | 写文件  |
-|ReadFile         |readFile       |  ❌    |  ✅ | 读文件（txt/json） |
-|DownloadFile     |downloadFile   |  ❌    |  ✅ | 下载文件     |
-|RemoveFile       |removeFile     |  ❌    |  ✅ | 删除文件     |
+|ParallelFor      |parallelFor    |  ✅    |  ✅ | parallel For   |
+
+
+**fs**
+|类名|注册类型| 是否有children|状态| 说明|
+|----|----|----|----|----|
+|WriteFile        |fs.writeFile      |  ❌    |  ✅ | 写文件  |
+|ReadFile         |fs.readFile       |  ❌    |  ✅ | 读文件（txt/json） |
+|DownloadFile     |fs.downloadFile   |  ❌    |  ✅ | 下载文件     |
+|RemoveFile       |fs.removeFile     |  ❌    |  ✅ | 删除文件     |
 
 ## 爬网相关和关联的Factory
 
@@ -66,10 +71,31 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 |Hover           |c.page.hover            |  ❌    |  ✅ | page.hover  |
 |UploadFile      |c.page.uploadFile       |  ❌    |  ✅ | 上传文件|
 |clearValue      |c.page.clearValue       |  ❌    |  ✅ | 清除输入控制的值|
+|ExposeFunction  |c.page.exposeFunction   |  ❌    |  ❌ | 暴露函数  |
+|Pdf             |c.page.pdf              |  ❌    |  ❌ | pdf|
+|Screenshot      |c.page.screenshot       |  ❌    |  ❌ | 截屏|
+|SetViewport     |c.page.setViewport      |  ❌    |  ❌ | setViewport|
+|SetRequestInterception|c.page.setRequestInterception  |  ❌    |  ❌ | setRequestInterception|
+|SetExtraHTTPHeaders|c.page.setExtraHTTPHeaders  |  ❌    |  ❌ | setExtraHTTPHeaders|
+|SetGeolocation|c.page.setGeolocation      |  ❌    |  ❌ | setGeolocation|
+|SetRequestInterception|c.page.setRequestInterception  |  ❌    |  ❌ | setRequestInterception|
+|AddStyleTag     |c.page.addStyleTag       |  ❌    |  ❌ | 添加style|
+|AddScriptTag    |c.page.addScriptTag      |  ❌    |  ❌ | 添加script|
+|Select          |c.page.select            |  ❌    |  ❌ | select选中|
+
+
+**键盘**
+|类名|注册类型| 是否有children|状态| 说明|
+|----|----|----|----|----|
 |KeyboardDown    |c.page.keyboard.down    |  ❌    |  ✅ | 键down|
 |KeyboardPress   |c.page.keyboard.press   |  ❌    |  ✅ | 键press|
 |KeyboardSendCharacter  |c.page.keyboard.sendCharacter |  ❌    |  ✅ | 键盘输入|
 |KeyboardType    |c.page.keyboard.type    |  ❌    |  ✅  | 键盘输入|
+|KeyboardUp      |c.page.keyboard.up      |  ❌    |  ✅  | 键盘up|
+
+**鼠标**
+|类名|注册类型| 是否有children|状态| 说明|
+|----|----|----|----|----|
 |MouseClick      |c.page.mouse.click      |  ❌    |  ✅  | 鼠标点|
 |MouseDown       |c.page.mouse.down       |  ❌    |  ✅  | 鼠标down|
 |MouseDrag       |c.page.mouse.drag       |  ❌    |  ✅  | 鼠标drag|

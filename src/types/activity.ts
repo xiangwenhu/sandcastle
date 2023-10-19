@@ -5,7 +5,9 @@ export type IActivityProps<C = any> = {
     type: BaseActivityType | string;
     context?: C,
     name: string;
-    children?: IActivityProps[]
+    children?: IActivityProps[];
+    before?: IActivityProps | string | null | undefined;
+    after?: IActivityProps | string | null | undefined;
 } & Record<string, any>
 
 export interface ActivityFactory<P extends IActivityProps = any, A extends Activity = Activity | ContainerActivity> {

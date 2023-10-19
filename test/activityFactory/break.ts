@@ -5,9 +5,15 @@ const activityProps: IActivityProps = {
     type: 'sequence',
     name: 'break测试',
     children: [{
+        before: {
+            type: "code",
+            name: "code before",
+            code: "console.log('code before')"
+        },
         type: 'code',
         name: '输出当前日期',
-        code: 'console.log(new Date().toLocaleString())'
+        code: 'console.log(new Date().toLocaleString())',
+        after: 'console.log("code after")'
     }, {
         type: 'delay',
         name: '延时2秒',

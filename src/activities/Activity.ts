@@ -16,6 +16,10 @@ class Activity<C = any, R = any> {
 
     next: Activity | null = null;
 
+    before: Activity | null = null;
+
+    after: Activity | null = null;
+
     /**
      * 父节点
      */
@@ -49,6 +53,25 @@ class Activity<C = any, R = any> {
         this.task = null;
     }
 
+    async runBefore(ctx: any = {},
+        preRes: any = undefined,
+        ...otherParams: any[]) {
+        if (!this.before || !(this.before instanceof Activity)) {
+            return
+        }
+        await this.before.run(ctx, preRes, ...otherParams);
+    }
+
+
+    async runAfter(ctx: any = {},
+        preRes: any = undefined,
+        ...otherParams: any[]) {
+        if (!this.after || !(this.after instanceof Activity)) {
+            return
+        }
+        await this.after.run(ctx, preRes, ...otherParams);
+    }
+
     /**
      *
      * @param {执行上下文} ctx
@@ -56,7 +79,7 @@ class Activity<C = any, R = any> {
      * @param {其他参数} otherParams
      */
     async run(
-        ctx: any = undefined,
+        ctx: any = {},
         preRes: any = undefined,
         ...otherParams: any[]
     ) {
@@ -75,25 +98,26 @@ class Activity<C = any, R = any> {
             this.buildTask();
         }
 
-        let realContext = Object.assign({}, ctx || {}, this.ctx || {});
+        let mContext = Object.assign({}, ctx || {}, this.ctx || {});
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
-            const res: R = await this.task!.apply(self, [
-                realContext,
-                preRes,
-                globalCtx,
-                this.parent,
-                ...otherParams,
-            ]);
+            const argsList = [mContext, preRes, globalCtx, this.parent, ...otherParams];
+            // 执行前
+            await this.runBefore.apply(self, argsList);
+
+            const res: R = await this.task!.apply(self, argsList);
             this.status = EnumActivityStatus.EXECUTED;
+            // 执行后
+            mContext.res = res;
+            await this.runAfter.apply(self, argsList);
 
             if (this.type == "terminate") {
                 globalCtx[GK_TERMINATED] = true;
                 globalCtx[GK_TERMINATED_MESSAGE] = res as string;
+                // 执行后
                 throw new TerminateError(res as string, this);
             }
-
             return res;
         } catch (err) {
             self.status = EnumActivityStatus.EXCEPTION;

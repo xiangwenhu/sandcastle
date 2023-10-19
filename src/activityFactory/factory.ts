@@ -1,3 +1,4 @@
+import { isString } from "lodash";
 import ContainerActivity from "../activities/ContainerActivity";
 import { ActivityFactory, BaseActivityType, IActivityProps } from "../types/activity";
 const factoryMap = new Map<string, ActivityFactory>();
@@ -21,8 +22,25 @@ function createSingle(props: IActivityProps, globalContext: any = {}) {
         throw new Error(`不存在type为 ${type} 的factory`)
     }
     const activity = factory(props, globalContext);
+    // 创建children
     if (Array.isArray(props.children)) {
         (activity as ContainerActivity).children = createChildren(props.children, globalContext);
+    }
+    // 创建before
+    if (props.before) {
+        activity.before = isString(props.before) ? createSingle({
+            type: "code",
+            code: props.before,
+            name: `${props.name} before`
+        }, globalContext) : createSingle(props.before);
+    }
+    // 创建after
+    if (props.after) {
+        activity.after = isString(props.after) ? createSingle({
+            type: "code",
+            code: props.after,
+            name: `${props.name} after`
+        }, globalContext) : createSingle(props.after);
     }
     return activity;
 }
