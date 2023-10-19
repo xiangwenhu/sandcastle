@@ -19,10 +19,10 @@ export default class BrowserActivity<
     }
 
 
-    async run(ctx?: any, preRes?: any, ...otherParams: any[]): Promise<any> {
+    async run(ctx?: any, preRes?: any, extra?: any): Promise<any> {
         try {
             this[PROPERTY_BROWSER] = await launch(this.options);
-            const res = await super.run(ctx, preRes, ...otherParams);
+            const res = await super.run(ctx, preRes, extra);
             return res;
         } catch (err) {
 

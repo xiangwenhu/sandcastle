@@ -17,7 +17,7 @@ export default class ForActivity<
         return super.buildTask(this.children);
     }
 
-    run(ctx?: any, preRes?: any, ...otherParams: any[]): Promise<R | undefined> {
+    run(ctx?: any, preRes?: any, extra?: any): Promise<R | undefined> {
         const that = this as Activity;
         return new Promise(async (resolve, reject) => {
             for (let i = 0; i < this.values.length; i++) {
@@ -25,7 +25,7 @@ export default class ForActivity<
                 ctx = ctx || {};
                 ctx.item = val;
                 try {
-                    preRes = await super.run(ctx, preRes, ...otherParams)
+                    preRes = await super.run(ctx, preRes, extra)
                 } catch (err: any) {
                     reject(new ActivityError(err && err.message, that));
                 } finally {

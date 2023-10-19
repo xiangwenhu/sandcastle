@@ -27,14 +27,14 @@ export default class AssertSequenceActivity<
         }
     }
 
-    async run(ctx: C, preRes: any = undefined, ...otherParams: any[]) {
+    async run(ctx: C, preRes: any = undefined, extra?: any) {
         if (!this.assert) {
             throw new ActivityError("assert未定义", this);
         }
-        const res = await this.assert.run(ctx, preRes, ...otherParams);
+        const res = await this.assert.run(ctx, preRes, extra);
         if (!res) {
             return preRes;
         }
-        return super.run(ctx, preRes, ...otherParams);
+        return super.run(ctx, preRes, extra);
     }
 }

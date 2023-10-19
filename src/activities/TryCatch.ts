@@ -12,9 +12,9 @@ export default class TryCatchActivity<C = any, R = any> extends SequenceActivity
     }
 
     // @ts-ignore
-    async run(ctx?: any, preRes?: any, ...otherParams: any[]) {
+    async run(ctx?: any, preRes?: any, extra?: any) {
         try {
-            const res = await super.run(ctx, preRes, ...otherParams);
+            const res = await super.run(ctx, preRes, extra);
             return res;
         } catch (err) {
             // 如果已经终止，不能catch TerminateError
@@ -24,7 +24,7 @@ export default class TryCatchActivity<C = any, R = any> extends SequenceActivity
                 }
                 throw new TerminateError(this.globalCtx[GK_TERMINATED_MESSAGE]!, this)
             }
-            await this.catch!.run(ctx, preRes, ...otherParams)
+            await this.catch!.run(ctx, preRes, extra)
         }
     }
 }

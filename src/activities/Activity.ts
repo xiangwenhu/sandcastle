@@ -19,7 +19,6 @@ class Activity<C = any, R = any> {
     before: Activity | null = null;
 
     after: Activity | null = null;
-
     /**
      * 父节点
      */
@@ -53,23 +52,33 @@ class Activity<C = any, R = any> {
         this.task = null;
     }
 
-    async runBefore(ctx: any = {},
-        preRes: any = undefined,
-        ...otherParams: any[]) {
+    protected async runBefore(
+        _ctx: any = this.ctx,
+        _preRes: any = undefined,
+        _gCtx = this.globalCtx,
+        _parent: any = this.parent,
+        _res: any = undefined,
+        _extra: any = {}
+    ) {
         if (!this.before || !(this.before instanceof Activity)) {
             return
         }
-        await this.before.run(ctx, preRes, ...otherParams);
+        await this.before.task?.apply(this.before, arguments);
     }
 
 
-    async runAfter(ctx: any = {},
-        preRes: any = undefined,
-        ...otherParams: any[]) {
+    protected async runAfter(
+        _ctx: any = this.ctx,
+        _preRes: any = undefined,
+        _gCtx = this.globalCtx,
+        _parent: any = this.parent,
+        _res: any = undefined,
+        _extra: any = {}
+    ) {
         if (!this.after || !(this.after instanceof Activity)) {
             return
         }
-        await this.after.run(ctx, preRes, ...otherParams);
+        await this.after.task?.apply(this.after, arguments)
     }
 
     /**
@@ -81,7 +90,7 @@ class Activity<C = any, R = any> {
     async run(
         ctx: any = {},
         preRes: any = undefined,
-        ...otherParams: any[]
+        extra: any = {}
     ) {
         const globalCtx = this.globalCtx;
         // 如果已经终止
@@ -102,15 +111,15 @@ class Activity<C = any, R = any> {
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
-            const argsList = [mContext, preRes, globalCtx, this.parent, ...otherParams];
-            // 执行前
-            await this.runBefore.apply(self, argsList);
 
-            const res: R = await this.task!.apply(self, argsList);
+            const beforeArgsList = [mContext, preRes, globalCtx, this.parent, undefined, extra];
+            // 执行前
+            await this.runBefore.apply(self, beforeArgsList as any);
+
+            const res: R = await this.task!.apply(self, beforeArgsList as any);
             this.status = EnumActivityStatus.EXECUTED;
             // 执行后
-            mContext.res = res;
-            await this.runAfter.apply(self, argsList);
+            await this.runAfter.apply(self, [mContext, preRes, globalCtx, this.parent, res, extra]);
 
             if (this.type == "terminate") {
                 globalCtx[GK_TERMINATED] = true;
@@ -148,10 +157,12 @@ class Activity<C = any, R = any> {
         }
         this.status = EnumActivityStatus.BUILDING;
         this.task = createPromiseFunction(
-            "ctx", // 上下文
-            "res", // res
-            "gCtx", // 全局上下文
+            "ctx",    // 上下文
+            "preRes", // 上一个活动执行后的 res
+            "gCtx",   // 全局上下文
             "parent", // 父活动
+            "res",    // 当前Activity之后的res
+            "extra",  // 其他的参数
             code
         );
         this.status = EnumActivityStatus.BUILDED;

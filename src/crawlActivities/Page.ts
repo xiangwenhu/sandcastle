@@ -10,10 +10,10 @@ export default class PageActivity<C = any, R = any> extends SequenceActivity<C, 
         return this.getProperty<Browser>(PROPERTY_BROWSER, true)
     }
 
-    async run(ctx?: any, preRes?: any, ...otherParams: any[]): Promise<any> {
+    async run(ctx?: any, preRes?: any, extra?: any): Promise<any> {
         try {
             this[PROPERTY_PAGE] = await this.getBrowser()!.newPage();
-            const res = await super.run(ctx, preRes, ...otherParams);
+            const res = await super.run(ctx, preRes, extra);
             return res;
         } catch (err) {
             console.log("error:", err);

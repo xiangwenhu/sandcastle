@@ -29,7 +29,7 @@ const activityProps: IActivityProps = {
                 {
                     type: "code",
                     name: "输出cookie",
-                    code: "console.log('快手res', res);"
+                    code: "console.log('快手res', preRes);"
                 }
             ]
         },
@@ -52,7 +52,7 @@ const activityProps: IActivityProps = {
                 {
                     type: "code",
                     name: "输出cookie",
-                    code: "console.log('抖音res', res);"
+                    code: "console.log('抖音res', preRes);"
                 }
             ]
         }]

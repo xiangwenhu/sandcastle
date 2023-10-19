@@ -8,7 +8,7 @@ export default class RemoveFileActivity<C = any> extends Activity<C, string> {
     }
 
     buildTask(dist: string) {
-        return async (_ctx: C, res: any, ...otherParams: any[]) => {
+        return async (_ctx: C, res: any, extra?: any) => {
             const rDist = this.replaceVariable(dist, _ctx, res) as string;
             if (!fs.existsSync(rDist)) {
                 return false

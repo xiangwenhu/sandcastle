@@ -18,7 +18,7 @@ export default class IFElseActivity<
         this.type = "ifElse"
     }
 
-    buildTask(ctx: C, preRes: any = undefined, ...otherParams: any[]) {
+    buildTask(ctx: C, preRes: any = undefined, extra?: any) {
         if (!this.if) {
             throw new ActivityError("if为定义", this)
         }
@@ -31,16 +31,16 @@ export default class IFElseActivity<
             sequenceCol.push(this.else)
         }
 
-        return async (ctx: C, preRes: any = undefined, ...otherParams: any[]) => {
+        return async (ctx: C, preRes: any = undefined, extra: any) => {
             let assertR: boolean = false;
             let r: any;
             for (let i = 0; i < sequenceCol.length; i++) {
                 const act = sequenceCol[i];
-                assertR = await act.assert!.run(ctx, preRes, ...otherParams);
+                assertR = await act.assert!.run(ctx, preRes, extra);
                 // 执行后状态会被改变
                 act.assert!.status = EnumActivityStatus.BUILDED;
                 if (assertR) {
-                    return act.run(ctx, preRes, ...otherParams);
+                    return act.run(ctx, preRes, extra);
                 }
             }
         }

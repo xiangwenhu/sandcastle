@@ -17,7 +17,7 @@ export default class ReadFileActivity<C = any> extends Activity<C, string> {
         )
         | BufferEncoding
         | null) {
-        return async (_ctx: C, preRes: any, ...otherParams: any[]) => {
+        return async (_ctx: C, preRes: any, extra?: any) => {
             const rDist = this.replaceVariable(dist, _ctx, preRes) as string;
 
             const res = await fsp.readFile(rDist, options || {

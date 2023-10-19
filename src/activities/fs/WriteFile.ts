@@ -18,7 +18,7 @@ export default class WriteFileActivity<C = any> extends Activity<C, string> {
         })
         | BufferEncoding
         | null) {
-        return async (_ctx: C, res: any, ...otherParams: any[]) => {
+        return async (_ctx: C, res: any, extra?: any) => {
             const rDist = this.replaceVariable(dist, _ctx, res) as string;
             const rContent = this.replaceVariable(content, _ctx, res) as any;
             const data = isPlainObject(rContent) ? JSON.stringify(rContent, undefined, "\t") : rContent;

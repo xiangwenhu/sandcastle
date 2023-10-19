@@ -13,7 +13,7 @@ export default class SequenceActivity<
 
     buildTask(children?: Activity[]) {
         this.children = children || this.children;
-        return (ctx?: C, preRes?: any, ...otherParams: any[]) =>
+        return (ctx?: C, preRes?: any, extra?: any) =>
             new Promise(async (resolve, reject) => {
                 for (let i = 0; i < this.children.length; i++) {
                     const child = this.children[i];
@@ -25,7 +25,7 @@ export default class SequenceActivity<
                         preRes = await child.run(
                             ctx,
                             preRes,
-                            ...otherParams
+                            extra
                         );
                     } catch (err: any) {
                         reject(new ActivityError(err && err.message, child));

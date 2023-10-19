@@ -12,7 +12,7 @@ export default class DownloadFileActivity<C = any> extends Activity<C, string> {
         requestConfig: AxiosRequestConfig,
         timeout: number
     }) {
-        return (_ctx: C, res: any, ...otherParams: any[]) => {
+        return (_ctx: C, res: any, extra?: any) => {
             const rUrl = this.replaceVariable(url, _ctx, res) as string;
             const rDist = this.replaceVariable(dist, _ctx, res) as string;
             return downloadFileWithRetry(rUrl, rDist, options)

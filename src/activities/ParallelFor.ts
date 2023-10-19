@@ -18,14 +18,14 @@ export default class ParallelForActivity<
     }
 
     // @ts-ignore
-    run(ctx?: any, preRes?: any, ...otherParams: any[]): Promise<R | undefined> {
+    run(ctx?: any, preRes?: any, extra?: any): Promise<R | undefined> {
         const values = this.values;
         new Promise(async (resolve, reject) => {
             ctx = ctx || {};
             try {
                 const ps = values.map(item => {
                     ctx.item = item;
-                    return super.run(ctx, preRes, ...otherParams)
+                    return super.run(ctx, preRes, extra)
                 })
                 const res = await Promise.all(ps);
                 resolve(res);

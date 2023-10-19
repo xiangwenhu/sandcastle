@@ -31,7 +31,7 @@ const activityProps: IActivityProps = {
                 {
                     type: "code",
                     name: "输出cookie",
-                    code: "console.log('fetch res:', res);"
+                    code: "console.log('fetch res:', preRes);"
                 }
             ]
         }
