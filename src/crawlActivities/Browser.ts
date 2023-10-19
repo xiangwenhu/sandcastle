@@ -1,14 +1,17 @@
 import { Browser, PuppeteerLaunchOptions, launch } from "puppeteer";
-import SequenceActivity from "../activities/Sequence";
 import Activity from "../activities/Activity";
-import { PROPERTY_BROWSER } from "../const";
+import SequenceActivity from "../activities/Sequence";
 
 export default class BrowserActivity<
     C = any,
     R = any
 > extends SequenceActivity<C, R> {
 
-    protected accessor [PROPERTY_BROWSER]: Browser |  undefined = undefined;
+    #browser: Browser | undefined = undefined;
+
+    get browser() {
+        return this.#browser;
+    }
 
     constructor(
         ctx: any,
@@ -21,15 +24,14 @@ export default class BrowserActivity<
 
     async run(ctx?: any, preRes?: any, extra?: any): Promise<any> {
         try {
-            this[PROPERTY_BROWSER] = await launch(this.options);
+            this.#browser = await launch(this.options);
             const res = await super.run(ctx, preRes, extra);
             return res;
         } catch (err) {
 
         } finally {
-            if (!!this[PROPERTY_BROWSER]) {
-                // @ts-ignore
-                await this[PROPERTY_BROWSER].close();
+            if (!!this.#browser) {
+                await this.#browser.close();
             }
         }
     }

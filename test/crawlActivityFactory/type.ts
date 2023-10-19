@@ -10,7 +10,7 @@ const activityProps: IActivityProps = {
     },
     children: [
         {
-            type: "page",
+            type: "c.page",
             name: "页面容器",
             children: [
                 {

@@ -1,16 +1,17 @@
 import { Browser, Page } from "puppeteer";
 import Activity from "../activities/Activity";
-import { PROPERTY_BROWSER, PROPERTY_PAGE } from "../const";
 import { isFunction } from "lodash";
+import PageActivity from "./Page";
 
 export default class PageChildActivity<C = any, R = any> extends Activity<C, R>  {
 
     get browser(): Browser | undefined {
-        return this.getProperty<Browser>(PROPERTY_BROWSER, true)
+        return this.page?.browser();
     }
 
     get page(): Page | undefined {
-        return this.getProperty<Page>(PROPERTY_PAGE, true)
+        // return this.getProperty<Page>(PROPERTY_PAGE, true)
+        return this.getClosestParent<PageActivity>(PageActivity)?.page;
     }
 
     action<R = any>(propertyName: keyof Page, ...args: any[]): Promise<R> {
@@ -21,7 +22,6 @@ export default class PageChildActivity<C = any, R = any> extends Activity<C, R> 
         }
         return (property as Function).call(page, ...args);
     }
-
 
 }
 

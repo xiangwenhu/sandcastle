@@ -1,18 +1,22 @@
 import { Browser, Page } from "puppeteer";
 import SequenceActivity from "../activities/Sequence";
-import { PROPERTY_BROWSER, PROPERTY_PAGE } from "../const";
+import BrowserActivity from "./Browser";
 
 export default class PageActivity<C = any, R = any> extends SequenceActivity<C, R>  {
-  
-    protected accessor [PROPERTY_PAGE]: Page |  undefined = undefined;
 
-    private getBrowser(): Browser | undefined {
-        return this.getProperty<Browser>(PROPERTY_BROWSER, true)
+    #page: Page | undefined = undefined;
+
+    get page() {
+        return this.#page
+    }
+
+    get browser(): Browser | undefined {
+        return this.getClosestParent<BrowserActivity>(BrowserActivity)?.browser;
     }
 
     async run(ctx?: any, preRes?: any, extra?: any): Promise<any> {
         try {
-            this[PROPERTY_PAGE] = await this.getBrowser()!.newPage();
+            this.#page = await this.browser!.newPage();
             const res = await super.run(ctx, preRes, extra);
             return res;
         } catch (err) {

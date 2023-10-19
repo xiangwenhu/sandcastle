@@ -200,6 +200,18 @@ class Activity<C = any, R = any> {
         }
         return this.getProperty.call(this.parent, property, recurse) as P;
     }
+
+    getClosestParent<A>(targetActivity: Object) {
+        let act: Activity | null = this;
+
+        while (act != null) {
+            if (act instanceof (targetActivity as any as Function)) {
+                return act as A;
+            }
+            act = act.parent;
+        }
+        return undefined;
+    }
 }
 
 export default Activity;
