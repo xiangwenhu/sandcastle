@@ -121,19 +121,21 @@ TODO::
 
 
 ## TODO::
-- [ ] 活动CodeActivity执行中，如何提供内置的变量或者方法
+- [x] 活动CodeActivity执行中，如何提供内置的变量或者方法
     * 动态创建的函数，传入this, 使用with语句
     * 额外参数，展开所有属性
+     改良版本，`$c`注册的变量，`$m` 注册的方法
 - [ ] 集合?变量?的操作和管理
     * 比如for循环
     * 比如page的children操作
 - [x] 注册函数和变量
 ```typescript  
-// 使用 默认属性为 $v, 方法为 $m
+// 使用 默认属性为 $c, 方法为 $m
 registerMethod("getName",function getName() {return "name"});
 registerVariable("money", 1000);
 // 批量使用如下
 batchRegisterVariables
 batchRegisterMethods
 ```
+- [ ] 注册的函数和变量 只读
 - [ ] 类型推导，已知type，推导具体的 IActivityProps

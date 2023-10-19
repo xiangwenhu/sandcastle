@@ -26,13 +26,13 @@ export function createPromiseFunction(code: string, ...args: string[]) {
 
 export function createFunctionWithExtraParams(code: string, ...args: string[]) {
     return (properties: BuiltInProperties = {
-        placeholder: "$v",
+        placeholder: "$c",
         properties: {}
     }, methods: BuiltInMethods = {
         placeholder: "$m",
         properties: {}
     }) => {
-        const cArgNames = args.concat([properties.placeholder || "$v", methods.placeholder || "$m"]);
+        const cArgNames = args.concat([properties.placeholder || "$c", methods.placeholder || "$m"]);
         return (...args: any[]) => {
              const argList = [...args, properties.properties, methods.properties];
             return createFunction(code, ...cArgNames).apply(null, argList)

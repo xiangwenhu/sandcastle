@@ -10,7 +10,7 @@ import {
 } from "../types/activity";
 import { firstToLower } from "../util";
 import { replaceVariable } from "./util/variable";
-import { GLOBAL_BUILTIN } from "../const";
+import { GLOBAL_BUILTIN, GLOBAL_VARIABLES } from "../const";
 import { GlobalBuiltInObject } from "../types/factory";
 
 class Activity<C = any, R = any> {
@@ -44,9 +44,14 @@ class Activity<C = any, R = any> {
 
     accessor checkStatus: boolean = true;
 
-    private get globalBuiltObject(): GlobalBuiltInObject {
+    protected get globalBuiltObject(): GlobalBuiltInObject {
         // @ts-ignore
         return this.globalCtx[GLOBAL_BUILTIN]
+    }
+
+    protected get globalVariables(): Record<string, any> {
+        // @ts-ignore
+        return this.globalCtx[GLOBAL_VARIABLES]
     }
 
     constructor(public ctx: C) {
@@ -62,8 +67,9 @@ class Activity<C = any, R = any> {
     protected async runBefore(
         _gCtx = this.globalCtx,
         _ctx: any = this.ctx,
-        _$v: Record<string, any> = {},
+        _$c: Record<string, any> = {},
         _$m: Record<string, Function> = {},
+        _$v: Record<string, any>,
         _parent: any = this.parent,
         _preRes: any = undefined,
         _res: any = undefined,
@@ -79,8 +85,9 @@ class Activity<C = any, R = any> {
     protected async runAfter(
         _gCtx = this.globalCtx,
         _ctx: any = this.ctx,
-        _$v: Record<string, any> = {},
+        _$c: Record<string, any> = {},
         _$m: Record<string, Function> = {},
+        _$v: Record<string, any>,
         _parent: any = this.parent,
         _preRes: any = undefined,
         _res: any = undefined,
@@ -125,7 +132,7 @@ class Activity<C = any, R = any> {
             const gb = this.globalBuiltObject;
             const argsList = [
                 globalCtx, mContext, gb.properties.properties, gb.methods.properties,
-                this.parent, preRes, undefined, extra
+                this.globalVariables, this.parent, preRes, undefined, extra
             ];
             // 执行前
             await this.runBefore.apply(self, argsList as any);
@@ -172,14 +179,15 @@ class Activity<C = any, R = any> {
         }
         this.status = EnumActivityStatus.BUILDING;
         const g = this.globalBuiltObject;
-        const $v = g.properties.placeholder || "$v";
+        const $c = g.properties.placeholder || "$c";
         const $m = g.methods.placeholder || "$m";
         this.task = createPromiseFunction(
             code,
             "gCtx",    // 全局上下文
             "ctx",     // 上下文
-            $v,        // 内置变量
+            $c,        // 内置变量
             $m,        // 内置方法
+            "$v",
             "parent",  // 父节点
             "preRes",  // 上一个活动的返回值
             "res",     // 本活动执行完毕的返回值
@@ -199,7 +207,7 @@ class Activity<C = any, R = any> {
         let mContext = Object.assign({}, ctx || {}, this.ctx || {});
         const argsList = [
             this.globalCtx, mContext, gb.properties.properties, gb.methods.properties,
-            this.parent, preRes, undefined, extra
+            this.globalVariables, this.parent, preRes, undefined, extra
         ];
         return replaceVariable(config).apply(this, argsList) as C;
     }

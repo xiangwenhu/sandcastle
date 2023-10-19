@@ -23,6 +23,8 @@ import readFileActivityFactory from "./fs/readFile";
 import writeFileActivityFactory from "./fs/writeFile";
 import downloadFileActivityFactory  from "./fs/downloadFile";
 import removeFileActivityFactory  from "./fs/removeFile";
+import createVariable from "./variable/createVariable";
+import deleteVariable from "./variable/deleteVariable";
 
 const factory = {
     create,
@@ -48,10 +50,14 @@ register("terminate", terminateActivityFactory);
 register("tryCatch", tryCatchActivityFactory);
 register("for", forActivityFactory);
 register("parallelFor", parallelForActivityFactory);
+
 register("fs.readFile", readFileActivityFactory);
 register("fs.writeFile", writeFileActivityFactory);
 register("fs.downloadFile", downloadFileActivityFactory);
 register("fs.removeFile", removeFileActivityFactory);
+
+register("v.create", createVariable);
+register("v.delete", deleteVariable);
 
 
 export default factory;

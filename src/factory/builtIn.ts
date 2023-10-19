@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 const builtInObject: GlobalBuiltInObject = {
     properties: {
-        placeholder: "$v",
+        placeholder: "$c",
         properties: {}
     },
     methods: {

@@ -3,6 +3,7 @@ import { PuppeteerLaunchOptions } from "puppeteer";
 export const PROPERTY_BROWSER: unique symbol = Symbol();
 export const PROPERTY_PAGE: unique symbol = Symbol();
 export const GLOBAL_BUILTIN: unique symbol = Symbol();
+export const GLOBAL_VARIABLES: unique symbol = Symbol();
 
 export const  PROPERTY_KEYS  = {
     BROWSER: PROPERTY_BROWSER

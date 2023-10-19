@@ -16,7 +16,7 @@ const activityProps: IActivityProps = {
         {
             type: "code",
             name: "打印all开始时间",
-            code: `console.log('all开始时间:', $m.getName(), $v.money)`
+            code: `console.log('all开始时间:', $m.getName(), $c.money)`
         }
     ]
 };
