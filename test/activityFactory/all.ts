@@ -25,7 +25,7 @@ const activityProps: IActivityProps = {
         {
             type: "code",
             name: "打印all结束时间",
-            code:  `console.log('all结束时间:', new Date())`
+            code: `console.log('all结束时间:', new Date())`
         }
     ]
 };

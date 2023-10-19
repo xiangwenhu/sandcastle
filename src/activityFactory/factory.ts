@@ -32,7 +32,7 @@ function createSingle(props: IActivityProps, globalContext: any = {}) {
             type: "code",
             code: props.before,
             name: `${props.name} before`
-        }, globalContext) : createSingle(props.before);
+        }, globalContext) : createSingle(props.before, globalContext);
     }
     // 创建after
     if (props.after) {
@@ -40,7 +40,7 @@ function createSingle(props: IActivityProps, globalContext: any = {}) {
             type: "code",
             code: props.after,
             name: `${props.name} after`
-        }, globalContext) : createSingle(props.after);
+        }, globalContext) : createSingle(props.after, globalContext);
     }
     return activity;
 }

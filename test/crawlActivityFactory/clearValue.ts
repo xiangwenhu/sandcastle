@@ -15,6 +15,11 @@ const activityProps: IActivityProps = {
             name: "快手页面啊",
             children: [
                 {
+                    type: "code",
+                    name: "代码",
+                    code: "console.log(Date.now());"
+                },
+                {
                     type: "c.page.goto",
                     name: "跳转",
                     url: "https://www.baidu.com/",

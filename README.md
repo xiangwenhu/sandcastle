@@ -127,5 +127,13 @@ TODO::
 - [ ] 集合?变量?的操作和管理
     * 比如for循环
     * 比如page的children操作
-- [ ] 注册函数
+- [x] 注册函数和变量
+```typescript  
+// 使用 默认属性为 $v, 方法为 $m
+registerMethod("getName",function getName() {return "name"});
+registerVariable("money", 1000);
+// 批量使用如下
+batchRegisterVariables
+batchRegisterMethods
+```
 - [ ] 类型推导，已知type，推导具体的 IActivityProps

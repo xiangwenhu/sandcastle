@@ -8,11 +8,12 @@ const activityProps: IActivityProps = {
         type: 'fs.writeFile',
         name: '读取文件',
         content: "{{gCtx.data}}",
-        dist: `D:\\data\\tmp2\\txt.json`
+        dist: `D:\\data\\tmp2\\txt.json`,
+        after: "return true"
     }, {
         type: 'code',
         name: '输出内容',
-        code: 'console.log(res)'
+        code: 'console.log(preRes)'
     }]
 }
 

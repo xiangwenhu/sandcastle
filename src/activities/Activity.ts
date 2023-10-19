@@ -10,6 +10,8 @@ import {
 } from "../types/activity";
 import { firstToLower } from "../util";
 import { replaceVariable } from "./util/variable";
+import { GLOBAL_BUILTIN } from "../const";
+import { GlobalBuiltInObject } from "../types/factory";
 
 class Activity<C = any, R = any> {
     pre: Activity | null = null;
@@ -42,6 +44,11 @@ class Activity<C = any, R = any> {
 
     accessor checkStatus: boolean = true;
 
+    private get globalBuiltObject(): GlobalBuiltInObject {
+        // @ts-ignore
+        return this.globalCtx[GLOBAL_BUILTIN]
+    }
+
     constructor(public ctx: C) {
         this.parent = null;
         this.name = null;
@@ -53,10 +60,12 @@ class Activity<C = any, R = any> {
     }
 
     protected async runBefore(
-        _ctx: any = this.ctx,
-        _preRes: any = undefined,
         _gCtx = this.globalCtx,
+        _ctx: any = this.ctx,
+        _$v: Record<string, any> = {},
+        _$m: Record<string, Function> = {},
         _parent: any = this.parent,
+        _preRes: any = undefined,
         _res: any = undefined,
         _extra: any = {}
     ) {
@@ -68,17 +77,19 @@ class Activity<C = any, R = any> {
 
 
     protected async runAfter(
-        _ctx: any = this.ctx,
-        _preRes: any = undefined,
         _gCtx = this.globalCtx,
+        _ctx: any = this.ctx,
+        _$v: Record<string, any> = {},
+        _$m: Record<string, Function> = {},
         _parent: any = this.parent,
+        _preRes: any = undefined,
         _res: any = undefined,
         _extra: any = {}
     ) {
         if (!this.after || !(this.after instanceof Activity)) {
             return
         }
-        await this.after.task?.apply(this.after, arguments)
+        return this.after.task?.apply(this.after, arguments)
     }
 
     /**
@@ -111,15 +122,19 @@ class Activity<C = any, R = any> {
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
-
-            const beforeArgsList = [mContext, preRes, globalCtx, this.parent, undefined, extra];
+            const gb = this.globalBuiltObject;
+            const argsList = [
+                globalCtx, mContext, gb.properties.properties, gb.methods.properties,
+                this.parent, preRes, undefined, extra
+            ];
             // 执行前
-            await this.runBefore.apply(self, beforeArgsList as any);
+            await this.runBefore.apply(self, argsList as any);
 
-            const res: R = await this.task!.apply(self, beforeArgsList as any);
+            const res: R = await this.task!.apply(self, argsList as any);
             this.status = EnumActivityStatus.EXECUTED;
             // 执行后
-            await this.runAfter.apply(self, [mContext, preRes, globalCtx, this.parent, res, extra]);
+            argsList[6] = res;
+            const afterRes = await this.runAfter.apply(self, argsList as any);
 
             if (this.type == "terminate") {
                 globalCtx[GK_TERMINATED] = true;
@@ -127,7 +142,7 @@ class Activity<C = any, R = any> {
                 // 执行后
                 throw new TerminateError(res as string, this);
             }
-            return res;
+            return res === undefined ? afterRes : res;
         } catch (err) {
             self.status = EnumActivityStatus.EXCEPTION;
             throw err;
@@ -156,14 +171,19 @@ class Activity<C = any, R = any> {
             );
         }
         this.status = EnumActivityStatus.BUILDING;
+        const g = this.globalBuiltObject;
+        const $v = g.properties.placeholder || "$v";
+        const $m = g.methods.placeholder || "$m";
         this.task = createPromiseFunction(
-            "ctx",    // 上下文
-            "preRes", // 上一个活动执行后的 res
-            "gCtx",   // 全局上下文
-            "parent", // 父活动
-            "res",    // 当前Activity之后的res
-            "extra",  // 其他的参数
-            code
+            code,
+            "gCtx",    // 全局上下文
+            "ctx",     // 上下文
+            $v,        // 内置变量
+            $m,        // 内置方法
+            "parent",  // 父节点
+            "preRes",  // 上一个活动的返回值
+            "res",     // 本活动执行完毕的返回值
+            "extra",   // 额外的参数
         );
         this.status = EnumActivityStatus.BUILDED;
         return this.task;
@@ -171,15 +191,17 @@ class Activity<C = any, R = any> {
 
     replaceVariable<C>(
         config: string | Record<string, any>,
-        ctx?: any,
-        preRes?: any
+        ctx: any = {},
+        preRes: any = undefined,
+        extra: any = {}
     ) {
-        return replaceVariable(config).apply(this, [
-            ctx || this.ctx || {},
-            preRes,
-            this.globalCtx,
-            this.parent,
-        ]) as C;
+        const gb = this.globalBuiltObject;
+        let mContext = Object.assign({}, ctx || {}, this.ctx || {});
+        const argsList = [
+            this.globalCtx, mContext, gb.properties.properties, gb.methods.properties,
+            this.parent, preRes, undefined, extra
+        ];
+        return replaceVariable(config).apply(this, argsList) as C;
     }
 
     getProperty<P = any>(
