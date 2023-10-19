@@ -15,12 +15,12 @@ export default (factory: ActivityFactoryFactory) => <C = any, GC = any>(props: I
     activity.name = props.name || activity.name;
     activity.globalCtx = globalContext || {};;
 
-    activity.if = factory.create(props.if) as AssertSequenceActivity;
+    activity.if = factory.create(props.if, globalContext) as AssertSequenceActivity;
     if (props.elseif) {
-        activity.elseif = factory.createChildren(props.elseif) as AssertSequenceActivity[];
+        activity.elseif = factory.createChildren(props.elseif, globalContext) as AssertSequenceActivity[];
     }
     if (props.else) {
-        activity.else = factory.create(props.else) as AssertSequenceActivity;
+        activity.else = factory.create(props.else, globalContext) as AssertSequenceActivity;
     }
 
     activity.build();

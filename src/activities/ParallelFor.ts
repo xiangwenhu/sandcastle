@@ -18,7 +18,7 @@ export default class ParallelForActivity<
         return super.buildTask(this.children);
     }
 
-    run(paramObj: IActivityRunParams): Promise<any> {
+    run(paramObj: IActivityRunParams = this.defaultTaskRunParam): Promise<any> {
         const values = this.values;
         return new Promise(async (resolve, reject) => {
             paramObj.ctx = paramObj.ctx || {};

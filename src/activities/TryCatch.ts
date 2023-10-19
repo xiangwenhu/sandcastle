@@ -11,7 +11,7 @@ export default class TryCatchActivity<C = any, R = any> extends SequenceActivity
         super(context, children)
     }
 
-    async run(paramObj: IActivityRunParams) {
+    async run(paramObj: IActivityRunParams = this.defaultTaskRunParam) {
         try {
             const res = await super.run(paramObj);
             return res;

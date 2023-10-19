@@ -18,7 +18,11 @@ export default class ForActivity<
         return super.buildTask(this.children);
     }
 
-    run(paramObj: IActivityRunParams): Promise<R | undefined> {
+    run(paramObj: IActivityRunParams = {
+        ctx:{},
+        preRes:undefined,
+        extra:{}
+    }): Promise<R | undefined> {
         const that = this as Activity;
         return new Promise(async (resolve, reject) => {
             let preRes;

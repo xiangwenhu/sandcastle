@@ -23,7 +23,7 @@ export default class BrowserActivity<
     }
 
 
-    async run(paramObj: IActivityRunParams): Promise<any> {
+    async run(paramObj: IActivityRunParams = this.defaultTaskRunParam): Promise<any> {
         try {
             this.#browser = await launch(this.options);
             const res = await super.run(paramObj);

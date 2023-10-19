@@ -26,7 +26,7 @@ export default class AssertSequenceActivity<
         }
     }
 
-    async run(paramObj: IActivityRunParams) {
+    async run(paramObj: IActivityRunParams = this.defaultTaskRunParam) {
         if (!this.assert) {
             throw new ActivityError("assert未定义", this);
         }

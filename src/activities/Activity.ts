@@ -52,6 +52,14 @@ class Activity<C = any, R = any> {
         return this.globalCtx[GLOBAL_BUILTIN];
     }
 
+    protected get defaultTaskRunParam(): IActivityRunParams {
+        return {
+            ctx: {},
+            preRes: undefined,
+            extra: {},
+        };
+    }
+
     protected get globalVariables(): Record<string, any> {
         // @ts-ignore
         return this.globalCtx[GLOBAL_VARIABLES];
@@ -87,11 +95,9 @@ class Activity<C = any, R = any> {
      * @param {上一次执行结果} preRes
      * @param {其他参数} otherParams
      */
-    async run({ ctx, preRes, extra }: IActivityRunParams = {
-        ctx:{},
-        preRes:undefined,
-        extra:{}
-    }) {
+    async run(
+        { ctx, preRes, extra }: IActivityRunParams =  this.defaultTaskRunParam
+    ) {
         const globalCtx = this.globalCtx;
         // 如果已经终止
         if (globalCtx[GK_TERMINATED]) {
@@ -144,9 +150,7 @@ class Activity<C = any, R = any> {
         }
     }
 
-    public buildTask(
-        ..._args: any[]
-    ): IActivityTaskFunction {
+    public buildTask(..._args: any[]): IActivityTaskFunction {
         return () => {};
     }
 
@@ -201,7 +205,7 @@ class Activity<C = any, R = any> {
             parent: this.parent,
             preRes: paramObj.preRes,
             res: undefined,
-            extra: paramObj.extra
+            extra: paramObj.extra,
         };
 
         return replaceVariable(config).call(this, paramObject) as C;

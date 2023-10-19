@@ -15,7 +15,7 @@ export default class PageActivity<C = any, R = any> extends SequenceActivity<C, 
         return this.getClosestParent<BrowserActivity>(BrowserActivity)?.browser;
     }
 
-    async run(paramObj: IActivityRunParams): Promise<any> {
+    async run(paramObj: IActivityRunParams = this.defaultTaskRunParam): Promise<any> {
         try {
             this.#page = await this.browser!.newPage();
             const res = await super.run(paramObj);

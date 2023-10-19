@@ -13,11 +13,21 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
         super(context, children);
     }
 
-    accessor assert: AssertActivity | null = null;
+    #assert: AssertActivity | undefined = undefined;
+
+    set assert(val: AssertActivity | undefined) {
+        this.#assert = val;
+        if (val) {
+            val.parent = this;
+        }
+    }
+
+    get assert(): AssertActivity | undefined {
+        return this.#assert;
+    }
 
     // @ts-ignore
-    buildTask(assert: AssertActivity | null, children: Activity[]) {
-
+    buildTask(assert: AssertActivity | undefined, children: Activity[]) {
         // 构建子活动
         this.children = children || this.children;
 
@@ -34,10 +44,12 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
                     let assertR: boolean;
                     while ((assertR = await this.assert!.run(paramObj))) {
                         // @ts-ignore
-                        r = await childrenFun.apply(this);
+                        r = await childrenFun.call(this, paramObj);
 
                         // 重复执行，需要调整状态值
-                        this.children.forEach(c => c.status = EnumActivityStatus.BUILDED);
+                        this.children.forEach(
+                            (c) => (c.status = EnumActivityStatus.BUILDED)
+                        );
                         this.assert!.status = EnumActivityStatus.BUILDED;
                     }
                     return resolve(r);
@@ -47,7 +59,6 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
             });
         };
     }
-
 }
 
 module.exports = WhileActivity;

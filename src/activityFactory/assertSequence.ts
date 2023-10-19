@@ -17,7 +17,7 @@ export default (factory: ActivityFactoryFactory) => <C = any, GC = any>(props: I
         type: "assert",
         code: `return (${props.assert})`,
         context: props.context
-    }) as AssertActivity;
+    }, globalContext) as AssertActivity;
 
     activity.build();
     return activity
