@@ -50,6 +50,8 @@ import mouseUpActivityFactory from "./mouse/up";
 import wheelActivityFactory from "./mouse/wheel";
 import clearValue from "./clearValue";
 import uploadFile from "./uploadFile";
+import $ from "./$";
+import $$ from "./$$";
 
 register("c.browser", browserActivityFactory);
 register("c.page", pageActivityFactory);
@@ -81,6 +83,8 @@ register("c.page.focus", focusActivityFactory);
 register("c.page.hover", hoverActivityFactory);
 register("c.page.clearValue", clearValue);
 register("c.page.uploadFile", uploadFile)
+register("c.page.$", $)
+register("c.page.$$)", $$)
 
 // keyboard
 register("c.page.keyboard.down", downActivityFactory);

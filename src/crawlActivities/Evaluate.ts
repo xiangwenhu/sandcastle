@@ -10,15 +10,18 @@ export default class EvaluateActivity<
     }
 
     buildTask(code: string, ...args: any[]) {
-        return this.task = (paramObj: IActivityRunParams)  => {
+        return this.task = async (paramObj: IActivityRunParams)  => {
             // 替换code变量
             const rCode = this.replaceVariable(code, paramObj) as string;
             // 替换参数变量
             const rArgs = args.map(arg => this.replaceVariable(arg, paramObj))
-            return this.page?.evaluate((_code, ..._args) => {
+            const res = await this.page?.evaluate((_code, ..._args) => {
                 const f = new Function(_code);
-                return f(..._args)
+                console.log("f:", f.toString());
+                const results = f(..._args);
+                return results
             }, rCode, ...rArgs)
+            return res;
         }
     }
 }

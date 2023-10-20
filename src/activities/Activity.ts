@@ -49,6 +49,7 @@ class Activity<C = any, R = any> {
 
     accessor checkStatus: boolean = true;
 
+
     protected get globalBuiltObject(): GlobalBuiltInObject {
         // @ts-ignore
         return this.globalCtx[GLOBAL_BUILTIN];
@@ -131,7 +132,7 @@ class Activity<C = any, R = any> {
         const self = this;
         try {
             const gb = this.globalBuiltObject;
-            const argObject: IActivityExecuteParams ={
+            const argObject: IActivityExecuteParams = {
                 gCtx: globalCtx,
                 ctx: mContext,
                 $c: gb.properties.properties,
@@ -208,7 +209,7 @@ class Activity<C = any, R = any> {
         config: C,
         paramObj: IActivityRunParams
     ) {
-        if (config == undefined) {
+        if (config == undefined || Array.isArray(config)) {
             return config as C;
         }
         const gb = this.globalBuiltObject;

@@ -42,7 +42,7 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
                 try {
                     let r;
                     let assertR: boolean;
-                    while ((assertR = await this.assert!.run(paramObj))) {
+                    do {
                         // @ts-ignore
                         r = await childrenFun.call(this, paramObj);
 
@@ -51,7 +51,7 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
                             (c) => (c.status = EnumActivityStatus.BUILDED)
                         );
                         this.assert!.status = EnumActivityStatus.BUILDED;
-                    }
+                    } while ((assertR = await this.assert!.run(paramObj)))
                     return resolve(r);
                 } catch (err) {
                     return reject(err);

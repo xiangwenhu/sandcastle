@@ -25,6 +25,7 @@ import downloadFileActivityFactory  from "./fs/downloadFile";
 import removeFileActivityFactory  from "./fs/removeFile";
 import createVariable from "./variable/createVariable";
 import deleteVariable from "./variable/deleteVariable";
+import doWhile from "./doWhile";
 
 const factory = {
     create,
@@ -42,6 +43,7 @@ register("parallel", parallelActivityFactory);
 register("race", raceActivityFactory);
 register("assert", assertActivityFactory);
 register("while", whileActivityFactory);
+register("doWhile", doWhile);
 register("assertSequence", assertSequenceActivityFactory);
 register("ifElse", ifElseActivityFactory);
 register("request", requestActivityFactory);

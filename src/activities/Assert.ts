@@ -12,7 +12,6 @@ export default class AssertActivity<C = any> extends SequenceActivity<C, boolean
         if (this.parent) {
             this.ctx = this.parent?.ctx;
         }
-        super.adjust();
         const res = await super.run(paramObj);
         return !!res
     }
