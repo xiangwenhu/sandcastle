@@ -1,9 +1,11 @@
+import _ from "lodash";
 import AssertActivity from "../activities/Assert";
 import Activity from "../activities/AssertSequence"
 import { ActivityFactoryFactory, IActivityProps } from "../types/activity";
+import { IAssertActivityProps } from "./assert";
 
 export interface IAssertSequenceActivityProps<C = any> extends IActivityProps<C> {
-    assert: string;
+    assert: IAssertActivityProps;
     children: IActivityProps[];
 }
 
@@ -13,11 +15,7 @@ export default (factory: ActivityFactoryFactory) => <C = any, GC = any>(props: I
     activity.name = props.name || activity.name;
     activity.globalCtx = globalContext || {};;
 
-    activity.assert = factory.create({
-        type: "assert",
-        code: `return (${props.assert})`,
-        context: props.context
-    }, globalContext) as AssertActivity;
+    activity.assert = factory.create(props.assert, globalContext) as AssertActivity;
 
     activity.build();
     return activity

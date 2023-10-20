@@ -38,6 +38,7 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
         }
         // 构建执行函数
         return (paramObj: IActivityRunParams) => {
+            this.adjust();
             return new Promise(async (resolve, reject) => {
                 try {
                     let r;

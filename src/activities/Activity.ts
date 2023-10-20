@@ -8,13 +8,15 @@ import {
     GK_TERMINATED_MESSAGE,
     GlobalActivityContext,
     IActivityRunParams,
-    IActivityCodeExecuteParams,
+    IActivityExecuteParams,
     IActivityTaskFunction,
 } from "../types/activity";
 import { firstToLower } from "../util";
 import { replaceVariable } from "./util/variable";
 import { GLOBAL_BUILTIN, GLOBAL_VARIABLES } from "../const";
 import { GlobalBuiltInObject } from "../types/factory";
+import { createTaskExecuteDefaultParams, createTaskRunDefaultParams } from "./util";
+import _ from "lodash";
 
 class Activity<C = any, R = any> {
     pre: Activity | undefined = undefined;
@@ -53,11 +55,11 @@ class Activity<C = any, R = any> {
     }
 
     protected get defaultTaskRunParam(): IActivityRunParams {
-        return {
-            ctx: {},
-            preRes: undefined,
-            extra: {},
-        };
+        return createTaskRunDefaultParams();
+    }
+
+    protected get defaultTaskExecuteParam(): IActivityExecuteParams {
+        return createTaskExecuteDefaultParams();
     }
 
     protected get globalVariables(): Record<string, any> {
@@ -65,7 +67,19 @@ class Activity<C = any, R = any> {
         return this.globalCtx[GLOBAL_VARIABLES];
     }
 
-    constructor(public ctx: C) {
+
+    #ctx: any = {};
+
+    get ctx() {
+        return this.#ctx;
+    }
+
+    set ctx(ctx: any) {
+        this.#ctx = ctx;
+    }
+
+    constructor(ctx: C) {
+        this.#ctx = ctx || {};
         this.parent = undefined;
         this.name = undefined;
         // @ts-ignore
@@ -82,7 +96,7 @@ class Activity<C = any, R = any> {
         await this.before.task?.call(this.before, paramObject);
     }
 
-    protected async runAfter(paramObject: IActivityCodeExecuteParams) {
+    protected async runAfter(paramObject: IActivityExecuteParams) {
         if (!this.after || !(this.after instanceof Activity)) {
             return;
         }
@@ -96,7 +110,7 @@ class Activity<C = any, R = any> {
      * @param {其他参数} otherParams
      */
     async run(
-        { ctx, preRes, extra }: IActivityRunParams =  this.defaultTaskRunParam
+        { preRes, extra }: IActivityRunParams = this.defaultTaskRunParam
     ) {
         const globalCtx = this.globalCtx;
         // 如果已经终止
@@ -112,12 +126,12 @@ class Activity<C = any, R = any> {
             this.buildTask();
         }
 
-        let mContext = Object.assign({}, ctx || {}, this.ctx || {});
+        let mContext = this.ctx || {};
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
             const gb = this.globalBuiltObject;
-            const argObject: IActivityCodeExecuteParams = {
+            const argObject: IActivityExecuteParams ={
                 gCtx: globalCtx,
                 ctx: mContext,
                 $c: gb.properties.properties,
@@ -150,8 +164,8 @@ class Activity<C = any, R = any> {
         }
     }
 
-    public buildTask(..._args: any[]): IActivityTaskFunction {
-        return () => {};
+    buildTask(..._args: any[]): IActivityTaskFunction {
+        return () => { };
     }
 
     build(...args: any[]) {
@@ -164,7 +178,7 @@ class Activity<C = any, R = any> {
      *
      * @param {代码} code
      */
-    protected buildWithCode(code: string): IActivityTaskFunction {
+    buildWithCode(code: string): IActivityTaskFunction {
         if (!isString(code) && !isBoolean(code)) {
             throw new ActivityError(
                 "buildWithCode方法的code参数必须是字符串",
@@ -190,13 +204,16 @@ class Activity<C = any, R = any> {
         return this.task;
     }
 
-    replaceVariable<C>(
-        config: string | Record<string, any>,
+    protected replaceVariable<C = any>(
+        config: C,
         paramObj: IActivityRunParams
     ) {
+        if (config == undefined) {
+            return config as C;
+        }
         const gb = this.globalBuiltObject;
-        let mContext = Object.assign({}, paramObj.ctx || {}, this.ctx || {});
-        const paramObject: IActivityCodeExecuteParams = {
+        let mContext = this.ctx || {};
+        const paramObject: IActivityExecuteParams = {
             gCtx: this.globalCtx,
             ctx: mContext,
             $c: gb.properties.properties,
@@ -211,7 +228,7 @@ class Activity<C = any, R = any> {
         return replaceVariable(config).call(this, paramObject) as C;
     }
 
-    getProperty<P = any>(
+    protected getProperty<P = any>(
         property: PropertyKey,
         recurse: boolean = false
     ): undefined | P {

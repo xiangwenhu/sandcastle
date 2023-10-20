@@ -1,11 +1,9 @@
 import { Mode, ObjectEncodingOptions, OpenMode } from "fs";
-import Activity from "../Activity";
 import fsp from "fs/promises";
-import fs from "fs";
 import { isPlainObject } from "lodash";
-import path from "path";
-import { ensureDir } from "../../util/fs";
 import { IActivityRunParams } from "../../types/activity";
+import { ensureDir } from "../../util/fs";
+import Activity from "../Activity";
 
 export default class WriteFileActivity<C = any> extends Activity<C, string> {
     constructor(context: C = {} as C) {

@@ -1,9 +1,22 @@
-import { IActivityRunParams } from "../../types/activity";
+import { IActivityExecuteParams, IActivityRunParams } from "../../types/activity";
 
-export function createTaskRunDefaultParams(): IActivityRunParams{
+export function createTaskRunDefaultParams(): IActivityRunParams {
     return {
-        ctx: {},
         preRes: undefined,
         extra: {}
+    }
+}
+
+export function createTaskExecuteDefaultParams(): IActivityExecuteParams {
+    const tp = createTaskRunDefaultParams();
+    return {
+        ...tp,
+        gCtx: {},
+        $c: {},
+        $m: {},
+        $v: {},
+        ctx: {},
+        parent: undefined,
+        res: undefined,
     }
 }

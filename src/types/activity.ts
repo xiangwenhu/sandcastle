@@ -55,20 +55,19 @@ export interface GlobalActivityContext {
 }
 
 export interface IActivityRunParams {
-    ctx: Record<PropertyKey, any>;
     preRes: any;
     extra: Record<PropertyKey, any>;
 }
 
-export interface IActivityCodeExecuteParams {
+export interface IActivityExecuteParams extends IActivityRunParams {
+    /**
+     * 上下文
+     */
+    ctx: any,
     /**
      * 全局上下文
      */
     gCtx: Record<PropertyKey, any>;
-    /**
-     * 上下文
-     */
-    ctx: Record<PropertyKey, any>;
     /**
      * 内置常量
      */
@@ -88,15 +87,7 @@ export interface IActivityCodeExecuteParams {
     /**
      * 上一个活动的返回值
      */
-    preRes: any;
-    /**
-     * 活动执行完毕后的值
-     */
     res: any;
-    /**
-     * 额外的参数
-     */
-    extra: Record<PropertyKey, any>;
 }
 
 export interface IActivityTaskFunction {

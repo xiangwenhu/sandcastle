@@ -1,6 +1,6 @@
 import { isObjectLike, isString } from "lodash";
 import { createOneParamFunction } from "../../factory/function";
-import { IActivityCodeExecuteParams } from "../../types/activity";
+import { IActivityExecuteParams } from "../../types/activity";
 
 function createReplaceFunc(code: string) {
     return createOneParamFunction(code, [
@@ -17,7 +17,7 @@ function createReplaceFunc(code: string) {
 }
 
 export function replaceStringVariable(value: string) {
-    return (paramObject: IActivityCodeExecuteParams) => {
+    return (paramObject: Partial<IActivityExecuteParams>) => {
         if (isString(value)) {
             if (value.includes("${")) {
                 const rValue = value.replace(/\$\{/gim, "\\${");
@@ -42,16 +42,16 @@ export function replaceVariable(config: Record<string, any> | string) {
     }
 
     if (isString(config)) {
-        return function (paramObject: IActivityCodeExecuteParams) {
+        return function (paramObject: Partial<IActivityExecuteParams>) {
             return replaceStringVariable(config)(paramObject);
         };
     }
 
     if (!isObjectLike(config)) {
-        return (paramObject: IActivityCodeExecuteParams) => config;
+        return (paramObject: Partial<IActivityExecuteParams>) => config;
     }
 
-    return function (paramObject: IActivityCodeExecuteParams) {
+    return function (paramObject: Partial<IActivityExecuteParams>) {
         const result: Record<string, any> = {};
         Object.entries(config).forEach(([key, value]) => {
             if (isString(value)) {

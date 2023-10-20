@@ -14,7 +14,9 @@ export default class GotoActivity<
         this.url = url || this.url;
         this.options = options || this.options;
         return this.task = (paramObject: IActivityRunParams) => {
-            return this.action("goto", this.url, this.options)
+            const rUrl = this.replaceVariable(this.url, paramObject);
+            const rOptions = this.replaceVariable(this.options, paramObject);
+            return this.action("goto", rUrl, rOptions)
         }
     }
 }

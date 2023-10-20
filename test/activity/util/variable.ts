@@ -16,13 +16,6 @@ const r = replaceVariable({
     gCtx: {},
     ctx: {
         name: "name"
-    },
-    $c: {},
-    $m: {}, // 内置方法
-    $v: {}, // 全局变量
-    parent: {} as any, // 父节点
-    preRes: {}, // 上一个活动的返回值
-    res: {}, // 本活动执行完毕的返回值
-    extra: {}, // 额外的参数
+    }
 });
 console.log(r);

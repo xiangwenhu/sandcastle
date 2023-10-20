@@ -1,9 +1,10 @@
 import AssertActivity from "../activities/Assert";
 import Activity from "../activities/While"
 import { ActivityFactoryFactory, IActivityProps } from "../types/activity";
+import { IAssertActivityProps } from "./assert";
 
 export interface IWhileActivityProps<C = any> extends IActivityProps<C> {
-    assert: string;
+    assert: IAssertActivityProps;
     children: IActivityProps[];
 }
 
@@ -12,12 +13,9 @@ export default (factory: ActivityFactoryFactory) => <C = any, GC = any>(props: I
     const activity = new Activity(props.context, children)
     activity.name = props.name || activity.name;
     activity.globalCtx = globalContext || {};;
+    activity.assert = factory.create(props.assert, globalContext) as AssertActivity;
+
     activity.children = factory.createChildren(props.children, globalContext);
-    activity.assert = factory.create({
-        type: "assert",
-        code: `return (${props.assert})`,
-        context: props.context
-    }, globalContext) as AssertActivity;
 
     activity.build();
     return activity

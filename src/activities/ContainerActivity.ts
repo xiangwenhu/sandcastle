@@ -17,11 +17,13 @@ export default class ContainerActivity<C = any, R = any> extends Activity<C, R>{
         this.children = children;
     }
 
-    private adjust() {
+    protected adjust() {
         this.#children.forEach((child, index) => {
             child.pre = index === 0 ? undefined : this.children[index - 1];
-            child.parent = this;
+            // 孩子节点的上下文等于父容器
+            child.ctx = this.ctx;
             child.globalCtx = this.globalCtx;
+            child.parent = this;
             child.next = index === this.#children.length - 2 ? undefined : this.children[index - 2];
         })
     }

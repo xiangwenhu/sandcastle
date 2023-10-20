@@ -8,7 +8,11 @@ const activityProps: IActivityProps = {
     context: {
         count: 1
     },
-    assert: 'ctx.count < 5',
+    assert: {
+        type: "assert",
+        name: "assert",
+        code: 'ctx.count < 5'
+    },
     children: [{
         type: 'code',
         name: 'count加1',

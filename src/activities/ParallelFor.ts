@@ -21,10 +21,10 @@ export default class ParallelForActivity<
     run(paramObj: IActivityRunParams = this.defaultTaskRunParam): Promise<any> {
         const values = this.values;
         return new Promise(async (resolve, reject) => {
-            paramObj.ctx = paramObj.ctx || {};
+            this.ctx = this.ctx || {};
             try {
                 const ps = values.map(item => {
-                    paramObj.ctx.item = item;
+                    this.ctx.item = item;
                     return super.run(paramObj)
                 })
                 const res = await Promise.all(ps);

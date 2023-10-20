@@ -19,7 +19,6 @@ export default class ForActivity<
     }
 
     run(paramObj: IActivityRunParams = {
-        ctx:{},
         preRes:undefined,
         extra:{}
     }): Promise<R | undefined> {
@@ -28,7 +27,7 @@ export default class ForActivity<
             let preRes;
             for (let i = 0; i < this.values.length; i++) {
                 const val = this.values[i];
-                paramObj.ctx.item = val;
+                this.ctx!.item = val;
                 try {
                     preRes = await super.run(paramObj)
                     paramObj.preRes = preRes;
