@@ -1,5 +1,6 @@
 import { IActivityProps } from '../../src/types/activity';
 import createActivity from "../../src/factory/activity";
+import { EvaluateFunc } from 'puppeteer';
 
 const activityProps: IActivityProps = {
     type: "sequence",
@@ -55,13 +56,14 @@ const activityProps: IActivityProps = {
                                         {
                                             type: "c.page.evaluate",
                                             name: "查询节点集合",
-                                            code: `
-                                            var elCol =  document.querySelectorAll(".job-card-box");
-                                            return Array.from(elCol).map(el=>({
-                                                name: el.querySelector(".job-name").textContent,
-                                                salary: el.querySelector(".job-salary").textContent
-                                            }))
-                                            `
+                                            params: [],
+                                            code: function () {
+                                                var elCol = document.querySelectorAll(".job-card-box");
+                                                return Array.from(elCol).map((el: any) => ({
+                                                    name: el.querySelector(".job-name").textContent,
+                                                    salary: el.querySelector(".job-salary").textContent
+                                                }))
+                                            }
                                         }, {
                                             type: "code",
                                             name: "存入",
