@@ -3,7 +3,8 @@ import { IActivityExecuteParams, IActivityRunParams } from "../../types/activity
 export function createTaskRunDefaultParams(): IActivityRunParams {
     return {
         $preRes: undefined,
-        $extra: {}
+        $extra: {},
+        $item: undefined
     }
 }
 
@@ -18,5 +19,6 @@ export function createTaskExecuteDefaultParams(): IActivityExecuteParams {
         $ctx: {},
         $parent: undefined,
         $res: undefined,
+        $a: {}
     }
 }

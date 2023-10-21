@@ -9,7 +9,8 @@ export type IActivityConfig<C = any> = {
     before?: IActivityConfig | string | null | undefined;
     after?: IActivityConfig | string | null | undefined;
     assert?: string | IActivityConfig;
-    useParentCtx?: boolean
+    useParentCtx?: boolean;
+    toVariable?: string;
 } & Record<string, any>;
 
 export interface ActivityFactory<
@@ -90,6 +91,8 @@ export interface IActivityExecuteParams extends IActivityRunParams {
      * 上一个活动的返回值
      */
     $res: any;
+
+    $a: Record<string, Activity>;
 }
 
 export interface IActivityTaskFunction {

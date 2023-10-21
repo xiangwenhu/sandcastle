@@ -2,14 +2,22 @@ import _, { isFunction, isNumber, isString, isSymbol } from "lodash";
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 import { BaseActivityType, IActivityConfig } from "../types/activity";
-import { ActivityConstructor, IFactoryConfigValue, IFactoryHandlerParams, IFactoryP$HConfigValue, PropertyConfigItem } from "./factory.type";
+import {
+    ActivityConstructor,
+    IFactoryConfigValue,
+    IFactoryHandlerParams,
+    IFactoryP$HConfigValue,
+    PropertyConfigItem,
+} from "./factory.type";
+import { GLOBAL_BUILTIN } from "../const";
+import { GlobalBuiltInObject } from "../types/factory";
 
 const configMap = new Map<string, IFactoryConfigValue>();
 
 export function register<A extends ActivityConstructor>(
     type: BaseActivityType | string,
     _class_: A,
-    phConfig: IFactoryP$HConfigValue  = {}
+    phConfig: IFactoryP$HConfigValue = {}
 ) {
     configMap.set(type, {
         _class_,
@@ -29,7 +37,11 @@ export function createChildren(
 }
 
 const BUILTIN_PARAMS: PropertyConfigItem[] = ["context"];
-const BUILTIN_PROPERTIES: PropertyConfigItem[] = ["name", "type", "useParentCtx"];
+const BUILTIN_PROPERTIES: PropertyConfigItem[] = [
+    "name",
+    "type",
+    "useParentCtx",
+];
 
 function getPropertyValue(
     actConfig: IActivityConfig,
@@ -56,9 +68,9 @@ function getPropertyValue(
 
 /**
  * 获取构造参数
- * @param factoryConfig 
- * @param actConfig 
- * @returns 
+ * @param factoryConfig
+ * @param actConfig
+ * @returns
  */
 function getParams(
     factoryConfig: IFactoryConfigValue,
@@ -72,9 +84,9 @@ function getParams(
 
 /**
  * 获取build调用时的参数
- * @param factoryConfig 
- * @param actConfig 
- * @returns 
+ * @param factoryConfig
+ * @param actConfig
+ * @returns
  */
 function getBuildParams(
     factoryConfig: IFactoryConfigValue,
@@ -86,9 +98,9 @@ function getBuildParams(
 
 /**
  * 获取属性赋值
- * @param factoryConfig 
- * @param actConfig 
- * @returns 
+ * @param factoryConfig
+ * @param actConfig
+ * @returns
  */
 function getProperties(
     factoryConfig: IFactoryConfigValue,
@@ -98,23 +110,23 @@ function getProperties(
         ? BUILTIN_PROPERTIES
         : BUILTIN_PROPERTIES.concat(actConfig.properties || []);
     return keys.reduce((obj: Record<string, any>, cur: PropertyConfigItem) => {
-        const key = isString(cur)? cur : cur.name;
+        const key = isString(cur) ? cur : cur.name;
         obj[key] = _.get(actConfig, key);
         return obj;
     }, {});
 }
 
 function createSingle<A extends Activity>(
-    config: IActivityConfig,
+    actConfig: IActivityConfig,
     globalContext: any = {}
 ) {
-    const type = config.type;
+    const type = actConfig.type;
     const factoryConfig = configMap.get(type);
     if (factoryConfig == undefined) {
         throw new Error(`不存在type为 ${type} 的配置`);
     }
     const paramsObject: IFactoryHandlerParams<A> = {
-        config: config,
+        config: actConfig,
         activity: undefined,
         globalContext,
         factory: {
@@ -122,7 +134,7 @@ function createSingle<A extends Activity>(
             createChildren,
         },
     };
-    const { before, after, assert } = config;
+    const { before, after, assert } = actConfig;
     const { before: beforeHandler, after: afterHandler, init } = factoryConfig;
 
     if (_.isFunction(init)) {
@@ -130,8 +142,8 @@ function createSingle<A extends Activity>(
     }
     const { _class_: ClassConstructor } = factoryConfig;
 
-    const params = getParams(factoryConfig, config);
-    const properties = getProperties(factoryConfig, config);
+    const params = getParams(factoryConfig, actConfig);
+    const properties = getProperties(factoryConfig, actConfig);
 
     const activity = new ClassConstructor(...params);
     activity.globalCtx = globalContext;
@@ -139,9 +151,9 @@ function createSingle<A extends Activity>(
     paramsObject.activity = activity as A;
 
     // 创建children
-    if (Array.isArray(config.children)) {
+    if (Array.isArray(actConfig.children)) {
         (activity as ContainerActivity).children = createChildren(
-            config.children,
+            actConfig.children,
             globalContext
         );
     }
@@ -151,7 +163,7 @@ function createSingle<A extends Activity>(
                   {
                       type: "code",
                       code: before,
-                      name: `${config.name} before`,
+                      name: `${actConfig.name} before`,
                   },
                   globalContext
               )
@@ -164,7 +176,7 @@ function createSingle<A extends Activity>(
                   {
                       type: "code",
                       code: after,
-                      name: `${config.name} after`,
+                      name: `${actConfig.name} after`,
                   },
                   globalContext
               )
@@ -173,13 +185,13 @@ function createSingle<A extends Activity>(
     // assert
     if (assert) {
         activity.assert = (
-            isString(config.assert)
+            isString(actConfig.assert)
                 ? (createSingle(
                       {
                           type: "code",
-                          code: `return ${config.assert}`,
-                          name: `${config.name} after`,
-                          useParentCtx: true
+                          code: `return ${actConfig.assert}`,
+                          name: `${actConfig.name} after`,
+                          useParentCtx: true,
                       },
                       globalContext
                   ) as Activity)
@@ -191,11 +203,21 @@ function createSingle<A extends Activity>(
         beforeHandler.call(null, paramsObject);
     }
 
-    const buildParams = getBuildParams(factoryConfig, config);
+    const buildParams = getBuildParams(factoryConfig, actConfig);
     activity.build(...buildParams);
 
     if (_.isFunction(afterHandler)) {
         afterHandler.call(null, paramsObject);
     }
+
+    //TODO:: Proxy限制访问的属性
+    if (
+        isString(actConfig.toVariable) &&
+        actConfig.toVariable.toString() !== ""
+    ) {
+        const g: GlobalBuiltInObject = globalContext[GLOBAL_BUILTIN];
+        g.activities.properties[actConfig.toVariable.toString()] = activity;
+    }
+
     return activity as A;
 }

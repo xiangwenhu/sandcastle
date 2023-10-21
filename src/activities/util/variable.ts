@@ -13,7 +13,8 @@ function createReplaceFunc(code: string) {
         "$preRes", // 上一个活动的返回值
         "$res", // 本活动执行完毕的返回值
         "$extra", // 额外的参数
-        "$item"   // 集合处理的item
+        "$item",   // 集合处理的item
+        "$a"
     ]);
 }
 

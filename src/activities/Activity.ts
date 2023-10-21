@@ -154,6 +154,7 @@ class Activity<C = any, R = any> {
                 $preRes,
                 $res: undefined,
                 $extra,
+                $a: gb.activities.properties
             };
 
             const needRun = await this.runAssert(argObject);
@@ -219,6 +220,7 @@ class Activity<C = any, R = any> {
             "$res", // 本活动执行完毕的返回值
             "$extra", // 额外的参数
             "$item",
+            "$a"
         ]) as IActivityTaskFunction;
         this.status = EnumActivityStatus.BUILDED;
         return this.task;
@@ -241,6 +243,7 @@ class Activity<C = any, R = any> {
             $v: this.globalVariables,
             $parent: this.parent,
             $res: undefined,
+            $a: gb.activities.properties,
             ...paramObj,
         };
 
