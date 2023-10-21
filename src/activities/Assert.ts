@@ -9,9 +9,6 @@ export default class AssertActivity<C = any> extends SequenceActivity<C, boolean
     }
 
     async run(paramObj: IActivityRunParams = this.defaultTaskRunParam): Promise<boolean> {
-        if (this.parent) {
-            this.ctx = this.parent?.ctx;
-        }
         const res = await super.run(paramObj);
         return !!res
     }

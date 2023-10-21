@@ -54,8 +54,13 @@ class Activity<C = any, R = any> {
         return this.globalCtx[GLOBAL_VARIABLES];
     }
 
+    public accessor useParentCtx: boolean = false;
+
     #ctx: any = {};
     get ctx() {
+        if (this.useParentCtx) {
+            return this.parent?.ctx;
+        }
         return this.#ctx;
     }
     set ctx(ctx: any) {
@@ -64,11 +69,11 @@ class Activity<C = any, R = any> {
 
     #assert: Activity | AssertActivity | undefined = undefined;
 
-    get assert(): Activity |  undefined {
+    get assert(): Activity | undefined {
         return this.#assert
     }
 
-    set assert(value: Activity |  undefined) {
+    set assert(value: Activity | undefined) {
         this.#assert = value;
         if (value) {
             value.parent = this as Activity;

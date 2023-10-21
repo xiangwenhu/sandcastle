@@ -6,7 +6,7 @@ const activityProps: IActivityProps = {
     type: 'ifElse',
     name: 'if else 测试',
     context: {
-        count: 10
+        count: 25
     },
     if: {
         type: "assertSequence",

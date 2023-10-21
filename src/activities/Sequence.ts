@@ -16,7 +16,6 @@ export default class SequenceActivity<
                 let preRes: any;
                 for (let i = 0; i < this.children.length; i++) {
                     const child = this.children[i];
-                    child.ctx = this.ctx;
                     try {
                         // 终止
                         if (child.type === "break") {

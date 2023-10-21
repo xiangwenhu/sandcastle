@@ -139,3 +139,10 @@ batchRegisterMethods
 ```
 - [ ] 注册的函数和变量 只读
 - [ ] 类型推导，已知type，推导具体的 IActivityProps
+- [ ] ctx指向问题
+  - [x] For
+  - [x] IFElse
+  - [x] Parallel
+  - [ ] ParallelFor
+  - [ ] Race
+  - [ ] Sequence

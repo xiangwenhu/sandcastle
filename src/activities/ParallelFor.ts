@@ -24,7 +24,6 @@ export default class ParallelForActivity<
             this.ctx = this.ctx || {};
             try {
                 const ps = values.map(item => {
-                    this.ctx.item = item;
                     return super.run(paramObj)
                 })
                 const res = await Promise.all(ps);
