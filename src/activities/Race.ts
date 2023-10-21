@@ -8,7 +8,6 @@ export default class RaceActivity<C = any, R = any> extends ContainerActivity<C,
         // 构建子活动
         this.children = children || this.children
 
-        this.childrenUseParentCtx(true);
         return (paramObj: IActivityRunParams) =>
             Promise.race(this.children.map(act => {
                 return act.run(paramObj)

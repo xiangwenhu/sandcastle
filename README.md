@@ -138,7 +138,7 @@ batchRegisterVariables
 batchRegisterMethods
 ```
 - [ ] 注册的函数和变量 只读
-- [ ] 类型推导，已知type，推导具体的 IActivityProps
+- [ ] 类型推导，已知type，推导具体的 IActivityConfig
 - [ ] ctx指向问题
   - [x] For
   - [x] IFElse
@@ -146,5 +146,9 @@ batchRegisterMethods
   - [x] ParallelFor
   - [x] Race
   - [x] Sequence
-  - [x] AssertSequence
+  - [x] While
+  - [x] All
+  - [x] doWhile
 - [ ] 验证$preRes, $item的多级传递性
+- [ ] 改进或者删除AssertSequence
+- [ ] 给父节点打名称，通过名称访问

@@ -1,14 +1,18 @@
-import { IActivityProps } from './../../src/types/activity';
+import { IActivityConfig } from './../../src/types/activity';
 import createActivity from "../../src/factory/activity"
 
-const activityProps: IActivityProps = {
+const activityProps: IActivityConfig = {
     type: "sequence",
     name: "sequence执行",
+    context: {
+        name: "啊家具"
+    },
     children: [
         {
+            useParentCtx: true,
             type: "code",
             name: "打印all开始时间",
-            code: `console.log('all开始时间:', new Date())`
+            code: `console.log('all开始时间:', new Date(), $ctx.name)`
         }, {
             type: "sequence",
             name: "all哈哈",

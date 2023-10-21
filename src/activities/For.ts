@@ -14,7 +14,6 @@ export default class ForActivity<
     // @ts-ignore
     buildTask(values: any[]) {
         this.values = values || this.values;
-        this.childrenUseParentCtx();
         return super.buildTask(this.children);
     }
 

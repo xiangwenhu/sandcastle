@@ -2,45 +2,42 @@ import { ActivityError } from "../ActivityError";
 import { EnumActivityStatus } from "../enum";
 import { IActivityRunParams } from "../types/activity";
 import Activity from "./Activity";
-import AssertSequenceActivity from "./AssertSequence";
+import SequenceActivity from "./Sequence";
 
 export default class IFElseActivity<C = any, R = any> extends Activity<C, R> {
-    accessor #if: AssertSequenceActivity | undefined = undefined;
-    accessor #elseif: AssertSequenceActivity[] | undefined = undefined;
-    accessor #else: AssertSequenceActivity | undefined = undefined;
+    accessor #if: SequenceActivity | undefined = undefined;
+    accessor #elseif: SequenceActivity[] | undefined = undefined;
+    accessor #else: SequenceActivity | undefined = undefined;
 
-    set if(value: AssertSequenceActivity | undefined) {
+    set if(value: SequenceActivity | undefined) {
         this.#if = value;
         if (this.#if) {
             this.#if.parent = this;
-            this.#if.allUserParentCtx(true);
         }
     }
-    get if(): AssertSequenceActivity | undefined {
+    get if(): SequenceActivity | undefined {
         return this.#if;
     }
 
-    set elseif(value: AssertSequenceActivity[] | undefined) {
+    set elseif(value: SequenceActivity[] | undefined) {
         this.#elseif = value;
         if (this.#elseif) {
             this.#elseif.forEach((c) => {
                 c.parent = this;
-                c.allUserParentCtx(true);
             });
         }
     }
-    get elseif(): AssertSequenceActivity[] | undefined {
+    get elseif(): SequenceActivity[] | undefined {
         return this.#elseif;
     }
 
-    set else(value: AssertSequenceActivity | undefined) {
+    set else(value: SequenceActivity | undefined) {
         this.#else = value;
         if (this.#else) {
             this.#else.parent = this;
-            this.#else.allUserParentCtx(true);
         }
     }
-    get else(): AssertSequenceActivity | undefined {
+    get else(): SequenceActivity | undefined {
         return this.#else;
     }
 

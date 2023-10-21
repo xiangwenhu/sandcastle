@@ -10,7 +10,6 @@ export default class SequenceActivity<
 > extends ContainerActivity<C, R> {
     buildTask(children?: Activity[]) {
         this.children = children || this.children;
-        this.childrenUseParentCtx();
         return (paramObj: IActivityRunParams) =>
             new Promise(async (resolve, reject) => {
                 let preRes: any;

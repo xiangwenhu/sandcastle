@@ -1,7 +1,7 @@
-import { IActivityProps } from './../../src/types/activity';
+import { IActivityConfig } from './../../src/types/activity';
 import createActivity from "../../src/factory/activity"
 
-const activityProps: IActivityProps = {
+const activityProps: IActivityConfig = {
     type: "sequence",
     name: "sequence执行",
     children: [
@@ -16,6 +16,7 @@ const activityProps: IActivityProps = {
             },
             name: "race哈哈",
             children: [{
+                useParentCtx: true,
                 before: {
                     name: "delay 3000",
                     type: "delay",

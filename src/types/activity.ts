@@ -9,6 +9,7 @@ export type IActivityConfig<C = any> = {
     before?: IActivityConfig | string | null | undefined;
     after?: IActivityConfig | string | null | undefined;
     assert?: string | IActivityConfig;
+    useParentCtx?: boolean
 } & Record<string, any>;
 
 export interface ActivityFactory<

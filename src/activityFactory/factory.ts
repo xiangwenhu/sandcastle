@@ -1,6 +1,5 @@
 import _, { isFunction, isNumber, isString, isSymbol } from "lodash";
 import Activity from "../activities/Activity";
-import AssertActivity from "../activities/Assert";
 import ContainerActivity from "../activities/ContainerActivity";
 import { BaseActivityType, IActivityConfig } from "../types/activity";
 import { ActivityConstructor, IFactoryConfigValue, IFactoryHandlerParams, IFactoryP$HConfigValue, PropertyConfigItem } from "./factory.type";
@@ -30,7 +29,7 @@ export function createChildren(
 }
 
 const BUILTIN_PARAMS: PropertyConfigItem[] = ["context"];
-const BUILTIN_PROPERTIES: PropertyConfigItem[] = ["name", "type"];
+const BUILTIN_PROPERTIES: PropertyConfigItem[] = ["name", "type", "useParentCtx"];
 
 function getPropertyValue(
     actConfig: IActivityConfig,
@@ -177,14 +176,15 @@ function createSingle<A extends Activity>(
             isString(config.assert)
                 ? (createSingle(
                       {
-                          type: "assert",
-                          code: config.assert,
+                          type: "code",
+                          code: `return ${config.assert}`,
                           name: `${config.name} after`,
+                          useParentCtx: true
                       },
                       globalContext
                   ) as Activity)
                 : createSingle(assert as IActivityConfig, globalContext)
-        ) as AssertActivity;
+        ) as Activity;
     }
 
     if (_.isFunction(beforeHandler)) {

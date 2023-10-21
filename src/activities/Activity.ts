@@ -15,9 +15,11 @@ import { firstToLower } from "../util";
 import { replaceVariable } from "./util/variable";
 import { GLOBAL_BUILTIN, GLOBAL_VARIABLES } from "../const";
 import { GlobalBuiltInObject } from "../types/factory";
-import { createTaskExecuteDefaultParams, createTaskRunDefaultParams } from "./util";
+import {
+    createTaskExecuteDefaultParams,
+    createTaskRunDefaultParams,
+} from "./util";
 import _ from "lodash";
-import AssertActivity from "./Assert";
 
 class Activity<C = any, R = any> {
     pre: Activity | undefined = undefined;
@@ -31,10 +33,9 @@ class Activity<C = any, R = any> {
     public status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
 
     public globalCtx: GlobalActivityContext = {};
-    protected task: IActivityTaskFunction | undefined;
+    public task: IActivityTaskFunction | undefined;
 
     accessor checkStatus: boolean = true;
-
 
     protected get globalBuiltObject(): GlobalBuiltInObject {
         // @ts-ignore
@@ -67,10 +68,10 @@ class Activity<C = any, R = any> {
         this.#ctx = ctx;
     }
 
-    #assert: Activity | AssertActivity | undefined = undefined;
+    #assert: Activity | undefined = undefined;
 
     get assert(): Activity | undefined {
-        return this.#assert
+        return this.#assert;
     }
 
     set assert(value: Activity | undefined) {
@@ -91,18 +92,26 @@ class Activity<C = any, R = any> {
         this.task = undefined;
     }
 
-    protected async runBefore(paramObject: IActivityRunParams) {
+    protected runBefore(paramObject: IActivityRunParams): unknown {
         if (!this.before || !(this.before instanceof Activity)) {
             return;
         }
-        await this.before.task?.call(this.before, paramObject);
+        return this.before.run(paramObject);
     }
 
-    protected async runAfter(paramObject: IActivityExecuteParams) {
+    protected runAfter(paramObject: IActivityExecuteParams): unknown {
         if (!this.after || !(this.after instanceof Activity)) {
             return;
         }
-        return this.after.task?.call(this.after, paramObject);
+        return this.after.run(paramObject);
+    }
+
+    protected async runAssert(paramObject: IActivityExecuteParams) {
+        if (!this.assert || !(this.assert instanceof Activity)) {
+            return true;
+        }
+        const res = await this.assert.run(paramObject);
+        return !!res;
     }
 
     /**
@@ -112,7 +121,8 @@ class Activity<C = any, R = any> {
      * @param {其他参数} otherParams
      */
     async run(
-        { $preRes, $extra, $item }: IActivityRunParams = this.defaultTaskRunParam
+        { $preRes, $extra, $item }: IActivityRunParams = this
+            .defaultTaskRunParam
     ) {
         const globalCtx = this.globalCtx;
         // 如果已经终止
@@ -145,6 +155,12 @@ class Activity<C = any, R = any> {
                 $res: undefined,
                 $extra,
             };
+
+            const needRun = await this.runAssert(argObject);
+            if (!needRun) {
+                return $preRes;
+            }
+
             // 执行前
             await this.runBefore.call(self, argObject);
 
@@ -168,7 +184,7 @@ class Activity<C = any, R = any> {
     }
 
     buildTask(..._args: any[]): IActivityTaskFunction {
-        return () => { };
+        return () => {};
     }
 
     build(...args: any[]) {
@@ -202,7 +218,7 @@ class Activity<C = any, R = any> {
             "$preRes", // 上一个活动的返回值
             "$res", // 本活动执行完毕的返回值
             "$extra", // 额外的参数
-            "$item"
+            "$item",
         ]) as IActivityTaskFunction;
         this.status = EnumActivityStatus.BUILDED;
         return this.task;
@@ -210,7 +226,7 @@ class Activity<C = any, R = any> {
 
     protected replaceVariable<C = any>(
         config: C,
-        paramObj: IActivityRunParams,
+        paramObj: IActivityRunParams
     ) {
         if (config == undefined || Array.isArray(config)) {
             return config as C;
@@ -225,7 +241,7 @@ class Activity<C = any, R = any> {
             $v: this.globalVariables,
             $parent: this.parent,
             $res: undefined,
-            ...paramObj
+            ...paramObj,
         };
 
         return replaceVariable(config).call(this, paramObject) as C;

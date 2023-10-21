@@ -1,18 +1,20 @@
 
-import { IActivityProps } from './../../src/types/activity';
+import { IActivityConfig } from './../../src/types/activity';
 import createActivity from "../../src/factory/activity"
 
-const activityProps: IActivityProps = {
+const activityProps: IActivityConfig = {
     type: 'ifElse',
     name: 'if else 测试',
     context: {
-        count: 26
+        count: 1
     },
     if: {
-        type: "assertSequence",
+        useParentCtx: true,
+        type: "sequence",
         assert: '$ctx.count  <= 5',
         name: '如果count小于等于5',
         children: [ {
+            useParentCtx: true,
             type: 'code',
             name: '分支输出',
             code: `console.log("count小于等于5分支", $ctx.count)`
@@ -46,7 +48,7 @@ const activityProps: IActivityProps = {
         }]
     },
     elseif: [{
-        type: "assertSequence",
+        type: "sequence",
         assert: '$ctx.count <=10 ',
         name: '如果count小于等于10',
         children: [{
@@ -63,7 +65,7 @@ const activityProps: IActivityProps = {
             code: 'console.log(new Date().toLocaleString())'
         }]
     }, {
-        type: "assertSequence",
+        type: "sequence",
         assert: '$ctx.count <=15 ',
         name: '如果count小于等于15',
         children: [{
@@ -80,7 +82,7 @@ const activityProps: IActivityProps = {
             code: 'console.log(new Date().toLocaleString())'
         }]
     }, {
-        type: "assertSequence",
+        type: "sequence",
         assert: '$ctx.count <=25 ',
         name: '如果count小于等于25',
         children: [{
@@ -98,7 +100,7 @@ const activityProps: IActivityProps = {
         }]
     }],
     else: {
-        type: "assertSequence",
+        type: "sequence",
         name: '如果count大于25',
         children: [{
             type: 'code',

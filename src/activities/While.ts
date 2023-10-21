@@ -2,26 +2,12 @@ import { ActivityError } from "../ActivityError";
 import { EnumActivityStatus } from "../enum";
 import { IActivityRunParams } from "../types/activity";
 import Activity from "./Activity";
-import AssertActivity from "./Assert";
 import SequenceActivity from "./Sequence";
 
 export default class WhileActivity<C = any, R = any> extends SequenceActivity<
     C,
     R
 > {
-
-    #assert: AssertActivity | undefined = undefined;
-
-    set assert(val: AssertActivity | undefined) {
-        this.#assert = val;
-        if (val) {
-            val.parent = this;
-        }
-    }
-
-    get assert(): AssertActivity | undefined {
-        return this.#assert;
-    }
 
     // @ts-ignore
     buildTask(assert: AssertActivity | undefined, children: Activity[]) {
