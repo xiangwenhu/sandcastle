@@ -27,12 +27,12 @@ export default class AssertSequenceActivity<
     }
 
     async run(paramObj: IActivityRunParams = this.defaultTaskRunParam) {
-        if (!this.assert) {
-            throw new ActivityError("assert未定义", this);
-        }
-        const res = await this.assert.run(paramObj);
-        if (res === undefined) {
-            return paramObj.preRes;
+
+        if (this.assert) {
+            const res = await this.assert.run(paramObj);
+            if (res === undefined) {
+                return paramObj.preRes;
+            }
         }
         return super.run(paramObj);
     }

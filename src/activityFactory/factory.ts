@@ -97,7 +97,8 @@ function createSingle<A extends Activity>(config: IActivityProps, globalContext:
             createChildren
         }
     };
-    const { before, after, assert, init } = config;
+    const { before, after, assert } = config;
+    const { before: beforeHandler, after: afterHandler, init } = factoryConfig;
 
     if (_.isFunction(init)) {
         init.call(null, paramsObject);
@@ -110,6 +111,7 @@ function createSingle<A extends Activity>(config: IActivityProps, globalContext:
     const activity = new ClassConstructor(...params);
     activity.globalCtx = globalContext;
     Object.assign(activity, properties);
+    paramsObject.activity = activity as A;
 
     // 创建children
     if (Array.isArray(config.children)) {
@@ -139,15 +141,15 @@ function createSingle<A extends Activity>(config: IActivityProps, globalContext:
         }, globalContext) as Activity : createSingle(assert as IActivityProps, globalContext)) as AssertActivity;
     }
 
-    if (_.isFunction(before)) {
-        before.call(null, paramsObject)
+    if (_.isFunction(beforeHandler)) {
+        beforeHandler.call(null, paramsObject)
     }
 
     const buildParams = getBuildParams(factoryConfig, config);
     activity.build(...buildParams);
 
-    if (_.isFunction(after)) {
-        after.call(null, paramsObject)
+    if (_.isFunction(afterHandler)) {
+        afterHandler.call(null, paramsObject)
     }
     return activity as A;
 }

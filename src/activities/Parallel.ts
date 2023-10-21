@@ -9,6 +9,9 @@ export default class ParallelActivity<C = any, R = any> extends ContainerActivit
         this.children = children || this.children
 
         return (paramObj: IActivityRunParams) =>
-            Promise.all(this.children.map(act => act.run(paramObj)))
+            Promise.all(this.children.map(act => {
+                act.ctx = this.ctx;
+                act.run(paramObj)
+            }))
     }
 }

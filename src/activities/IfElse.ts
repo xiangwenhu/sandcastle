@@ -16,29 +16,34 @@ export default class IFElseActivity<C = any, R = any> extends Activity<C, R> {
 
     buildTask() {
         if (!this.if) {
-            throw new ActivityError("if为定义", this);
+            throw new ActivityError("if未定义", this);
         }
 
         const sequenceCol = [this.if];
         if (this.elseif) {
             sequenceCol.push(...this.elseif);
         }
-        if (this.else) {
-            sequenceCol.push(this.else);
-        }
+        // if (this.else) {
+        //     sequenceCol.push(this.else);
+        // }
 
         return async (paramObj: IActivityRunParams) => {
             let assertR: boolean = false;
             let r: any;
             for (let i = 0; i < sequenceCol.length; i++) {
                 const act = sequenceCol[i];
+                act.ctx = this.ctx;
                 assertR = await act.assert!.run(paramObj);
                 // 执行后状态会被改变
-                act.assert!.status = EnumActivityStatus.BUILDED;
+                if (act.assert) {
+                    act.assert.status = EnumActivityStatus.BUILDED;
+                }
                 if (assertR) {
                     return act.run(paramObj);
                 }
             }
+
+            return this.else?.run(paramObj);
         };
     }
 }

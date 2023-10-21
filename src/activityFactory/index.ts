@@ -90,7 +90,9 @@ register("terminate", TerminateActivity, {
     params: ["message"]
 });
 register("tryCatch", TryCatchActivity);
-register("for", ForActivity);
+register("for", ForActivity, {
+    buildParams: ["values"]
+});
 register("parallelFor", ParallelForActivity, {
     params: ["values"]
 });

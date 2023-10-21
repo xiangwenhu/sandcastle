@@ -12,8 +12,7 @@ export default class ForActivity<
     }
 
     // @ts-ignore
-    buildTask(children?: Activity[], values: any[]) {
-        this.children = children || this.children || [];
+    buildTask(values: any[]) {
         this.values = values || this.values;
         return super.buildTask(this.children);
     }
@@ -28,14 +27,15 @@ export default class ForActivity<
             let preRes;
             for (let i = 0; i < values.length; i++) {
                 const val = values[i];
+                this.ctx.item = val;
                 // 给孩子节点ctx.item赋值
-                this.children.forEach(c => c.ctx.item = val);
+                // this.children.forEach(c => c.ctx.item = val);
                 try {
                     preRes = await super.run(paramObj)
                 } catch (err: any) {
                     reject(new ActivityError(err && err.message, that));
                 } finally {
-                    this.children.forEach(c => delete c.ctx.item);
+                    // this.children.forEach(c => delete c.ctx.item);
                 }
             }
             resolve(preRes);

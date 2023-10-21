@@ -1,5 +1,6 @@
 import { IActivityProps } from '../../src/types/activity';
 import createActivity from "../../src/factory/activity";
+import { DEFAULT_LAUNCH_OPTIONS } from '../../src/const';
 
 const activityProps: IActivityProps = {
     type: "sequence",
@@ -9,6 +10,7 @@ const activityProps: IActivityProps = {
             type: "c.browser",
             name: "浏览器",
             options: {
+                ...DEFAULT_LAUNCH_OPTIONS,
                 headless: false,
             },
             before: {
@@ -42,12 +44,14 @@ const activityProps: IActivityProps = {
                                     name: "遍历爬",
                                     assert: {
                                         type: "assert",
+                                        name: "assert哦",
                                         children: [{
                                             type: "c.page.$",
                                             name: "查询下一页",
                                             selector: `[ka="page-next"].disabled`
                                         }, {
                                             type: "code",
+                                            name: "",
                                             code: "return preRes == null"
                                         }]
                                     },
