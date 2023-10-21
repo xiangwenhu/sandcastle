@@ -1,31 +1,31 @@
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 
-export type IActivityProps<C = any> = {
+export type IActivityConfig<C = any> = {
     type: BaseActivityType | string;
     context?: C;
     name: string;
-    children?: IActivityProps[];
-    before?: IActivityProps | string | null | undefined;
-    after?: IActivityProps | string | null | undefined;
-    assert?: string | IActivityProps;
+    children?: IActivityConfig[];
+    before?: IActivityConfig | string | null | undefined;
+    after?: IActivityConfig | string | null | undefined;
+    assert?: string | IActivityConfig;
 } & Record<string, any>;
 
 export interface ActivityFactory<
-    P extends IActivityProps = any,
+    P extends IActivityConfig = any,
     A extends Activity = Activity | ContainerActivity
 > {
     (props: P, globalContext?: any): A;
 }
 
 export interface ActivityChildrenFactory<
-    P extends IActivityProps = any,
+    P extends IActivityConfig = any,
     A extends Activity = any
 > {
     (props: P[], globalContext?: any): A[];
 }
 
-export interface ActivityFactoryFactory<P extends IActivityProps = any> {
+export interface ActivityFactoryFactory<P extends IActivityConfig = any> {
     create: ActivityFactory<P>;
     createChildren: ActivityChildrenFactory<P>;
 }
