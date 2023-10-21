@@ -1,110 +1,177 @@
 import factory, { register } from "../activityFactory";
+import $Activity from "../crawlActivities/$";
+import $$Activity from "../crawlActivities/$$";
+import $$EvalActivity from "../crawlActivities/$$Eval";
+import $EvalActivity from "../crawlActivities/$Eval";
+import BrowserActivity from "../crawlActivities/Browser";
+import ClearValueActivity from "../crawlActivities/ClearValue";
+import ClickActivity from "../crawlActivities/Click";
+import CloseActivity from "../crawlActivities/Close";
+import ContentActivity from "../crawlActivities/Content";
+import EvaluateActivity from "../crawlActivities/Evaluate";
+import EvaluateClickActivity from "../crawlActivities/EvaluateClick";
+import FetchActivity from "../crawlActivities/Fetch";
+import FocusActivity from "../crawlActivities/Focus";
+import GetCookieActivity from "../crawlActivities/GetCookie";
+import GoBackActivity from "../crawlActivities/GoBack";
+import GoForwardActivity from "../crawlActivities/GoForward";
+import GotoActivity from "../crawlActivities/Goto";
+import HoverActivity from "../crawlActivities/Hover";
+import IsClosedActivity from "../crawlActivities/IsClosed";
+import PageActivity from "../crawlActivities/Page";
+import ReloadActivity from "../crawlActivities/Reload";
+import SetCookieActivity from "../crawlActivities/SetCookie";
+import SetUserAgentActivity from "../crawlActivities/SetUserAgent";
+import TitleActivity from "../crawlActivities/Title";
+import TypeActivity from "../crawlActivities/Type";
+import URLActivity from "../crawlActivities/URL";
+import UploadFileActivity from "../crawlActivities/UploadFile";
+import WaitForNavActivity from "../crawlActivities/WaitForNav";
+import WaitForRequestActivity from "../crawlActivities/WaitForRequest";
+import WaitForResponseActivity from "../crawlActivities/WaitForResponse";
+import WaitForSelectorActivity from "../crawlActivities/WaitForSelector";
+import KeyboardDownActivity from "../crawlActivities/keyboard/Down";
+import KeyboardUpActivity from "../crawlActivities/keyboard/Press";
+import KeyboardSendCharacterActivity from "../crawlActivities/keyboard/SendCharacter";
+import KeyboardTypeActivity from "../crawlActivities/keyboard/Type";
+import MouseClickActivity from "../crawlActivities/mouse/Click";
+import MouseDownActivity from "../crawlActivities/mouse/Down";
+import MouseDragActivity from "../crawlActivities/mouse/Drag";
+import MouseDragAndDropActivity from "../crawlActivities/mouse/DragAndDrop";
+import MouseDragEnterActivity from "../crawlActivities/mouse/DragEnter";
+import MouseDragOverActivity from "../crawlActivities/mouse/DragOver";
+import MouseDropActivity from "../crawlActivities/mouse/Drop";
+import MouseMoveActivity from "../crawlActivities/mouse/Move";
+import MouseResetActivity from "../crawlActivities/mouse/Reset";
+import MouseUpActivity from "../crawlActivities/mouse/Up";
+import MouseWheelActivity from "../crawlActivities/mouse/Wheel";
 
-import browserActivityFactory from "./browser";
-import pageActivityFactory from "./page";
 
-import clickActivityFactory from "./click";
-import closeActivityFactory from "./close";
-import contentActivityFactory from "./content";
-import evaluateActivityFactory from "./evaluate";
-import evaluateClickActivityFactory from "./evaluateClick";
-import fetchActivityFactory from "./fetch";
-import getCookieActivityFactory from "./getCookie";
-import goBackActivityFactory from "./goBack";
-import goForwardActivityFactory from "./goForward";
-import gotoActivityFactory from "./goto";
-import isClosedActivityFactory from "./isClosed";
-import reloadActivityFactory from "./reload";
-import setCookieActivityFactory from "./setCookie";
-import setUserAgentActivityFactory from "./setUserAgent";
-import titleActivityFactory from "./title";
-import typeActivityFactory from "./type";
-import urlActivityFactory from "./url";
-import waitForNavActivityFactory from "./waitForNav";
-import waitForRequestActivityFactory from "./waitForRequest";
-import waitForResponseActivityFactory from "./waitForResponse";
-import waitForSelectorActivityFactory from "./waitForSelector";
-import $evalActivityFactory from "./$eval";
-import $$evalActivityFactory from "./$$eval";
-import focusActivityFactory from "./focus";
-import hoverActivityFactory from "./hover";
+register("c.browser", BrowserActivity, {
+    params: ["options"]
+});
+register("c.page", PageActivity);
+
+register("c.page.click", ClickActivity, {
+    params: ["selector"]
+});
+register("c.page.close", CloseActivity);
+register("c.page.content", ContentActivity);
+register("c.page.evaluate", EvaluateActivity, {
+    buildParams: ["code", "args"]
+});
+register("c.page.eClick", EvaluateClickActivity, {
+    buildParams: ["selector"]
+});
+register("c.page.fetch", FetchActivity, {
+    buildParams: ["url", "options", "contentType"]
+});
+register("c.page.goBack", GoBackActivity);
+register("c.page.goForward", GoForwardActivity);
+register("c.page.isClosed", IsClosedActivity);
+register("c.page.reload", ReloadActivity, {
+    buildParams: ["options"]
+});
+register("c.page.setCookie", SetCookieActivity, {
+    buildParams: ["cookies"]
+});
+register("c.page.setUserAgent", SetUserAgentActivity, {
+    buildParams: ["userAgent", "userAgentMetadata"]
+});
+register("c.page.title", TitleActivity);
+register("c.page.type", TypeActivity, {
+    buildParams: ["selector", "text", "options"]
+});
+register("c.page.url", URLActivity);
+register("c.page.waitForNav", WaitForNavActivity, {
+    buildParams: ["options"]
+});
+register("c.page.waitForRequest", WaitForRequestActivity, {
+    buildParams: ["urlOrPredicate", "options"]
+});
+register("c.page.waitForResponse", WaitForResponseActivity, {
+    buildParams: ["urlOrPredicate", "options"]
+});
+register("c.page.waitForSelector", WaitForSelectorActivity, {
+    buildParams: ["selector", "options"]
+});
+register("c.page.getCookie", GetCookieActivity);
+register("c.page.goto", GotoActivity, {
+    params: ["url", "options"]
+});
+register("c.page.$eval", $EvalActivity), {
+    buildParams: ["selector", "pageFunction"]
+};
+register("c.page.$$eval", $$EvalActivity, {
+    buildParams: ["selector", "pageFunction"]
+});
+register("c.page.focus", FocusActivity, {
+    buildParams: ["selector"]
+});
+register("c.page.hover", HoverActivity, {
+    buildParams: ["selector"]
+});
+register("c.page.clearValue", ClearValueActivity, {
+    params: ["selector"]
+});
+register("c.page.uploadFile", UploadFileActivity, {
+    buildParams: ["selector", "paths"]
+})
+register("c.page.$", $Activity, {
+    buildParams: ["selector"]
+})
+register("c.page.$$)", $$Activity, {
+    buildParams: ["selector"]
+})
 
 // keyboard
-import downActivityFactory from "./keyboard/down";
-import pressActivityFactory from "./keyboard/press";
-import sendCharacterActivityFactory from "./keyboard/sendCharacter";
-import keyboardTypeActivityFactory from "./keyboard/type";
-import upActivityFactory from "./keyboard/up";
+register("c.page.keyboard.down", KeyboardDownActivity, {
+    buildParams: ["key", "options"]
+});
+register("c.page.keyboard.up", KeyboardUpActivity, {
+    buildParams: ["key", "options"]
+});
+register("c.page.keyboard.sendCharacter", KeyboardSendCharacterActivity, {
+    buildParams: ["key"]
+});
+register("c.page.keyboard.type", KeyboardTypeActivity, {
+    buildParams: ["key"]
+});
+register("c.page.keyboard.press", KeyboardUpActivity, {
+    buildParams: ["key"]
+});
 
 // mouse
-import mouseClickActivityFactory from "./mouse/click";
-import mouseDownActivityFactory from "./mouse/down";
-import dragActivityFactory from "./mouse/drag";
-import dragAndDropActivityFactory from "./mouse/dragAndDrop";
-import dragEnterActivityFactory from "./mouse/dragEnter";
-import dragOverActivityFactory from "./mouse/dragOver";
-import dropActivityFactory from "./mouse/drop";
-import moveActivityFactory from "./mouse/move";
-import resetActivityFactory from "./mouse/reset";
-import mouseUpActivityFactory from "./mouse/up";
-import wheelActivityFactory from "./mouse/wheel";
-import clearValue from "./clearValue";
-import uploadFile from "./uploadFile";
-import $ from "./$";
-import $$ from "./$$";
-
-register("c.browser", browserActivityFactory);
-register("c.page", pageActivityFactory);
-
-register("c.page.click", clickActivityFactory);
-register("c.page.close", closeActivityFactory);
-register("c.page.content", contentActivityFactory);
-register("c.page.evaluate", evaluateActivityFactory);
-register("c.page.eClick", evaluateClickActivityFactory);
-register("c.page.fetch", fetchActivityFactory);
-register("c.page.goBack", goBackActivityFactory);
-register("c.page.goForward", goForwardActivityFactory);
-register("c.page.isClosed", isClosedActivityFactory);
-register("c.page.reload", reloadActivityFactory);
-register("c.page.setCookie", setCookieActivityFactory);
-register("c.page.setUserAgent", setUserAgentActivityFactory);
-register("c.page.title", titleActivityFactory);
-register("c.page.type", typeActivityFactory);
-register("c.page.url", urlActivityFactory);
-register("c.page.waitForNav", waitForNavActivityFactory);
-register("c.page.waitForRequest", waitForRequestActivityFactory);
-register("c.page.waitForResponse", waitForResponseActivityFactory);
-register("c.page.waitForSelector", waitForSelectorActivityFactory);
-register("c.page.getCookie", getCookieActivityFactory);
-register("c.page.goto", gotoActivityFactory);
-register("c.page.$eval", $evalActivityFactory);
-register("c.page.$$eval", $$evalActivityFactory);
-register("c.page.focus", focusActivityFactory);
-register("c.page.hover", hoverActivityFactory);
-register("c.page.clearValue", clearValue);
-register("c.page.uploadFile", uploadFile)
-register("c.page.$", $)
-register("c.page.$$)", $$)
-
-// keyboard
-register("c.page.keyboard.down", downActivityFactory);
-register("c.page.keyboard.up", upActivityFactory);
-register("c.page.keyboard.sendCharacter", sendCharacterActivityFactory);
-register("c.page.keyboard.type", keyboardTypeActivityFactory);
-register("c.page.keyboard.press", pressActivityFactory);
-
-// mouse
-register("c.page.mouse.click", mouseClickActivityFactory);
-register("c.page.mouse.down", mouseDownActivityFactory);
-register("c.page.mouse.drag", dragActivityFactory);
-register("c.page.mouse.dragAndDrop", dragAndDropActivityFactory);
-register("c.page.mouse.dragEnter", dragEnterActivityFactory);
-register("c.page.mouse.dragOver", dragOverActivityFactory);
-register("c.page.mouse.drop", dropActivityFactory);
-register("c.page.mouse.move", moveActivityFactory);
-register("c.page.mouse.reset", resetActivityFactory);
-register("c.page.mouse.up", mouseUpActivityFactory);
-register("c.page.mouse.wheel", wheelActivityFactory);
+register("c.page.mouse.click", MouseClickActivity, {
+    buildParams: ["x", "y", "options"]
+});
+register("c.page.mouse.down", MouseDownActivity, {
+    buildParams: ["options"]
+});
+register("c.page.mouse.drag", MouseDragActivity, {
+    buildParams: ["start", "target"]
+});
+register("c.page.mouse.dragAndDrop", MouseDragAndDropActivity, {
+    buildParams: ["start", "target", "options"]
+});
+register("c.page.mouse.dragEnter", MouseDragEnterActivity, {
+    buildParams: ["target", "data"]
+});
+register("c.page.mouse.dragOver", MouseDragOverActivity, {
+    buildParams: ["target", "data"]
+});
+register("c.page.mouse.drop", MouseDropActivity, {
+    buildParams: ["target", "data"]
+});
+register("c.page.mouse.move", MouseMoveActivity, {
+    buildParams: ["x", "y", "options"]
+});
+register("c.page.mouse.reset", MouseResetActivity);
+register("c.page.mouse.up", MouseUpActivity, {
+    buildParams: ["options"]
+});
+register("c.page.mouse.wheel", MouseWheelActivity, {
+    buildParams: ["options"]
+});
 
 export default factory;
-export { register } from "../activityFactory";

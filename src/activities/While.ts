@@ -9,9 +9,6 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
     C,
     R
 > {
-    constructor(context: C, children: Activity[]) {
-        super(context, children);
-    }
 
     #assert: AssertActivity | undefined = undefined;
 

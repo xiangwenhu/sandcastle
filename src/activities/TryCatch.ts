@@ -7,9 +7,6 @@ export default class TryCatchActivity<C = any, R = any> extends SequenceActivity
 
     public catch: Activity | null = null;
 
-    constructor(context: C, children: Activity[]) {
-        super(context, children)
-    }
 
     async run(paramObj: IActivityRunParams = this.defaultTaskRunParam) {
         try {

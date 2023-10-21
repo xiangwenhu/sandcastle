@@ -9,8 +9,8 @@ export default class AssertSequenceActivity<
     R = any
 > extends SequenceActivity<C, R>{
 
-    constructor(context: C, children: Activity[]) {
-        super(context, children)
+    constructor(context: C) {
+        super(context)
     }
 
     #assert: AssertActivity | undefined = undefined;

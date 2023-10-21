@@ -7,8 +7,8 @@ export default class ForActivity<
     C = any,
     R = any
 > extends SequenceActivity<C, R> {
-    constructor(context: C, children: Activity[], protected values: any[]) {
-        super(context, children);
+    constructor(context: C, public values: any[]) {
+        super(context);
     }
 
     // @ts-ignore

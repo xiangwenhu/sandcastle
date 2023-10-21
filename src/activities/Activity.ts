@@ -17,34 +17,20 @@ import { GLOBAL_BUILTIN, GLOBAL_VARIABLES } from "../const";
 import { GlobalBuiltInObject } from "../types/factory";
 import { createTaskExecuteDefaultParams, createTaskRunDefaultParams } from "./util";
 import _ from "lodash";
+import AssertActivity from "./Assert";
 
 class Activity<C = any, R = any> {
     pre: Activity | undefined = undefined;
-
     next: Activity | undefined = undefined;
-
     before: Activity | undefined = undefined;
-
     after: Activity | undefined = undefined;
-    /**
-     * 父节点
-     */
+
     accessor parent: Activity | undefined;
-    /**
-     * name
-     */
     public name: string | undefined;
-    /**
-     * 类型
-     */
     public type: BaseActivityType;
-    /**
-     * 状态
-     */
     public status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
 
     public globalCtx: GlobalActivityContext = {};
-
     protected task: IActivityTaskFunction | undefined;
 
     accessor checkStatus: boolean = true;
@@ -68,15 +54,25 @@ class Activity<C = any, R = any> {
         return this.globalCtx[GLOBAL_VARIABLES];
     }
 
-
     #ctx: any = {};
-
     get ctx() {
         return this.#ctx;
     }
-
     set ctx(ctx: any) {
         this.#ctx = ctx;
+    }
+
+    #assert: Activity | AssertActivity | undefined = undefined;
+
+    get assert(): Activity |  undefined {
+        return this.#assert
+    }
+
+    set assert(value: Activity |  undefined) {
+        this.#assert = value;
+        if (value) {
+            value.parent = this as Activity;
+        }
     }
 
     constructor(ctx: C) {
@@ -248,7 +244,7 @@ class Activity<C = any, R = any> {
         return this.getProperty.call(this.parent, property, recurse) as P;
     }
 
-    getClosestParent<A>(targetActivity: Object) {
+    getClosestParent<A = Activity>(targetActivity: Object): A | undefined {
         let act: Activity | undefined = this;
 
         while (act != undefined) {

@@ -4,10 +4,6 @@ import Activity from "../Activity";
 import { IActivityRunParams } from "../../types/activity";
 
 export default class RemoveFileActivity<C = any> extends Activity<C, string> {
-    constructor(context: C = {} as C) {
-        super(context);
-    }
-
     buildTask(dist: string) {
         return async (paramObj: IActivityRunParams) => {
             const rDist = this.replaceVariable(dist, paramObj) as string;

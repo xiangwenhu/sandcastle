@@ -4,9 +4,6 @@ import { IActivityRunParams } from "../../types/activity";
 import Activity from "../Activity";
 
 export default class ReadFileActivity<C = any> extends Activity<C, string> {
-    constructor(context: C = {} as C) {
-        super(context);
-    }
 
     buildTask(dist: string, type: "text" | "json" = "json", options?:
         | (

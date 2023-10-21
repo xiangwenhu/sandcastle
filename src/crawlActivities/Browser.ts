@@ -16,10 +16,9 @@ export default class BrowserActivity<
 
     constructor(
         ctx: any,
-        children: Activity[],
         public options: PuppeteerLaunchOptions
     ) {
-        super(ctx, children);
+        super(ctx);
     }
 
 

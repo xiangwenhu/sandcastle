@@ -6,10 +6,6 @@ import { ensureDir } from "../../util/fs";
 import Activity from "../Activity";
 
 export default class WriteFileActivity<C = any> extends Activity<C, string> {
-    constructor(context: C = {} as C) {
-        super(context);
-    }
-
     buildTask(
         dist: string,
         content: any,

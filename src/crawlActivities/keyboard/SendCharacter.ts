@@ -2,7 +2,7 @@ import { KeyInput } from "puppeteer";
 import PageChildActivity from "../PageChildActivity";
 import { IActivityRunParams } from "../../types/activity";
 
-export default class KeyboardSendCharacter<C = any, R = any> extends PageChildActivity<
+export default class KeyboardSendCharacterActivity<C = any, R = any> extends PageChildActivity<
     C,
     R
 > {

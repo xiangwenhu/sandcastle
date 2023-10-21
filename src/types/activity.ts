@@ -8,6 +8,7 @@ export type IActivityProps<C = any> = {
     children?: IActivityProps[];
     before?: IActivityProps | string | null | undefined;
     after?: IActivityProps | string | null | undefined;
+    assert?: string | IActivityProps;
 } & Record<string, any>;
 
 export interface ActivityFactory<
@@ -37,7 +38,6 @@ export type BaseActivityType =
     | "race"
     | "assert"
     | "while"
-    | "assertSequence"
     | "ifElse"
     | "request"
     | "break"

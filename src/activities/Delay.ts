@@ -2,7 +2,7 @@ import { isString } from "lodash";
 import Activity from "./Activity";
 import { IActivityRunParams } from "../types/activity";
 
-export default class CodeActivity<C = any, R = any> extends Activity<C, R> {
+export default class DelayActivity<C = any, R = any> extends Activity<C, R> {
     constructor(context: C, private timeout: number) {
         super(context);
     }

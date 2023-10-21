@@ -1,6 +1,5 @@
 import { IActivityProps } from '../../src/types/activity';
 import createActivity from "../../src/factory/activity";
-import { EvaluateFunc } from 'puppeteer';
 
 const activityProps: IActivityProps = {
     type: "sequence",

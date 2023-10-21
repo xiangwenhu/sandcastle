@@ -8,9 +8,6 @@ export default class SequenceActivity<
     C = any,
     R = any
 > extends ContainerActivity<C, R> {
-    constructor(context: C, children: Activity[]) {
-        super(context, children);
-    }
 
     buildTask(children?: Activity[]) {
         this.children = children || this.children;

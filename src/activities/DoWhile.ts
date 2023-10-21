@@ -5,14 +5,10 @@ import Activity from "./Activity";
 import AssertActivity from "./Assert";
 import SequenceActivity from "./Sequence";
 
-export default class WhileActivity<C = any, R = any> extends SequenceActivity<
+export default class DoWhileActivity<C = any, R = any> extends SequenceActivity<
     C,
     R
 > {
-    constructor(context: C, children: Activity[]) {
-        super(context, children);
-    }
-
     #assert: AssertActivity | undefined = undefined;
 
     set assert(val: AssertActivity | undefined) {
@@ -61,4 +57,4 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
     }
 }
 
-module.exports = WhileActivity;
+module.exports = DoWhileActivity;

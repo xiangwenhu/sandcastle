@@ -4,9 +4,6 @@ import Activity from "../Activity";
 import { IActivityRunParams } from "../../types/activity";
 
 export default class DownloadFileActivity<C = any> extends Activity<C, string> {
-    constructor(context: C = {} as C) {
-        super(context);
-    }
 
     buildTask(
         url: string,
