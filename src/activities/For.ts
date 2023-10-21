@@ -14,13 +14,13 @@ export default class ForActivity<
     // @ts-ignore
     buildTask(values: any[]) {
         this.values = values || this.values;
-        this.children.forEach(c => c.useParentCtx = true);
+        this.childrenUseParentCtx();
         return super.buildTask(this.children);
     }
 
     run(paramObj: IActivityRunParams = {
-        preRes: undefined,
-        extra: {}
+        $preRes: undefined,
+        $extra: {}
     }): Promise<R | undefined> {
         const that = this as Activity;
         return new Promise(async (resolve, reject) => {
@@ -28,9 +28,11 @@ export default class ForActivity<
             let preRes;
             for (let i = 0; i < values.length; i++) {
                 const val = values[i];
-                this.ctx.item = val;
                 try {
-                    preRes = await super.run(paramObj)
+                    preRes = await super.run({
+                        ...paramObj,
+                        $item: val
+                    })
                 } catch (err: any) {
                     reject(new ActivityError(err && err.message, that));
                 } finally {

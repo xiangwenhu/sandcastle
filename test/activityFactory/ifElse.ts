@@ -6,16 +6,16 @@ const activityProps: IActivityProps = {
     type: 'ifElse',
     name: 'if else 测试',
     context: {
-        count: 25
+        count: 26
     },
     if: {
         type: "assertSequence",
-        assert: 'ctx.count  <= 5',
+        assert: '$ctx.count  <= 5',
         name: '如果count小于等于5',
         children: [ {
             type: 'code',
             name: '分支输出',
-            code: `console.log("count小于等于5分支")`
+            code: `console.log("count小于等于5分支", $ctx.count)`
         },{
             type: 'delay',
             name: 'delay 5 秒',
@@ -47,7 +47,7 @@ const activityProps: IActivityProps = {
     },
     elseif: [{
         type: "assertSequence",
-        assert: 'ctx.count <=10 ',
+        assert: '$ctx.count <=10 ',
         name: '如果count小于等于10',
         children: [{
             type: 'code',
@@ -64,7 +64,7 @@ const activityProps: IActivityProps = {
         }]
     }, {
         type: "assertSequence",
-        assert: 'ctx.count <=15 ',
+        assert: '$ctx.count <=15 ',
         name: '如果count小于等于15',
         children: [{
             type: 'code',
@@ -81,7 +81,7 @@ const activityProps: IActivityProps = {
         }]
     }, {
         type: "assertSequence",
-        assert: 'ctx.count <=25 ',
+        assert: '$ctx.count <=25 ',
         name: '如果count小于等于25',
         children: [{
             type: 'code',
@@ -103,7 +103,7 @@ const activityProps: IActivityProps = {
         children: [{
             type: 'code',
             name: '分支输出',
-            code: `console.log("count大于25分支")`
+            code: `console.log("count大于25分支", $ctx.count)`
         },{
             type: 'delay',
             name: 'delay 50秒',

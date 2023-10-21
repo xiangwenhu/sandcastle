@@ -13,7 +13,7 @@ export default class DelayActivity<C = any, R = any> extends Activity<C, R> {
             const tt = isString(this.timeout) ? this.replaceVariable(this.timeout, paramObj) as number: this.timeout;
             return new Promise((resolve, _reject) => {
                 setTimeout(function () {
-                    resolve(paramObj.preRes);
+                    resolve(paramObj.$preRes);
                 }, tt);
             });
         };

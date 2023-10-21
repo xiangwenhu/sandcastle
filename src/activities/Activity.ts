@@ -112,7 +112,7 @@ class Activity<C = any, R = any> {
      * @param {其他参数} otherParams
      */
     async run(
-        { preRes, extra }: IActivityRunParams = this.defaultTaskRunParam
+        { $preRes, $extra, $item }: IActivityRunParams = this.defaultTaskRunParam
     ) {
         const globalCtx = this.globalCtx;
         // 如果已经终止
@@ -134,15 +134,16 @@ class Activity<C = any, R = any> {
         try {
             const gb = this.globalBuiltObject;
             const argObject: IActivityExecuteParams = {
-                gCtx: globalCtx,
-                ctx: mContext,
+                $gCtx: globalCtx,
+                $ctx: mContext,
                 $c: gb.properties.properties,
                 $m: gb.methods.properties,
                 $v: this.globalVariables,
-                parent: this.parent,
-                preRes,
-                res: undefined,
-                extra,
+                $parent: this.parent,
+                $item,
+                $preRes,
+                $res: undefined,
+                $extra,
             };
             // 执行前
             await this.runBefore.call(self, argObject);
@@ -150,7 +151,7 @@ class Activity<C = any, R = any> {
             const res: R = await this.task!.call(self, argObject);
             this.status = EnumActivityStatus.EXECUTED;
             // 执行后
-            argObject.res = res;
+            argObject.$res = res;
             const afterRes = await this.runAfter.call(self, argObject);
 
             if (this.type == "terminate") {
@@ -192,15 +193,16 @@ class Activity<C = any, R = any> {
         const $c = g.properties.placeholder || "$c";
         const $m = g.methods.placeholder || "$m";
         this.task = createOneParamAsyncFunction(code, [
-            "gCtx", // 全局上下文
-            "ctx", // 上下文
+            "$gCtx", // 全局上下文
+            "$ctx", // 上下文
             $c, // 内置变量
             $m, // 内置方法
             "$v",
-            "parent", // 父节点
-            "preRes", // 上一个活动的返回值
-            "res", // 本活动执行完毕的返回值
-            "extra", // 额外的参数
+            "$parent", // 父节点
+            "$preRes", // 上一个活动的返回值
+            "$res", // 本活动执行完毕的返回值
+            "$extra", // 额外的参数
+            "$item"
         ]) as IActivityTaskFunction;
         this.status = EnumActivityStatus.BUILDED;
         return this.task;
@@ -208,7 +210,7 @@ class Activity<C = any, R = any> {
 
     protected replaceVariable<C = any>(
         config: C,
-        paramObj: IActivityRunParams
+        paramObj: IActivityRunParams,
     ) {
         if (config == undefined || Array.isArray(config)) {
             return config as C;
@@ -216,15 +218,14 @@ class Activity<C = any, R = any> {
         const gb = this.globalBuiltObject;
         let mContext = this.ctx || {};
         const paramObject: IActivityExecuteParams = {
-            gCtx: this.globalCtx,
-            ctx: mContext,
+            $gCtx: this.globalCtx,
+            $ctx: mContext,
             $c: gb.properties.properties,
             $m: gb.methods.properties,
             $v: this.globalVariables,
-            parent: this.parent,
-            preRes: paramObj.preRes,
-            res: undefined,
-            extra: paramObj.extra,
+            $parent: this.parent,
+            $res: undefined,
+            ...paramObj
         };
 
         return replaceVariable(config).call(this, paramObject) as C;

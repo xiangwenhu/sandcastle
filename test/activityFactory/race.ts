@@ -11,11 +11,19 @@ const activityProps: IActivityProps = {
             code: `console.log('all开始时间:', new Date())`
         }, {
             type: "race",
+            context: {
+                name: "race"
+            },
             name: "race哈哈",
             children: [{
+                before: {
+                    name: "delay 3000",
+                    type: "delay",
+                    timeout: 3000
+                },
                 name: "delay 3000",
-                type: "delay",
-                timeout: 3000
+                type: "code",
+                code: "console.log($ctx.name)"
             }, {
                 name: "delay 6000",
                 type: "delay",

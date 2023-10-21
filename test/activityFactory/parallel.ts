@@ -10,11 +10,11 @@ const activityProps: IActivityProps = {
     children: [{
         type: 'code',
         name: '最多延时秒',
-        code: "console.log(ctx.timeout)"
+        code: "console.log($ctx.timeout)"
     }, {
         type: 'code',
         name: '输出当前日期',
-        code: 'console.log(ctx.name)'
+        code: 'console.log($ctx.name)'
     }]
 }
 

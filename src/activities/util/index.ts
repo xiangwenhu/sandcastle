@@ -2,8 +2,8 @@ import { IActivityExecuteParams, IActivityRunParams } from "../../types/activity
 
 export function createTaskRunDefaultParams(): IActivityRunParams {
     return {
-        preRes: undefined,
-        extra: {}
+        $preRes: undefined,
+        $extra: {}
     }
 }
 
@@ -11,12 +11,12 @@ export function createTaskExecuteDefaultParams(): IActivityExecuteParams {
     const tp = createTaskRunDefaultParams();
     return {
         ...tp,
-        gCtx: {},
+        $gCtx: {},
         $c: {},
         $m: {},
         $v: {},
-        ctx: {},
-        parent: undefined,
-        res: undefined,
+        $ctx: {},
+        $parent: undefined,
+        $res: undefined,
     }
 }

@@ -6,11 +6,11 @@ export default class ParallelActivity<C = any, R = any> extends ContainerActivit
 
     buildTask(children: Activity[]) {
         // 构建子活动
-        this.children = children || this.children
-        this.children.forEach(c=> c.useParentCtx = true);
+        this.children = children || this.children;
+        this.childrenUseParentCtx(true);
         return (paramObj: IActivityRunParams) =>
             Promise.all(this.children.map(act => {
-                act.run(paramObj)
+                return act.run(paramObj)
             }))
     }
 }

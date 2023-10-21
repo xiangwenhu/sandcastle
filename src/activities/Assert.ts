@@ -12,6 +12,7 @@ export default class AssertActivity<C = any> extends SequenceActivity<C, boolean
         const res = await super.run(paramObj);
         return !!res
     }
+ 
 }
 
 

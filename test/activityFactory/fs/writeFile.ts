@@ -7,7 +7,7 @@ const activityProps: IActivityProps = {
     children: [{
         type: 'fs.writeFile',
         name: '读取文件',
-        content: "{{gCtx.data}}",
+        content: "{{$gCtx.data}}",
         dist: `D:\\data\\tmp2\\txt.json`,
         after: "return true"
     }, {

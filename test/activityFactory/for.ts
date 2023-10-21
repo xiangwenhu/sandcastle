@@ -8,11 +8,11 @@ const activityProps: IActivityProps = {
     children: [ {
         type: 'delay',
         name: '延时2秒',
-        timeout: 5000 * Math.random()
+        timeout: 1000 * Math.random()
     }, {
         type: 'code',
         name: '输出当前日期',
-        code: 'console.log(ctx.item.name)'
+        code: 'console.log($item.name)'
     }]
 }
 

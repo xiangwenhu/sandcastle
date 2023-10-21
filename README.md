@@ -143,6 +143,8 @@ batchRegisterMethods
   - [x] For
   - [x] IFElse
   - [x] Parallel
-  - [ ] ParallelFor
-  - [ ] Race
-  - [ ] Sequence
+  - [x] ParallelFor
+  - [x] Race
+  - [x] Sequence
+  - [x] AssertSequence
+- [ ] 验证$preRes, $item的多级传递性

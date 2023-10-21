@@ -7,13 +7,15 @@ export default class ParallelForActivity<
     C = any,
     R = any
 > extends SequenceActivity<C, R> {
-    constructor(context: C, protected values: any[]) {
+    constructor(context: C, public values: any[]) {
         super(context);
     }
 
     // @ts-ignore
     buildTask(children?: Activity[], values: any[]) {
-        this.children = children || this.children || [];
+        if (children) {
+            this.children = children;
+        }
         this.values = values || this.values || [];
         return super.buildTask(this.children);
     }
@@ -23,16 +25,17 @@ export default class ParallelForActivity<
         return new Promise(async (resolve, reject) => {
             this.ctx = this.ctx || {};
             try {
-                const ps = values.map(item => {
-                    return super.run(paramObj)
-                })
+                const ps = values.map((item) => {
+                    return super.run({
+                        ...paramObj,
+                        $item: item,
+                    });
+                });
                 const res = await Promise.all(ps);
                 resolve(res);
             } catch (err: any) {
                 reject(new ActivityError(err && err.message, this));
             }
         });
-
     }
 }
-

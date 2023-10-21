@@ -55,19 +55,20 @@ export interface GlobalActivityContext {
 }
 
 export interface IActivityRunParams {
-    preRes: any;
-    extra: Record<PropertyKey, any>;
+    $preRes: any;
+    $extra: Record<PropertyKey, any>;
+    $item?: any
 }
 
 export interface IActivityExecuteParams extends IActivityRunParams {
     /**
      * 上下文
      */
-    ctx: any,
+    $ctx: any,
     /**
      * 全局上下文
      */
-    gCtx: Record<PropertyKey, any>;
+    $gCtx: Record<PropertyKey, any>;
     /**
      * 内置常量
      */
@@ -83,11 +84,11 @@ export interface IActivityExecuteParams extends IActivityRunParams {
     /**
      * 父节点
      */
-    parent: Activity | undefined;
+    $parent: Activity | undefined;
     /**
      * 上一个活动的返回值
      */
-    res: any;
+    $res: any;
 }
 
 export interface IActivityTaskFunction {

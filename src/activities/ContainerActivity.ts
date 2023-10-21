@@ -1,7 +1,10 @@
 import Activity from "./Activity";
 
-export default class ContainerActivity<C = any, R = any> extends Activity<C, R>{
-    #children:  Activity[] = [];
+export default class ContainerActivity<C = any, R = any> extends Activity<
+    C,
+    R
+> {
+    #children: Activity[] = [];
 
     get children() {
         return this.#children;
@@ -18,7 +21,19 @@ export default class ContainerActivity<C = any, R = any> extends Activity<C, R>{
             // 使用父容器的ctx
             child.globalCtx = this.globalCtx;
             child.parent = this;
-            child.next = index === this.#children.length - 2 ? undefined : this.children[index - 2];
-        })
+            child.next =
+                index === this.#children.length - 2
+                    ? undefined
+                    : this.children[index - 2];
+        });
+    }
+
+    childrenUseParentCtx(useParentCtx: boolean = true) {
+        this.children.forEach((c) => (c.useParentCtx = useParentCtx));
+    }
+
+    allUserParentCtx(useParentCtx: boolean = true){
+        this.useParentCtx = useParentCtx;
+        this.childrenUseParentCtx(useParentCtx);
     }
 }

@@ -13,7 +13,7 @@ const activityProps: IActivityProps = {
         type: 'code',
         name: '输出当前日期',
         code: 'return {a:1, b:2}',
-        after: 'res.c = 3'
+        after: '$res.c = 3'
     }, {
         type: 'delay',
         name: '延时2秒',
@@ -21,7 +21,7 @@ const activityProps: IActivityProps = {
     }, {
         type: 'code',
         name: '输出当前日期',
-        code: 'console.log(preRes)'
+        code: 'console.log($preRes)'
     }]
 }
 
