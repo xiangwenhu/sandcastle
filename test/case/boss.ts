@@ -16,7 +16,7 @@ const activityProps: IActivityConfig = {
             before: {
                 type: "v.create",
                 name: "创建变量",
-                options: { vName: "results", value: [] },
+                options: { name: "results", value: [] },
             },
             children: [
                 {
@@ -49,9 +49,7 @@ const activityProps: IActivityConfig = {
                                             {
                                                 type: "c.page.$",
                                                 name: "查询下一页",
-                                                options: {
-                                                    selector: `[ka="page-next"].disabled`,
-                                                },
+                                                options:  `[ka="page-next"].disabled`                                                ,
                                             },
                                             {
                                                 type: "code",
@@ -88,8 +86,7 @@ const activityProps: IActivityConfig = {
                                         {
                                             type: "code",
                                             name: "存入",
-                                            options:
-                                                "$v.results.push(...(preRes || []))",
+                                            options:  "$v.results.push(...($preRes || []))",
                                         },
                                         {
                                             type: "c.page.eClick",

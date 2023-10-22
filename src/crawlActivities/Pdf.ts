@@ -10,7 +10,9 @@ export default class PdfActivity<C = any, R = any> extends PageChildActivity<
     PdfTaskOptions
 > {
     buildTask(options?: PdfTaskOptions) {
-        this.taskOptions = options;
+        if (options) {
+            this.taskOptions = options;
+        }
         return (this.task = (paramObj: IActivityRunParams) => {
             return this.page!.pdf(options);
         });

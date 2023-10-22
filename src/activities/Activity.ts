@@ -35,7 +35,7 @@ class Activity<C = any, R = any, TO = any> {
     public globalCtx: GlobalActivityContext = {};
     public task: IActivityTaskFunction | undefined;
 
-    public accessor taskOptions: TO | undefined = {} as TO;
+    public accessor taskOptions: TO  = {} as TO;
 
     accessor checkStatus: boolean = true;
 

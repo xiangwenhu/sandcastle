@@ -15,8 +15,7 @@ export default class BrowserActivity<
     }
 
     constructor(
-        ctx: any,
-        public options: PuppeteerLaunchOptions
+        ctx: any
     ) {
         super(ctx);
     }
@@ -24,7 +23,7 @@ export default class BrowserActivity<
 
     async run(paramObj: IActivityRunParams = this.defaultTaskRunParam): Promise<any> {
         try {
-            this.#browser = await launch(this.options);
+            this.#browser = await launch(this.taskOptions);
             const res = await super.run(paramObj);
             return res;
         } catch (err) {
