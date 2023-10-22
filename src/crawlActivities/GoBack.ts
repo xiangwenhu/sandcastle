@@ -12,7 +12,7 @@ export default class GoBackActivity<
 
     buildTask(options?: WaitForOptions | undefined) {
         return this.task = (paramObj: IActivityRunParams) => {
-            return this.page?.goBack(options)
+            return this.page!.goBack(options)
         }
     }
 }

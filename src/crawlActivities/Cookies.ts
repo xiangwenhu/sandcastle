@@ -1,14 +1,14 @@
 import { IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
-export default class HoverActivity<
+export default class GetCookieActivity<
 C = any,
 R = any
 > extends PageChildActivity<C, R> {
 
-    buildTask(selector: string) {
-        return this.task = (paramObject: IActivityRunParams)=> {
-            return this.page!.hover(selector)
+    buildTask(..._args: any[]) {
+        return this.task = (paramObj: IActivityRunParams) => {
+            return this.action("cookies")
         }
     }
 }

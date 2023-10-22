@@ -8,7 +8,7 @@ export default class MouseResetActivity<
     buildTask(
     ) {
         return (paramObj: IActivityRunParams) => {
-            return this.page?.mouse.reset();
+            return this.page!.mouse.reset();
         };
     }
 }

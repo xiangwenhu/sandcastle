@@ -11,7 +11,7 @@ export default class KeyboardUpActivity<
         options?: Readonly<KeyPressOptions>
     ) {
         return (_paramObj: IActivityRunParams) => {
-            return this.page?.keyboard.press(key, options);
+            return this.page!.keyboard.press(key, options);
         };
     }
 }

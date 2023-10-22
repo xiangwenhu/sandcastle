@@ -53,7 +53,7 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 | SetUserAgent           | c.page.setUserAgent           | ❌              | ✅    | page.setUserAgent                |
 | Url                    | c.page.url                    | ❌              | ✅    | page.url                         |
 | Content                | c.page.content                | ❌              | ✅    | page.content                     |
-| WaitForNav             | **c.page.waitForNav**         | ❌              | ✅    | page.waitForNavigation           |
+| WaitForNavigation      | c.page.waitForNavigation      | ❌              | ✅    | page.waitForNavigation           |
 | WaitForRequest         | c.page.waitForRequest         | ❌              | ✅    | page.waitForRequest              |
 | WaitForResponse        | c.page.waitForResponse        | ❌              | ✅    | page.waitForResponse             |
 | GoBack                 | c.page.goBack                 | ❌              | ✅    | page.goBack                      |
@@ -70,18 +70,18 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 | Focus                  | c.page.focus                  | ❌              | ✅    | page.focus                       |
 | Hover                  | c.page.hover                  | ❌              | ✅    | page.hover                       |
 | UploadFile             | c.page.uploadFile             | ❌              | ✅    | 上传文件                         |
-| clearValue             | c.page.clearValue             | ❌              | ✅    | 清除输入控制的值                 |
-| ExposeFunction         | c.page.exposeFunction         | ❌              | ❌    | 暴露函数                         |
-| Pdf                    | c.page.pdf                    | ❌              | ❌    | pdf                              |
-| Screenshot             | c.page.screenshot             | ❌              | ❌    | 截屏                             |
-| SetViewport            | c.page.setViewport            | ❌              | ❌    | setViewport                      |
-| SetRequestInterception | c.page.setRequestInterception | ❌              | ❌    | setRequestInterception           |
-| SetExtraHTTPHeaders    | c.page.setExtraHTTPHeaders    | ❌              | ❌    | setExtraHTTPHeaders              |
-| SetGeolocation         | c.page.setGeolocation         | ❌              | ❌    | setGeolocation                   |
-| SetRequestInterception | c.page.setRequestInterception | ❌              | ❌    | setRequestInterception           |
-| AddStyleTag            | c.page.addStyleTag            | ❌              | ❌    | 添加style                        |
-| AddScriptTag           | c.page.addScriptTag           | ❌              | ❌    | 添加script                       |
-| Select                 | c.page.select                 | ❌              | ❌    | select选中                       |
+| clearValue             | c.page.clearValue             | ❌              | ✅    | 清除输入控制的值    |
+| ExposeFunction         | c.page.exposeFunction         | ❌              | ✅    | 暴露函数      |
+| RemoveExposedFunction  | c.page.removeExposedFunction  | ❌              | ✅    | 删除暴露函数 |
+| Pdf                    | c.page.pdf                    | ❌              | ✅    | pdf        |
+| Screenshot             | c.page.screenshot             | ❌              | ✅    | 截屏      |
+| SetViewport            | c.page.setViewport            | ❌              | ✅    | setViewport   |
+| SetRequestInterception | c.page.setRequestInterception | ❌              | ✅    | setRequestInterception |
+| SetExtraHTTPHeaders    | c.page.setExtraHTTPHeaders    | ❌              | ✅    | setExtraHTTPHeaders   |
+| SetGeolocation         | c.page.setGeolocation         | ❌              | ✅    | setGeolocation    |
+| AddStyleTag            | c.page.addStyleTag            | ❌              | ✅    | 添加style         |
+| AddScriptTag           | c.page.addScriptTag           | ❌              | ✅    | 添加script      |
+| Select                 | c.page.select                 | ❌              | ✅    | select选中      |
 
 
 **键盘**
@@ -152,3 +152,4 @@ batchRegisterMethods
 - [ ] 验证$preRes, $item的多级传递性
 - [ ] 改进或者删除AssertSequence
 - [ ] 给父节点打名称，通过名称访问
+- [ ] 改进变量替换

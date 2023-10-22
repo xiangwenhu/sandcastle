@@ -10,7 +10,7 @@ export default class MouseDragActivity<
         start: Point, target: Point
     ) {
         return (paramObj: IActivityRunParams) => {
-            return this.page?.mouse.drag(start, target);
+            return this.page!.mouse.drag(start, target);
         };
     }
 }

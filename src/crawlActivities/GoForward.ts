@@ -12,7 +12,7 @@ export default class GoForwardActivity<
 
     buildTask(options?: WaitForOptions | undefined) {
         return this.task = (paramObj: IActivityRunParams)  => {
-            return this.page?.goForward(options)
+            return this.page!.goForward(options)
         }
     }
 }

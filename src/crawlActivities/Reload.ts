@@ -9,7 +9,7 @@ R = any
 
     buildTask(options: WaitForOptions) {
         return this.task = (paramObject: IActivityRunParams)=> {
-            return this.page?.reload(options)
+            return this.page!.reload(options)
         }
     }
 }

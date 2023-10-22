@@ -10,7 +10,7 @@ export default class KeyboardSendCharacterActivity<C = any, R = any> extends Pag
         key: KeyInput,
     ) {
         return (_paramObj: IActivityRunParams) => {
-            return this.page?.keyboard.sendCharacter(key);
+            return this.page!.keyboard.sendCharacter(key);
         };
     }
 }

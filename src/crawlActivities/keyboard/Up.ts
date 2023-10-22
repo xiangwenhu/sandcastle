@@ -10,7 +10,7 @@ export default class KeyboardUpActivity<C = any, R = any> extends PageChildActiv
         key: KeyInput,
     ) {
         return (paramObj: IActivityRunParams) => {
-            return this.page?.keyboard.up(key);
+            return this.page!.keyboard.up(key);
         };
     }
 }

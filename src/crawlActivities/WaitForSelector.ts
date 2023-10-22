@@ -8,7 +8,7 @@ export default class WaitForSelectorActivity<
 > extends PageChildActivity<C, R> {
     buildTask(selector: string, options?: WaitForSelectorOptions) {
         return this.task = (paramObject: IActivityRunParams) => {
-            return this.page?.waitForSelector(selector, options)
+            return this.page!.waitForSelector(selector, options)
         }
     }
 }

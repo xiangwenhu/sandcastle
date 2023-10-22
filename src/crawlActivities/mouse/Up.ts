@@ -10,7 +10,7 @@ export default class MouseUpActivity<
         options?: Readonly<MouseOptions>
     ) {
         return (paramObj: IActivityRunParams) => {
-            return this.page?.mouse.up(options);
+            return this.page!.mouse.up(options);
         };
     }
 }

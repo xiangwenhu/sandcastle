@@ -8,7 +8,7 @@ export default class EvaluateClickActivity<
 
     buildTask(selector: string) {
         return this.task = (paramObj: IActivityRunParams) => {
-            return this.page?.evaluate((selector) => {
+            return this.page!.evaluate((selector) => {
                 return (document.querySelector(selector) as HTMLElement)?.click()
             }, selector)
         }

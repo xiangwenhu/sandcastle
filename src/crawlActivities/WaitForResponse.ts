@@ -10,7 +10,7 @@ export default class WaitForResponseActivity<
         timeout?: number;
     }) {
         return this.task = async (paramObject: IActivityRunParams) => {
-            const res = await this.page?.waitForResponse(urlOrPredicate, options);
+            const res = await this.page!.waitForResponse(urlOrPredicate, options);
             return res?.json()
         }
     }

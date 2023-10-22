@@ -10,7 +10,7 @@ export default class MouseDownActivity<
         options?: Readonly<MouseOptions>
     ) {
         return (paramObj: IActivityRunParams) => {
-            return this.page?.mouse.down(options);
+            return this.page!.mouse.down(options);
         };
     }
 }

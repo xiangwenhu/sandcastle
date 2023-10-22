@@ -8,7 +8,7 @@ export default class WaitForRequestActivity<
 > extends PageChildActivity<C, R> {
     buildTask(urlOrPredicate: string | ((req: HTTPRequest) => boolean | Promise<boolean>), options?: { timeout?: number | undefined; } | undefined) {
         return this.task = (paramObject: IActivityRunParams) => {
-            return this.page?.waitForRequest(urlOrPredicate, options)
+            return this.page!.waitForRequest(urlOrPredicate, options)
         }
     }
 }

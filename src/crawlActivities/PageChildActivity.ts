@@ -6,7 +6,7 @@ import PageActivity from "./Page";
 export default class PageChildActivity<C = any, R = any> extends Activity<C, R>  {
 
     get browser(): Browser | undefined {
-        return this.page?.browser();
+        return this.page!.browser();
     }
 
     get page(): Page | undefined {

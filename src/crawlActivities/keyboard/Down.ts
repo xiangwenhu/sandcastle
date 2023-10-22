@@ -11,7 +11,7 @@ export default class KeyboardDownActivity<C = any, R = any> extends PageChildAct
         options?: Readonly<KeyDownOptions>
     ) {
         return (_paramObj: IActivityRunParams) => {
-            return this.page?.keyboard.down(key, options);
+            return this.page!.keyboard.down(key, options);
         };
     }
 }

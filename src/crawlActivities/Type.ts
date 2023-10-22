@@ -9,7 +9,7 @@ R = any
 
     buildTask(selector: string, text: string, options?: Readonly<KeyboardTypeOptions>) {
         return this.task = (paramObject: IActivityRunParams)=> {
-            return this.page?.type(selector, text, options)
+            return this.page!.type(selector, text, options)
         }
     }
 }

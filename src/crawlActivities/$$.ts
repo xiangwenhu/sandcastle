@@ -11,7 +11,7 @@ export default class $$Activity<
 
     buildTask<Selector extends string>(selector: Selector) {
         return this.task = (paramObj: IActivityRunParams) => {
-            return this.page?.$$(selector)
+            return this.page!.$$(selector)
         }
     }
 }

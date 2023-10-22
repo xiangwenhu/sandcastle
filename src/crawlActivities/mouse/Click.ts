@@ -12,7 +12,7 @@ export default class MouseClickActivity<
         options?: Readonly<MouseClickOptions>
     ) {
         return (paramObj: IActivityRunParams) => {
-            return this.page?.mouse.click(x, y, options);
+            return this.page!.mouse.click(x, y, options);
         };
     }
 }

@@ -11,7 +11,7 @@ export default class KeyboardTypeActivity<C = any, R = any> extends PageChildAct
         options?: Readonly<KeyboardTypeOptions>
     ) {
         return (paramObj: IActivityRunParams) => {
-            return this.page?.keyboard.type(key,options);
+            return this.page!.keyboard.type(key,options);
         };
     }
 }

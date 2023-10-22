@@ -10,7 +10,7 @@ export default class MouseDragEnterActivity<
         target: Point, data: Protocol.Input.DragData
     ) {
         return (paramObj: IActivityRunParams) => {
-            return this.page?.mouse.dragEnter(target, data);
+            return this.page!.mouse.dragEnter(target, data);
         };
     }
 }
