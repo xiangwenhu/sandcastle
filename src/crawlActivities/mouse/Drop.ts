@@ -10,7 +10,7 @@ export default class MouseDropActivity<
         target: Point, data: Protocol.Input.DragData
     ) {
         return (paramObj: IActivityRunParams) => {
-            return this.page?.mouse.drop(target, data);
+            return this.page!.mouse.drop(target, data);
         };
     }
 }

@@ -8,7 +8,7 @@ R = any
 
     buildTask(selector: string) {
         return this.task = (paramObject: IActivityRunParams)=> {
-            return this.page?.hover(selector)
+            return this.page!.hover(selector)
         }
     }
 }

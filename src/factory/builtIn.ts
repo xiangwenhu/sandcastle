@@ -9,6 +9,10 @@ const builtInObject: GlobalBuiltInObject = {
     methods: {
         placeholder: "$m",
         properties: {}
+    },
+    activities: {
+        placeholder: "$a",
+        properties: {}
     }
 }
 

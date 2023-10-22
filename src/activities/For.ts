@@ -18,8 +18,8 @@ export default class ForActivity<
     }
 
     run(paramObj: IActivityRunParams = {
-        preRes: undefined,
-        extra: {}
+        $preRes: undefined,
+        $extra: {}
     }): Promise<R | undefined> {
         const that = this as Activity;
         return new Promise(async (resolve, reject) => {
@@ -27,15 +27,14 @@ export default class ForActivity<
             let preRes;
             for (let i = 0; i < values.length; i++) {
                 const val = values[i];
-                this.ctx.item = val;
-                // 给孩子节点ctx.item赋值
-                // this.children.forEach(c => c.ctx.item = val);
                 try {
-                    preRes = await super.run(paramObj)
+                    preRes = await super.run({
+                        ...paramObj,
+                        $item: val
+                    })
                 } catch (err: any) {
                     reject(new ActivityError(err && err.message, that));
                 } finally {
-                    // this.children.forEach(c => delete c.ctx.item);
                 }
             }
             resolve(preRes);

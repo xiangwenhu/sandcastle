@@ -12,7 +12,7 @@ import EvaluateActivity from "../crawlActivities/Evaluate";
 import EvaluateClickActivity from "../crawlActivities/EvaluateClick";
 import FetchActivity from "../crawlActivities/Fetch";
 import FocusActivity from "../crawlActivities/Focus";
-import GetCookieActivity from "../crawlActivities/GetCookie";
+import CookiesActivity from "../crawlActivities/Cookies";
 import GoBackActivity from "../crawlActivities/GoBack";
 import GoForwardActivity from "../crawlActivities/GoForward";
 import GotoActivity from "../crawlActivities/Goto";
@@ -26,7 +26,7 @@ import TitleActivity from "../crawlActivities/Title";
 import TypeActivity from "../crawlActivities/Type";
 import URLActivity from "../crawlActivities/URL";
 import UploadFileActivity from "../crawlActivities/UploadFile";
-import WaitForNavActivity from "../crawlActivities/WaitForNav";
+import WaitForNavigationActivity from "../crawlActivities/WaitForNavigation";
 import WaitForRequestActivity from "../crawlActivities/WaitForRequest";
 import WaitForResponseActivity from "../crawlActivities/WaitForResponse";
 import WaitForSelectorActivity from "../crawlActivities/WaitForSelector";
@@ -45,6 +45,17 @@ import MouseMoveActivity from "../crawlActivities/mouse/Move";
 import MouseResetActivity from "../crawlActivities/mouse/Reset";
 import MouseUpActivity from "../crawlActivities/mouse/Up";
 import MouseWheelActivity from "../crawlActivities/mouse/Wheel";
+import ExposeFunctionActivity from "../crawlActivities/ExposeFunction";
+import RemoveExposedFunctionActivity from "../crawlActivities/RemoveExposedFunction";
+import PdfActivity from "../crawlActivities/Pdf";
+import ScreenshotActivity from "../crawlActivities/Screenshot";
+import SetViewportActivity from "../crawlActivities/SetViewport";
+import SetRequestInterceptionActivity from "../crawlActivities/SetRequestInterception";
+import SetExtraHTTPHeadersActivity from "../crawlActivities/SetExtraHTTPHeaders";
+import SetGeolocationActivity from "../crawlActivities/SetGeolocation";
+import AddScriptTagActivity from "../crawlActivities/AddScriptTag";
+import AddStyleTagActivity from "../crawlActivities/AddStyleTag";
+import SelectActivity from "../crawlActivities/Select";
 
 
 register("c.browser", BrowserActivity, {
@@ -83,7 +94,7 @@ register("c.page.type", TypeActivity, {
     buildParams: ["selector", "text", "options"]
 });
 register("c.page.url", URLActivity);
-register("c.page.waitForNav", WaitForNavActivity, {
+register("c.page.waitForNavigation", WaitForNavigationActivity, {
     buildParams: ["options"]
 });
 register("c.page.waitForRequest", WaitForRequestActivity, {
@@ -95,7 +106,7 @@ register("c.page.waitForResponse", WaitForResponseActivity, {
 register("c.page.waitForSelector", WaitForSelectorActivity, {
     buildParams: ["selector", "options"]
 });
-register("c.page.getCookie", GetCookieActivity);
+register("c.page.cookies", CookiesActivity);
 register("c.page.goto", GotoActivity, {
     params: ["url", "options"]
 });
@@ -173,5 +184,40 @@ register("c.page.mouse.up", MouseUpActivity, {
 register("c.page.mouse.wheel", MouseWheelActivity, {
     buildParams: ["options"]
 });
+register("c.page.exposeFunction", ExposeFunctionActivity, {
+    buildParams:["name", "function"]
+})
+register("c.page.removeExposedFunction", RemoveExposedFunctionActivity, {
+    buildParams:["name"]
+})
+register("c.page.pdf", PdfActivity, {
+    buildParams:["options"]
+})
+register("c.page.screenshot", ScreenshotActivity, {
+    buildParams:["options"]
+})
+register("c.page.setViewport", SetViewportActivity, {
+    buildParams:["viewport"]
+})
+register("c.page.setRequestInterception", SetRequestInterceptionActivity, {
+    buildParams:["value"]
+})
+register("c.page.setExtraHTTPHeaders",SetExtraHTTPHeadersActivity , {
+    buildParams:["headers"]
+})
+register("c.page.setGeolocation", SetGeolocationActivity, {
+    buildParams:[""]
+})
+register("c.page.addScriptTag", AddScriptTagActivity, {
+    buildParams:["options"]
+})
+register("c.page.addStyleTag", AddStyleTagActivity, {
+    buildParams:["options"]
+})
+register("c.page.select", SelectActivity, {
+    buildParams:["selector", "values"]
+})
+
+
 
 export default factory;

@@ -2,12 +2,44 @@ import { ActivityError } from "../ActivityError";
 import { EnumActivityStatus } from "../enum";
 import { IActivityRunParams } from "../types/activity";
 import Activity from "./Activity";
-import AssertSequenceActivity from "./AssertSequence";
+import SequenceActivity from "./Sequence";
 
 export default class IFElseActivity<C = any, R = any> extends Activity<C, R> {
-    accessor if: AssertSequenceActivity | null = null;
-    accessor elseif: AssertSequenceActivity[] | null = null;
-    accessor else: AssertSequenceActivity | null = null;
+    accessor #if: SequenceActivity | undefined = undefined;
+    accessor #elseif: SequenceActivity[] | undefined = undefined;
+    accessor #else: SequenceActivity | undefined = undefined;
+
+    set if(value: SequenceActivity | undefined) {
+        this.#if = value;
+        if (this.#if) {
+            this.#if.parent = this;
+        }
+    }
+    get if(): SequenceActivity | undefined {
+        return this.#if;
+    }
+
+    set elseif(value: SequenceActivity[] | undefined) {
+        this.#elseif = value;
+        if (this.#elseif) {
+            this.#elseif.forEach((c) => {
+                c.parent = this;
+            });
+        }
+    }
+    get elseif(): SequenceActivity[] | undefined {
+        return this.#elseif;
+    }
+
+    set else(value: SequenceActivity | undefined) {
+        this.#else = value;
+        if (this.#else) {
+            this.#else.parent = this;
+        }
+    }
+    get else(): SequenceActivity | undefined {
+        return this.#else;
+    }
 
     constructor(context: C) {
         super(context);
@@ -23,17 +55,13 @@ export default class IFElseActivity<C = any, R = any> extends Activity<C, R> {
         if (this.elseif) {
             sequenceCol.push(...this.elseif);
         }
-        // if (this.else) {
-        //     sequenceCol.push(this.else);
-        // }
 
         return async (paramObj: IActivityRunParams) => {
             let assertR: boolean = false;
-            let r: any;
             for (let i = 0; i < sequenceCol.length; i++) {
                 const act = sequenceCol[i];
-                act.ctx = this.ctx;
-                assertR = await act.assert!.run(paramObj);
+
+                assertR = (await act.assert?.run(paramObj)) || false;
                 // 执行后状态会被改变
                 if (act.assert) {
                     act.assert.status = EnumActivityStatus.BUILDED;
@@ -42,8 +70,9 @@ export default class IFElseActivity<C = any, R = any> extends Activity<C, R> {
                     return act.run(paramObj);
                 }
             }
-
-            return this.else?.run(paramObj);
+            if (this.#else) {
+                return this.#else.run(paramObj);
+            }
         };
     }
 }

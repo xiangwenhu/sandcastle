@@ -15,9 +15,11 @@ import { firstToLower } from "../util";
 import { replaceVariable } from "./util/variable";
 import { GLOBAL_BUILTIN, GLOBAL_VARIABLES } from "../const";
 import { GlobalBuiltInObject } from "../types/factory";
-import { createTaskExecuteDefaultParams, createTaskRunDefaultParams } from "./util";
+import {
+    createTaskExecuteDefaultParams,
+    createTaskRunDefaultParams,
+} from "./util";
 import _ from "lodash";
-import AssertActivity from "./Assert";
 
 class Activity<C = any, R = any> {
     pre: Activity | undefined = undefined;
@@ -31,10 +33,9 @@ class Activity<C = any, R = any> {
     public status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
 
     public globalCtx: GlobalActivityContext = {};
-    protected task: IActivityTaskFunction | undefined;
+    public task: IActivityTaskFunction | undefined;
 
     accessor checkStatus: boolean = true;
-
 
     protected get globalBuiltObject(): GlobalBuiltInObject {
         // @ts-ignore
@@ -54,21 +55,26 @@ class Activity<C = any, R = any> {
         return this.globalCtx[GLOBAL_VARIABLES];
     }
 
+    public accessor useParentCtx: boolean = false;
+
     #ctx: any = {};
     get ctx() {
+        if (this.useParentCtx) {
+            return this.parent?.ctx;
+        }
         return this.#ctx;
     }
     set ctx(ctx: any) {
         this.#ctx = ctx;
     }
 
-    #assert: Activity | AssertActivity | undefined = undefined;
+    #assert: Activity | undefined = undefined;
 
-    get assert(): Activity |  undefined {
-        return this.#assert
+    get assert(): Activity | undefined {
+        return this.#assert;
     }
 
-    set assert(value: Activity |  undefined) {
+    set assert(value: Activity | undefined) {
         this.#assert = value;
         if (value) {
             value.parent = this as Activity;
@@ -86,18 +92,26 @@ class Activity<C = any, R = any> {
         this.task = undefined;
     }
 
-    protected async runBefore(paramObject: IActivityRunParams) {
+    protected runBefore(paramObject: IActivityRunParams): unknown {
         if (!this.before || !(this.before instanceof Activity)) {
             return;
         }
-        await this.before.task?.call(this.before, paramObject);
+        return this.before.run(paramObject);
     }
 
-    protected async runAfter(paramObject: IActivityExecuteParams) {
+    protected runAfter(paramObject: IActivityExecuteParams): unknown {
         if (!this.after || !(this.after instanceof Activity)) {
             return;
         }
-        return this.after.task?.call(this.after, paramObject);
+        return this.after.run(paramObject);
+    }
+
+    protected async runAssert(paramObject: IActivityExecuteParams) {
+        if (!this.assert || !(this.assert instanceof Activity)) {
+            return true;
+        }
+        const res = await this.assert.run(paramObject);
+        return !!res;
     }
 
     /**
@@ -107,7 +121,8 @@ class Activity<C = any, R = any> {
      * @param {其他参数} otherParams
      */
     async run(
-        { preRes, extra }: IActivityRunParams = this.defaultTaskRunParam
+        { $preRes, $extra, $item }: IActivityRunParams = this
+            .defaultTaskRunParam
     ) {
         const globalCtx = this.globalCtx;
         // 如果已经终止
@@ -129,23 +144,31 @@ class Activity<C = any, R = any> {
         try {
             const gb = this.globalBuiltObject;
             const argObject: IActivityExecuteParams = {
-                gCtx: globalCtx,
-                ctx: mContext,
+                $gCtx: globalCtx,
+                $ctx: mContext,
                 $c: gb.properties.properties,
                 $m: gb.methods.properties,
                 $v: this.globalVariables,
-                parent: this.parent,
-                preRes,
-                res: undefined,
-                extra,
+                $parent: this.parent,
+                $item,
+                $preRes,
+                $res: undefined,
+                $extra,
+                $a: gb.activities.properties
             };
+
+            const needRun = await this.runAssert(argObject);
+            if (!needRun) {
+                return $preRes;
+            }
+
             // 执行前
             await this.runBefore.call(self, argObject);
 
             const res: R = await this.task!.call(self, argObject);
             this.status = EnumActivityStatus.EXECUTED;
             // 执行后
-            argObject.res = res;
+            argObject.$res = res;
             const afterRes = await this.runAfter.call(self, argObject);
 
             if (this.type == "terminate") {
@@ -162,7 +185,7 @@ class Activity<C = any, R = any> {
     }
 
     buildTask(..._args: any[]): IActivityTaskFunction {
-        return () => { };
+        return () => {};
     }
 
     build(...args: any[]) {
@@ -187,15 +210,17 @@ class Activity<C = any, R = any> {
         const $c = g.properties.placeholder || "$c";
         const $m = g.methods.placeholder || "$m";
         this.task = createOneParamAsyncFunction(code, [
-            "gCtx", // 全局上下文
-            "ctx", // 上下文
+            "$gCtx", // 全局上下文
+            "$ctx", // 上下文
             $c, // 内置变量
             $m, // 内置方法
             "$v",
-            "parent", // 父节点
-            "preRes", // 上一个活动的返回值
-            "res", // 本活动执行完毕的返回值
-            "extra", // 额外的参数
+            "$parent", // 父节点
+            "$preRes", // 上一个活动的返回值
+            "$res", // 本活动执行完毕的返回值
+            "$extra", // 额外的参数
+            "$item",
+            "$a"
         ]) as IActivityTaskFunction;
         this.status = EnumActivityStatus.BUILDED;
         return this.task;
@@ -211,15 +236,15 @@ class Activity<C = any, R = any> {
         const gb = this.globalBuiltObject;
         let mContext = this.ctx || {};
         const paramObject: IActivityExecuteParams = {
-            gCtx: this.globalCtx,
-            ctx: mContext,
+            $gCtx: this.globalCtx,
+            $ctx: mContext,
             $c: gb.properties.properties,
             $m: gb.methods.properties,
             $v: this.globalVariables,
-            parent: this.parent,
-            preRes: paramObj.preRes,
-            res: undefined,
-            extra: paramObj.extra,
+            $parent: this.parent,
+            $res: undefined,
+            $a: gb.activities.properties,
+            ...paramObj,
         };
 
         return replaceVariable(config).call(this, paramObject) as C;

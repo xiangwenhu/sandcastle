@@ -11,7 +11,7 @@ export default class $Activity<
 
     buildTask<Selector extends string>(selector: Selector) {
         return this.task = async (paramObj: IActivityRunParams) => {
-            const res = await this.page?.$(selector);
+            const res = await this.page!.$(selector);
             return res;
         }
     }

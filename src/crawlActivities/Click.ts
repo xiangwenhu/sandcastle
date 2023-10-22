@@ -8,7 +8,7 @@ export default class ClickActivity<
 
     buildTask(selector: string) {
         return this.task = (paramObj: IActivityRunParams) => {
-            return this.page?.click(selector)
+            return this.page!.click(selector)
         }
     }
 }

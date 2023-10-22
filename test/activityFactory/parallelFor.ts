@@ -1,21 +1,26 @@
-import { IActivityProps } from '../../src/types/activity';
+import { IActivityConfig } from '../../src/types/activity';
 import createActivity from "../../src/factory/activity"
 
-const activityProps: IActivityProps = {
+const activityProps: IActivityConfig = {
     type: 'parallelFor',
     name: 'parallelFor',
+    context: {
+        name: "cname"
+    },
     values: [
-        { name: 1, timeout: 3 * 1000 }, 
-        { name: 2, timeout: 10 * 1000 }
+        { name: 'name1', timeout: 3 * 1000 }, 
+        { name: 'name2', timeout: 5 * 1000 }
     ],
     children: [{
+        // useParentCtx: true,
         type: 'delay',
         name: '最多延时秒',
-        timeout: "{{ctx.item.timeout}}"
+        timeout: "{{$item.timeout}}"
     }, {
+        useParentCtx: true,
         type: 'code',
         name: '输出当前日期',
-        code: 'console.log(ctx.item.name)'
+        code: 'console.log($item.name,$ctx.name)'
     }]
 }
 

@@ -18,7 +18,7 @@ export default class EvaluateActivity<
             rCode = this.replaceVariable(rCode, paramObj) as string;
             // 替换参数变量
             const rArgs = args.map(arg => this.replaceVariable(arg, paramObj))
-            const res = await this.page?.evaluate((_code, ..._args) => {
+            const res = await this.page!.evaluate((_code, ..._args) => {
                 const f = new Function(_code);
                 console.log("f:", f.toString());
                 const results = f(..._args);

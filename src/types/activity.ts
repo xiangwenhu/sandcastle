@@ -1,31 +1,33 @@
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 
-export type IActivityProps<C = any> = {
+export type IActivityConfig<C = any> = {
     type: BaseActivityType | string;
     context?: C;
     name: string;
-    children?: IActivityProps[];
-    before?: IActivityProps | string | null | undefined;
-    after?: IActivityProps | string | null | undefined;
-    assert?: string | IActivityProps;
+    children?: IActivityConfig[];
+    before?: IActivityConfig | string | null | undefined;
+    after?: IActivityConfig | string | null | undefined;
+    assert?: string | IActivityConfig;
+    useParentCtx?: boolean;
+    toVariable?: string;
 } & Record<string, any>;
 
 export interface ActivityFactory<
-    P extends IActivityProps = any,
+    P extends IActivityConfig = any,
     A extends Activity = Activity | ContainerActivity
 > {
     (props: P, globalContext?: any): A;
 }
 
 export interface ActivityChildrenFactory<
-    P extends IActivityProps = any,
+    P extends IActivityConfig = any,
     A extends Activity = any
 > {
     (props: P[], globalContext?: any): A[];
 }
 
-export interface ActivityFactoryFactory<P extends IActivityProps = any> {
+export interface ActivityFactoryFactory<P extends IActivityConfig = any> {
     create: ActivityFactory<P>;
     createChildren: ActivityChildrenFactory<P>;
 }
@@ -55,19 +57,20 @@ export interface GlobalActivityContext {
 }
 
 export interface IActivityRunParams {
-    preRes: any;
-    extra: Record<PropertyKey, any>;
+    $preRes: any;
+    $extra: Record<PropertyKey, any>;
+    $item?: any
 }
 
 export interface IActivityExecuteParams extends IActivityRunParams {
     /**
      * 上下文
      */
-    ctx: any,
+    $ctx: any,
     /**
      * 全局上下文
      */
-    gCtx: Record<PropertyKey, any>;
+    $gCtx: Record<PropertyKey, any>;
     /**
      * 内置常量
      */
@@ -83,11 +86,13 @@ export interface IActivityExecuteParams extends IActivityRunParams {
     /**
      * 父节点
      */
-    parent: Activity | undefined;
+    $parent: Activity | undefined;
     /**
      * 上一个活动的返回值
      */
-    res: any;
+    $res: any;
+
+    $a: Record<string, Activity>;
 }
 
 export interface IActivityTaskFunction {

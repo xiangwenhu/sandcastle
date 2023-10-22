@@ -1,13 +1,13 @@
-import { IActivityProps } from '../../../src/types/activity';
+import { IActivityConfig } from '../../../src/types/activity';
 import createActivity from "../../../src/factory/activity"
 
-const activityProps: IActivityProps = {
+const activityProps: IActivityConfig = {
     type: 'sequence',
     name: 'sequence',
     children: [{
         type: 'fs.writeFile',
         name: '读取文件',
-        content: "{{gCtx.data}}",
+        content: "{{$gCtx.data}}",
         dist: `D:\\data\\tmp2\\txt.json`,
         after: "return true"
     }, {

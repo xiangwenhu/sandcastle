@@ -1,7 +1,7 @@
-import { IActivityProps } from './../../src/types/activity';
+import { IActivityConfig } from './../../src/types/activity';
 import createActivity from "../../src/factory/activity"
 
-const activityProps: IActivityProps = {
+const activityProps: IActivityConfig = {
     type: "sequence",
     name: "sequence执行",
     children: [
@@ -11,11 +11,20 @@ const activityProps: IActivityProps = {
             code: `console.log('all开始时间:', new Date())`
         }, {
             type: "race",
+            context: {
+                name: "race"
+            },
             name: "race哈哈",
             children: [{
+                useParentCtx: true,
+                before: {
+                    name: "delay 3000",
+                    type: "delay",
+                    timeout: 3000
+                },
                 name: "delay 3000",
-                type: "delay",
-                timeout: 3000
+                type: "code",
+                code: "console.log($ctx.name)"
             }, {
                 name: "delay 6000",
                 type: "delay",

@@ -19,7 +19,7 @@ export default class FetchActivity<C = any, R = any> extends PageChildActivity<
                 init || {},
                 paramObj
             );
-            const res = await this.page?.evaluate(
+            const res = await this.page!.evaluate(
                 (input, init = {}, cType = "json") => {
                     const fRes = fetch(input, init);
                     switch (cType) {

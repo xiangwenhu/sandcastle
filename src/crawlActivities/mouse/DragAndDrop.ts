@@ -14,7 +14,7 @@ export default class MouseDragAndDropActivity<
         }
     ) {
         return (paramObj: IActivityRunParams) => {
-            return this.page?.mouse.dragAndDrop(start, target, options);
+            return this.page!.mouse.dragAndDrop(start, target, options);
         };
     }
 }

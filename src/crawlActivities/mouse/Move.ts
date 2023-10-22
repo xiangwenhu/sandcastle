@@ -10,7 +10,7 @@ export default class MouseMoveActivity<
         x: number, y: number, options?: Readonly<MouseMoveOptions>
     ) {
         return (paramObj: IActivityRunParams) => {
-            return this.page?.mouse.move(x, y, options);
+            return this.page!.mouse.move(x, y, options);
         };
     }
 }

@@ -7,7 +7,7 @@ export default class ContentActivity<
 > extends PageChildActivity<C, R> {
     buildTask() {
         return (this.task = (paramObj: IActivityRunParams) => {
-            return this.page?.content();
+            return this.page!.content();
         });
     }
 }

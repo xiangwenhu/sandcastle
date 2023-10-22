@@ -8,7 +8,7 @@ R = any
 
     buildTask(selector: string) {
         return this.task = (paramObj: IActivityRunParams) => {
-            return this.page?.focus(selector)
+            return this.page!.focus(selector)
         }
     }
 }

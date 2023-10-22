@@ -9,7 +9,7 @@ R = any
 
     buildTask(userAgent: string, userAgentMetadata?: Protocol.Emulation.UserAgentMetadata) {
         return this.task =(paramObject: IActivityRunParams) => {
-            return this.page?.setUserAgent(userAgent, userAgentMetadata)
+            return this.page!.setUserAgent(userAgent, userAgentMetadata)
         }
     }
 }

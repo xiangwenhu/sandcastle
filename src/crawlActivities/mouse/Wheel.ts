@@ -10,7 +10,7 @@ export default class MouseWheelActivity<
         options?: Readonly<MouseWheelOptions>
     ) {
         return (paramObj: IActivityRunParams) => {
-            return this.page?.mouse.wheel(options);
+            return this.page!.mouse.wheel(options);
         };
     }
 }

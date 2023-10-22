@@ -1,4 +1,4 @@
-import { ActivityConstructor, IFactoryP$HConfigValue, register as _register, create, createChildren } from "./factory";
+import { register as _register, create, createChildren } from "./factory";
 import Activity from "../activities/Activity";
 
 import CodeActivity from "../activities/Code";
@@ -6,10 +6,8 @@ import DelayActivity from "../activities/Delay";
 import SequenceActivity from "../activities/Sequence";
 import ParallelActivity from "../activities/Parallel";
 import RaceActivity from "../activities/Race";
-import AssertActivity from "../activities/Assert";
 import WhileActivity from "../activities/DoWhile";
 import DoWhileActivity from "../activities/DoWhile";
-import AssertSequenceActivity from "../activities/AssertSequence";
 import IFElseActivity from "../activities/IfElse";
 import RequestActivity from "../activities/Request";
 import BreakActivity from "../activities/Break";
@@ -24,6 +22,7 @@ import RemoveFileActivity from "../activities/fs/RemoveFile";
 import CreateVariableActivity from "../activities/variable/CreateVariable";
 import DeleteVariableActivity from "../activities/variable/DeleteVariable";
 import { isString } from "lodash";
+import { ActivityConstructor, IFactoryP$HConfigValue } from "./factory.type";
 
 const factory = {
     create,
@@ -46,37 +45,17 @@ register("delay", DelayActivity, {
 register("sequence", SequenceActivity);
 register("parallel", ParallelActivity);
 register("race", RaceActivity);
-register("assert", AssertActivity, {
-    before({ factory, config, globalContext, activity }) {
-        const code = config.code;
-        let children: Activity[] = [];
-        if (isString(code)) {
-            const act = factory.create({
-                type: "code",
-                name: "assert",
-                code: `return (${code})`
-            }, globalContext) as Activity;
-            children = [act]
-        } else if (Array.isArray(config.children)) {
-            children = factory.createChildren(config.children, globalContext) as Activity[]
-        } else {
-            throw new Error('AssertActivity必须有code或者children');
-        }
-        (activity as AssertActivity)!.children = children;
-    }
-});
 register("while", WhileActivity);
 register("doWhile", DoWhileActivity);
-register("assertSequence", AssertSequenceActivity);
 register("ifElse", IFElseActivity, {
     before({ factory, globalContext, config, activity }) {
         const act = (activity! as IFElseActivity);
-        act.if = factory.create(config.if, globalContext) as AssertSequenceActivity;
+        act.if = factory.create(config.if, globalContext) as SequenceActivity;
         if (config.elseif) {
-            act.elseif = factory.createChildren(config.elseif, globalContext) as AssertSequenceActivity[];
+            act.elseif = factory.createChildren(config.elseif, globalContext) as SequenceActivity[];
         }
         if (config.else) {
-            act.else = factory.create(config.else, globalContext) as AssertSequenceActivity;
+            act.else = factory.create(config.else, globalContext) as SequenceActivity;
         }
     }
 });

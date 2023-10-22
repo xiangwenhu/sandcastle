@@ -1,8 +1,8 @@
 
-import { IActivityProps } from '../../../src/types/activity';
+import { IActivityConfig } from '../../../src/types/activity';
 import createActivity from "../../../src/factory/activity"
 
-const activityProps: IActivityProps = {
+const activityProps: IActivityConfig = {
     type: 'sequence',
     name: 'sequence',
     context: {

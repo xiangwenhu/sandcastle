@@ -8,7 +8,7 @@ R = any
 
     buildTask() {
         return this.task = (paramObj: IActivityRunParams)  => {
-            return this.page?.close()
+            return this.page!.close()
         }
     }
 }

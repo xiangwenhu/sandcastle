@@ -8,7 +8,7 @@ R = any
 
     buildTask() {
         return this.task = (paramObject: IActivityRunParams) => {
-            return this.page?.title()
+            return this.page!.title()
         }
     }
 }

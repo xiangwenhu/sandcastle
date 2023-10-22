@@ -1,8 +1,8 @@
-import { IActivityProps } from '../../src/types/activity';
+import { IActivityConfig } from '../../src/types/activity';
 import createActivity from "../../src/factory/activity";
 import { HTTPResponse } from 'puppeteer';
 
-const activityProps: IActivityProps = {
+const activityProps: IActivityConfig = {
     type: "c.browser",
     name: "创建浏览器",
     options: {
