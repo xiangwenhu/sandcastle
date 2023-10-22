@@ -7,14 +7,6 @@ export default class ForActivity<
     C = any,
     R = any
 > extends SequenceActivity<C, R, any[]> {
-    constructor(context: C) {
-        super(context);
-    }
-
-    buildTask(options: any[]) {
-        this.taskOptions = options;
-        return super.buildTask();
-    }
 
     run(paramObj: IActivityRunParams = {
         $preRes: undefined,

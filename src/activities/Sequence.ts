@@ -9,7 +9,7 @@ export default class SequenceActivity<
     R = any,
     TO = any
 > extends ContainerActivity<C, R, TO> {
-    buildTask(options?: any) {
+    buildTask() {
         return (paramObj: IActivityRunParams) =>
             new Promise(async (resolve, reject) => {
                 let preRes: any;
@@ -18,7 +18,7 @@ export default class SequenceActivity<
                     try {
                         // 终止
                         if (child.type === "break") {
-                            return resolve((child as BreakActivity).taskOptions);
+                            return resolve((child as BreakActivity).taskOptions.message);
                         }
                         paramObj.$preRes = preRes;
                         preRes = await child.run(paramObj);

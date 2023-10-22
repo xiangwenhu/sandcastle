@@ -186,13 +186,13 @@ class Activity<C = any, R = any, TO = any> {
         }
     }
 
-    buildTask(options?: TO, ...args: any[]): IActivityTaskFunction {
+    buildTask(...args: any[]): IActivityTaskFunction {
         return () => {};
     }
 
-    build(options?: TO, ...args: any[]) {
+    build(...args: any[]) {
         this.status = EnumActivityStatus.BUILDING;
-        this.task = this.buildTask(options);
+        this.task = this.buildTask(...args);
         this.status = EnumActivityStatus.BUILDED;
     }
 

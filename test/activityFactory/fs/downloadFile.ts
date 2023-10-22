@@ -16,7 +16,7 @@ const activityProps: IActivityConfig = {
         {
             type: "code",
             name: "输出内容",
-            options: 'console.log("res:", $preRes)',
+            options: { code: 'console.log("res:", $preRes)' },
         },
     ],
 };

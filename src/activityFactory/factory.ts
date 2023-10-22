@@ -38,11 +38,11 @@ export function createChildren(
 
 const BUILTIN_PARAMS: PropertyConfigItem[] = ["context"];
 const BUILTIN_BUILD_PARAMS: PropertyConfigItem[] = [
-    {
-        name: "options",
-        default: {},
-        toName: "taskOptions",
-    },
+    // {
+    //     name: "options",
+    //     default: {},
+    //     toName: "taskOptions",
+    // },
 ];
 const BUILTIN_PROPERTIES: PropertyConfigItem[] = [
     "name",
@@ -183,7 +183,7 @@ function createSingle<A extends Activity>(
             ? createSingle(
                   {
                       type: "code",
-                      options: before,
+                      options: { code: before },
                       name: `${actConfig.name} before`,
                   },
                   globalContext
@@ -196,7 +196,7 @@ function createSingle<A extends Activity>(
             ? createSingle(
                   {
                       type: "code",
-                      options: after,
+                      options: { code: after },
                       name: `${actConfig.name} after`,
                   },
                   globalContext

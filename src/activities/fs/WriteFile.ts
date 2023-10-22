@@ -5,29 +5,35 @@ import { IActivityRunParams } from "../../types/activity";
 import { ensureDir } from "../../util/fs";
 import Activity from "../Activity";
 
-export default class WriteFileActivity<C = any> extends Activity<C, string> {
-    buildTask(options: {
-        dist: string;
-        content: any;
-        options?:
-            | (ObjectEncodingOptions & {
-                  mode?: Mode | undefined;
-                  flag?: OpenMode | undefined;
-              })
-            | BufferEncoding
-            | null;
-    }) {
-        this.taskOptions = options;
+export interface WriteFileTaskOptions {
+    dist: string;
+    content: any;
+    options?:
+        | (ObjectEncodingOptions & {
+              mode?: Mode | undefined;
+              flag?: OpenMode | undefined;
+          })
+        | BufferEncoding
+        | null;
+}
+
+export default class WriteFileActivity<C = any> extends Activity<
+    C,
+    string,
+    WriteFileTaskOptions
+> {
+    buildTask() {
         return async (paramObj: IActivityRunParams) => {
-            const rDist = this.replaceVariable(options.dist, paramObj) as string;
-            const rContent = this.replaceVariable(options.content, paramObj) as any;
+            const { dist, content, options } = this.taskOptions;
+            const rDist = this.replaceVariable(dist, paramObj) as string;
+            const rContent = this.replaceVariable(content, paramObj) as any;
             const data = isPlainObject(rContent)
                 ? JSON.stringify(rContent, undefined, "\t")
                 : rContent;
 
             await ensureDir(rDist);
 
-            return fsp.writeFile(rDist, data, options.options);
+            return fsp.writeFile(rDist, data, options);
         };
     }
 }

@@ -13,19 +13,17 @@ export interface DownloadFileTaskOptions {
     };
 }
 
-export default class DownloadFileActivity<C = any> extends Activity<C, string> {
-    buildTask(options: DownloadFileTaskOptions) {
-        this.taskOptions = options;
+export default class DownloadFileActivity<C = any> extends Activity<
+    C,
+    string,
+    DownloadFileTaskOptions
+> {
+    buildTask() {
         return (paramObj: IActivityRunParams) => {
-            const rUrl = this.replaceVariable(
-                this.taskOptions.url,
-                paramObj
-            ) as string;
-            const rDist = this.replaceVariable(
-                this.taskOptions.dist,
-                paramObj
-            ) as string;
-            return downloadFileWithRetry(rUrl, rDist, this.taskOptions.options);
+            const { url, options, dist } = this.taskOptions;
+            const rUrl = this.replaceVariable(url, paramObj) as string;
+            const rDist = this.replaceVariable(dist, paramObj) as string;
+            return downloadFileWithRetry(rUrl, rDist, options);
         };
     }
 }

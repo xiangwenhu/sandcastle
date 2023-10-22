@@ -3,18 +3,19 @@ import fsp from "fs/promises";
 import { IActivityRunParams } from "../../types/activity";
 import Activity from "../Activity";
 
-export default class ReadFileActivity<C = any> extends Activity<C, string> {
-    buildTask(options: {
-        dist: string;
-        type: "text" | "json"
-        options?:
-            | (ObjectEncodingOptions & {
-                  flag?: OpenMode | undefined;
-              })
-            | BufferEncoding
-            | null;
-    }) {
-        this.taskOptions = options;
+export interface ReadFileTaskOptions {
+    dist: string;
+    type: "text" | "json"
+    options?:
+        | (ObjectEncodingOptions & {
+              flag?: OpenMode | undefined;
+          })
+        | BufferEncoding
+        | null;
+}
+
+export default class ReadFileActivity<C = any> extends Activity<C, string, ReadFileTaskOptions> {
+    buildTask() {
         return async (paramObj: IActivityRunParams) => {
             const rDist = this.replaceVariable(this.taskOptions.dist, paramObj) as string;
 

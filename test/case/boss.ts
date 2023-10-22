@@ -37,7 +37,7 @@ const activityProps: IActivityConfig = {
                                 {
                                     type: "delay",
                                     name: "延时",
-                                    options: 2000,
+                                    options: 20000,
                                 },
                                 {
                                     type: "doWhile",
@@ -91,15 +91,18 @@ const activityProps: IActivityConfig = {
                                         {
                                             type: "c.page.eClick",
                                             name: "点击下一页",
-                                            options: {
-                                                selector: `[ka="page-next"]`,
-                                            },
+                                            options: `[ka="page-next"]`
                                         },
                                         {
                                             type: "delay",
                                             options: 5000,
                                             name: "延时5s",
                                         },
+                                        {
+                                            type: "code",
+                                            options: "console.log('准备下一页')",
+                                            name: "延时5s",
+                                        }                                
                                     ],
                                 },
                             ],

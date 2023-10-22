@@ -16,7 +16,7 @@ const activityProps: IActivityConfig = {
         {
             type: "code",
             name: "输出",
-            options: "console.log($v.v1); return $v",
+            options: { code: "console.log($v.v1); return $v" },
         },
         {
             type: "v.delete",
@@ -26,7 +26,7 @@ const activityProps: IActivityConfig = {
         {
             type: "code",
             name: "输出",
-            options: "console.log($v.v1); return $v",
+            options: { code: "console.log($v.v1); return $v" },
         },
     ],
 };

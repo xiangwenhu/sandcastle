@@ -8,10 +8,6 @@ export default class ParallelForActivity<
     R = any
 > extends SequenceActivity<C, R, any[]> {
 
-    buildTask(options: any[]) {
-        this.taskOptions = options;
-        return super.buildTask(this.children);
-    }
 
     run(paramObj: IActivityRunParams = this.defaultTaskRunParam): Promise<any> {
         const values = this.taskOptions;
