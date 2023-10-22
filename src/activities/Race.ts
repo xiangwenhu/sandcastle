@@ -4,10 +4,7 @@ import ContainerActivity from "./ContainerActivity";
 
 export default class RaceActivity<C = any, R = any> extends ContainerActivity<C, R>  {
 
-    buildTask(children: Activity[]) {
-        // 构建子活动
-        this.children = children || this.children
-
+    buildTask() {
         return (paramObj: IActivityRunParams) =>
             Promise.race(this.children.map(act => {
                 return act.run(paramObj)

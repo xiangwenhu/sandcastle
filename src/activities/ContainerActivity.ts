@@ -1,8 +1,9 @@
 import Activity from "./Activity";
 
-export default class ContainerActivity<C = any, R = any> extends Activity<
+export default class ContainerActivity<C = any, R = any, TO = any> extends Activity<
     C,
-    R
+    R,
+    TO
 > {
     #children: Activity[] = [];
 

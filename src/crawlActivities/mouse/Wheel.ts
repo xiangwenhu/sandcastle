@@ -9,8 +9,9 @@ export default class MouseWheelActivity<
     buildTask(
         options?: Readonly<MouseWheelOptions>
     ) {
+        this.taskOptions = options;
         return (paramObj: IActivityRunParams) => {
-            return this.page!.mouse.wheel(options);
+            return this.page!.mouse.wheel(this.taskOptions);
         };
     }
 }

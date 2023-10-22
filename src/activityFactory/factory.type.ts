@@ -12,6 +12,7 @@ export interface IFactoryConfigValue extends IFactoryP$HConfigValue {
 
 interface PropertyConfig<T = any> {
     name: string;
+    toName?: PropertyKey;
     default?: any | (() => any);
     init?: (v: T) => T;
 }
@@ -46,11 +47,9 @@ export interface IFactoryHandlerConfig {
 }
 
 export interface IFactoryParamsPropertyConfig {
-    properties?: PropertyConfigItem[];
     params?: PropertyConfigItem[];
     buildParams?: PropertyConfigItem[];
 }
 
 export type IFactoryP$HConfigValue = IFactoryParamsPropertyConfig &
     IFactoryHandlerConfig;
-

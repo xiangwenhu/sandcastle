@@ -21,7 +21,7 @@ import {
 } from "./util";
 import _ from "lodash";
 
-class Activity<C = any, R = any> {
+class Activity<C = any, R = any, TO = any> {
     pre: Activity | undefined = undefined;
     next: Activity | undefined = undefined;
     before: Activity | undefined = undefined;
@@ -34,6 +34,8 @@ class Activity<C = any, R = any> {
 
     public globalCtx: GlobalActivityContext = {};
     public task: IActivityTaskFunction | undefined;
+
+    public accessor taskOptions: TO | undefined = {} as TO;
 
     accessor checkStatus: boolean = true;
 
@@ -135,7 +137,7 @@ class Activity<C = any, R = any> {
         // }
 
         if (this.status < EnumActivityStatus.BUILDED) {
-            this.buildTask();
+            this.buildTask(this.taskOptions);
         }
 
         let mContext = this.ctx || {};
@@ -154,7 +156,7 @@ class Activity<C = any, R = any> {
                 $preRes,
                 $res: undefined,
                 $extra,
-                $a: gb.activities.properties
+                $a: gb.activities.properties,
             };
 
             const needRun = await this.runAssert(argObject);
@@ -184,13 +186,13 @@ class Activity<C = any, R = any> {
         }
     }
 
-    buildTask(..._args: any[]): IActivityTaskFunction {
+    buildTask(options?: TO, ...args: any[]): IActivityTaskFunction {
         return () => {};
     }
 
-    build(...args: any[]) {
+    build(options?: TO, ...args: any[]) {
         this.status = EnumActivityStatus.BUILDING;
-        this.task = this.buildTask(...args);
+        this.task = this.buildTask(options);
         this.status = EnumActivityStatus.BUILDED;
     }
 
@@ -220,7 +222,7 @@ class Activity<C = any, R = any> {
             "$res", // 本活动执行完毕的返回值
             "$extra", // 额外的参数
             "$item",
-            "$a"
+            "$a",
         ]) as IActivityTaskFunction;
         this.status = EnumActivityStatus.BUILDED;
         return this.task;

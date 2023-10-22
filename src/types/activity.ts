@@ -1,7 +1,7 @@
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 
-export type IActivityConfig<C = any> = {
+export interface IActivityConfig<O = any, C = any, E = any>{
     type: BaseActivityType | string;
     context?: C;
     name: string;
@@ -11,7 +11,15 @@ export type IActivityConfig<C = any> = {
     assert?: string | IActivityConfig;
     useParentCtx?: boolean;
     toVariable?: string;
-} & Record<string, any>;
+    options?: O,
+    eOptions?: E
+};
+
+export interface IfElseActivityConfig<O = any, C = any, E = any> extends IActivityConfig {
+    if: IActivityConfig;
+    elseif?: IActivityConfig[],
+    else?: IActivityConfig
+}
 
 export interface ActivityFactory<
     P extends IActivityConfig = any,
@@ -59,14 +67,14 @@ export interface GlobalActivityContext {
 export interface IActivityRunParams {
     $preRes: any;
     $extra: Record<PropertyKey, any>;
-    $item?: any
+    $item?: any;
 }
 
 export interface IActivityExecuteParams extends IActivityRunParams {
     /**
      * 上下文
      */
-    $ctx: any,
+    $ctx: any;
     /**
      * 全局上下文
      */

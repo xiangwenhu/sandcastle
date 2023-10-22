@@ -9,8 +9,9 @@ export default class MouseUpActivity<
     buildTask(
         options?: Readonly<MouseOptions>
     ) {
+        this.taskOptions = options;
         return (paramObj: IActivityRunParams) => {
-            return this.page!.mouse.up(options);
+            return this.page!.mouse.up(this.taskOptions);
         };
     }
 }

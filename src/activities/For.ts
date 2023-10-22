@@ -6,15 +6,14 @@ import { IActivityRunParams } from "../types/activity";
 export default class ForActivity<
     C = any,
     R = any
-> extends SequenceActivity<C, R> {
-    constructor(context: C, public values: any[]) {
+> extends SequenceActivity<C, R, any[]> {
+    constructor(context: C) {
         super(context);
     }
 
-    // @ts-ignore
-    buildTask(values: any[]) {
-        this.values = values || this.values;
-        return super.buildTask(this.children);
+    buildTask(options: any[]) {
+        this.taskOptions = options;
+        return super.buildTask();
     }
 
     run(paramObj: IActivityRunParams = {
@@ -23,7 +22,7 @@ export default class ForActivity<
     }): Promise<R | undefined> {
         const that = this as Activity;
         return new Promise(async (resolve, reject) => {
-            const values = this.replaceVariable(this.values, paramObj) as any[];
+            const values = this.replaceVariable(this.taskOptions, paramObj) as any[];
             let preRes;
             for (let i = 0; i < values.length; i++) {
                 const val = values[i];

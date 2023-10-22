@@ -6,27 +6,28 @@ import { ensureDir } from "../../util/fs";
 import Activity from "../Activity";
 
 export default class WriteFileActivity<C = any> extends Activity<C, string> {
-    buildTask(
-        dist: string,
-        content: any,
+    buildTask(options: {
+        dist: string;
+        content: any;
         options?:
             | (ObjectEncodingOptions & {
                   mode?: Mode | undefined;
                   flag?: OpenMode | undefined;
               })
             | BufferEncoding
-            | null
-    ) {
+            | null;
+    }) {
+        this.taskOptions = options;
         return async (paramObj: IActivityRunParams) => {
-            const rDist = this.replaceVariable(dist, paramObj) as string;
-            const rContent = this.replaceVariable(content, paramObj) as any;
+            const rDist = this.replaceVariable(options.dist, paramObj) as string;
+            const rContent = this.replaceVariable(options.content, paramObj) as any;
             const data = isPlainObject(rContent)
                 ? JSON.stringify(rContent, undefined, "\t")
                 : rContent;
 
             await ensureDir(rDist);
 
-            return fsp.writeFile(rDist, data, options);
+            return fsp.writeFile(rDist, data, options.options);
         };
     }
 }

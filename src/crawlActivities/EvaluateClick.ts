@@ -7,10 +7,11 @@ export default class EvaluateClickActivity<
 > extends PageChildActivity<C, R> {
 
     buildTask(selector: string) {
-        return this.task = (paramObj: IActivityRunParams) => {
+        this.taskOptions = selector;
+        return this.task = (paramObj: IActivityRunParams) => {            
             return this.page!.evaluate((selector) => {
                 return (document.querySelector(selector) as HTMLElement)?.click()
-            }, selector)
+            }, this.taskOptions)
         }
     }
 }

@@ -5,13 +5,10 @@ export default class $Activity<
     C = any,
     R = any
 > extends PageChildActivity<C, R> {
-    constructor(ctx: C) {
-        super(ctx)
-    }
-
-    buildTask<Selector extends string>(selector: Selector) {
+    buildTask<Selector extends string>(options: Selector) {
+        this.taskOptions = options;
         return this.task = async (paramObj: IActivityRunParams) => {
-            const res = await this.page!.$(selector);
+            const res = await this.page!.$(this.taskOptions);
             return res;
         }
     }

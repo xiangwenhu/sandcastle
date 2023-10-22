@@ -4,9 +4,10 @@ import Activity from "../Activity";
 import { IActivityRunParams } from "../../types/activity";
 
 export default class RemoveFileActivity<C = any> extends Activity<C, string> {
-    buildTask(dist: string) {
+    buildTask(options: string) {
+        this.taskOptions = options;
         return async (paramObj: IActivityRunParams) => {
-            const rDist = this.replaceVariable(dist, paramObj) as string;
+            const rDist = this.replaceVariable(this.taskOptions, paramObj) as string;
             if (!fs.existsSync(rDist)) {
                 return false;
             }

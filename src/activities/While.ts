@@ -8,14 +8,8 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
     C,
     R
 > {
-
-    // @ts-ignore
-    buildTask(assert: AssertActivity | undefined, children: Activity[]) {
-        // 构建子活动
-        this.children = children || this.children;
-
+    buildTask() {
         let childrenFun = super.buildTask();
-        this.assert = assert || this.assert;
         if (!this.assert) {
             throw new ActivityError("assert 未定义", this);
         }

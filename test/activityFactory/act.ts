@@ -12,7 +12,7 @@ const activityProps: IActivityConfig = {
     children: [{
         type: 'code',
         name: 'count加1',
-        code: 'console.log($a.sb.ctx.count);'
+        options: 'console.log($a.sb.ctx.count);'
     }]
 }
 

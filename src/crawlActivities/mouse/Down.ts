@@ -9,8 +9,9 @@ export default class MouseDownActivity<
     buildTask(
         options?: Readonly<MouseOptions>
     ) {
+        this.taskOptions = options;
         return (paramObj: IActivityRunParams) => {
-            return this.page!.mouse.down(options);
+            return this.page!.mouse.down(this.taskOptions);
         };
     }
 }

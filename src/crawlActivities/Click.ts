@@ -6,9 +6,10 @@ export default class ClickActivity<
     R = any
 > extends PageChildActivity<C, R> {
 
-    buildTask(selector: string) {
+    buildTask(options: string) {
+        this.taskOptions = options;
         return this.task = (paramObj: IActivityRunParams) => {
-            return this.page!.click(selector)
+            return this.page!.click( this.taskOptions)
         }
     }
 }
