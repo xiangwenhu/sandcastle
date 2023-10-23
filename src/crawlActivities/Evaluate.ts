@@ -16,9 +16,7 @@ export default class EvaluateActivity<
         return (this.task = async (paramObj: IActivityRunParams) => {
             const { code, args = [] } = this.options;
             // 替换code变量
-            let rCode = isFunction(code) ? getFunctionBody(code) : `${code}`;
-            rCode = this.replaceVariable(rCode, paramObj) as string;
-            // 替换参数变量
+            let rCode = isFunction(code) ? getFunctionBody(code) :  this.replaceVariable(code, paramObj) as string;
             const rArgs = args.map((arg: any) =>
                 this.replaceVariable(arg, paramObj)
             );

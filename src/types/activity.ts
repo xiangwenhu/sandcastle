@@ -72,6 +72,7 @@ export interface IActivityRunParams {
     $preRes: any;
     $extra: Record<PropertyKey, any>;
     $item?: any;
+    $index?: number;
 }
 
 export interface IActivityExecuteParams extends IActivityRunParams {

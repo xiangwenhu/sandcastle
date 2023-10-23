@@ -21,12 +21,14 @@ export default class ForActivity<
         return new Promise(async (resolve, reject) => {
             const values = this.replaceVariable(this.options.values, paramObj) as any[];
             let preRes;
-            for (let i = 0; i < values.length; i++) {
-                const val = values[i];
+            for (let index = 0; index < values.length; index++) {
+                const $item = values[index];
+                const $index = index
                 try {
                     preRes = await super.run({
                         ...paramObj,
-                        $item: val
+                        $item,
+                        $index
                     })
                 } catch (err: any) {
                     reject(new ActivityError(err && err.message, that));

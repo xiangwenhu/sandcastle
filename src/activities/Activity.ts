@@ -121,7 +121,7 @@ class Activity<C = any, R = any, O = any> {
      * @param {其他参数} otherParams
      */
     async run(
-        { $preRes, $extra, $item }: IActivityRunParams = this
+        { $preRes, $extra, $item , $index}: IActivityRunParams = this
             .defaultTaskRunParam
     ) {
         const globalCtx = this.globalCtx;
@@ -151,6 +151,7 @@ class Activity<C = any, R = any, O = any> {
                 $v: this.globalVariables,
                 $parent: this.parent,
                 $item,
+                $index,
                 $preRes,
                 $res: undefined,
                 $extra,
@@ -220,6 +221,7 @@ class Activity<C = any, R = any, O = any> {
             "$res", // 本活动执行完毕的返回值
             "$extra", // 额外的参数
             "$item",
+            "$index",
             "$a",
         ]) as IActivityTaskFunction;
         this.status = EnumActivityStatus.BUILDED;
