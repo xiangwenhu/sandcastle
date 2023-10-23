@@ -1,6 +1,6 @@
 import { ObjectEncodingOptions, OpenMode } from "fs";
 import fsp from "fs/promises";
-import { IActivityRunParams } from "../../types/activity";
+import { IActivityExecuteParams } from "../../types/activity";
 import Activity from "../Activity";
 
 export interface ReadFileActivityOptions {
@@ -16,7 +16,7 @@ export interface ReadFileActivityOptions {
 
 export default class ReadFileActivity<C = any> extends Activity<C, string, ReadFileActivityOptions> {
     buildTask() {
-        return async (paramObj: IActivityRunParams) => {
+        return async (paramObj: IActivityExecuteParams) => {
             const rDist = this.replaceVariable(this.options.dist, paramObj) as string;
 
             const res = await fsp.readFile(

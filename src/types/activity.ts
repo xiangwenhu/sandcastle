@@ -108,5 +108,5 @@ export interface IActivityExecuteParams extends IActivityRunParams {
 }
 
 export interface IActivityTaskFunction {
-    (paramObject: IActivityRunParams): any;
+    (paramObject: IActivityExecuteParams): any;
 }

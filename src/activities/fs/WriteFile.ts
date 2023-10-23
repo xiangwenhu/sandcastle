@@ -1,7 +1,7 @@
 import { Mode, ObjectEncodingOptions, OpenMode } from "fs";
 import fsp from "fs/promises";
 import { isPlainObject } from "lodash";
-import { IActivityRunParams } from "../../types/activity";
+import { IActivityExecuteParams } from "../../types/activity";
 import { ensureDir } from "../../util/fs";
 import Activity from "../Activity";
 
@@ -23,7 +23,7 @@ export default class WriteFileActivity<C = any> extends Activity<
     WriteFileActivityOptions
 > {
     buildTask() {
-        return async (paramObj: IActivityRunParams) => {
+        return async (paramObj: IActivityExecuteParams) => {
             const { dist, content, options } = this.options;
             const rDist = this.replaceVariable(dist, paramObj) as string;
             const rContent = this.replaceVariable(content, paramObj) as any;

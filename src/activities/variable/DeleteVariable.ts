@@ -1,4 +1,4 @@
-import { IActivityRunParams } from "../../types/activity";
+import { IActivityExecuteParams } from "../../types/activity";
 import Activity from "../Activity";
 
 export interface DeleteVariableActivityOptions {
@@ -7,7 +7,7 @@ export interface DeleteVariableActivityOptions {
 
 export default class DeleteVariableActivity<C = any> extends Activity<C, any, DeleteVariableActivityOptions> {
     buildTask() {
-        return (paramObj: IActivityRunParams) => {
+        return (paramObj: IActivityExecuteParams) => {
             const rName = this.replaceVariable(
                 this.options.name,
                 paramObj

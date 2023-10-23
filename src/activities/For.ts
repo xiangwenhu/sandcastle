@@ -4,7 +4,7 @@ import { ActivityError } from "../ActivityError";
 import { IActivityRunParams } from "../types/activity";
 
 
-export interface ForActivityOptions{
+export interface ForActivityOptions {
     values: any[]
 }
 

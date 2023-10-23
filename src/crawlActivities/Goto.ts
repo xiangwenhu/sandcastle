@@ -14,9 +14,9 @@ export default class GotoActivity<C = any, R = any> extends PageChildActivity<
 > {
     buildTask() {
         return (this.task = (paramObject: IActivityRunParams) => {
-            const { url, options } = this.options!;
+            const { url, options } = this.options;
             const rUrl = this.replaceVariable(url, paramObject);
-            const rOptions = this.replaceVariable(options, paramObject);
+            const rOptions = this.replaceVariable(options || {}, paramObject);
             return this.action("goto", rUrl, rOptions);
         });
     }

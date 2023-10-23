@@ -1,4 +1,4 @@
-import { IActivityRunParams } from "../../types/activity";
+import { IActivityExecuteParams } from "../../types/activity";
 import Activity from "../Activity";
 
 export interface CreateVariableActivityOptions {
@@ -8,7 +8,7 @@ export interface CreateVariableActivityOptions {
 
 export default class CreateVariableActivity<C = any> extends Activity<C, any, CreateVariableActivityOptions> {
     buildTask() {
-        return (paramObj: IActivityRunParams) => {
+        return (paramObj: IActivityExecuteParams) => {
             const rName = this.replaceVariable(
                 this.options.name,
                 paramObj

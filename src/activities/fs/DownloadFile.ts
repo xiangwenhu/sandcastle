@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import { downloadFileWithRetry } from "../../util/loader";
 import Activity from "../Activity";
-import { IActivityRunParams } from "../../types/activity";
+import { IActivityExecuteParams } from "../../types/activity";
 
 export interface DownloadFileActivityOptions {
     url: string;
@@ -19,7 +19,7 @@ export default class DownloadFileActivity<C = any> extends Activity<
     DownloadFileActivityOptions
 > {
     buildTask() {
-        return (paramObj: IActivityRunParams) => {
+        return (paramObj: IActivityExecuteParams) => {
             const { url, options, dist } = this.options;
             const rUrl = this.replaceVariable(url, paramObj) as string;
             const rDist = this.replaceVariable(dist, paramObj) as string;

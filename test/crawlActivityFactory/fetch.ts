@@ -17,25 +17,27 @@ const activityProps: IActivityConfig = {
                 {
                     type: "c.page.goto",
                     name: "跳转",
-                    url: "https://www.kuaishou.com/?isHome=1",
                     options: {
-                        "waitUntil": "load"
+                        url: "https://www.kuaishou.com/?isHome=1",
+                        options: {
+                            "waitUntil": "load"
+                        }
                     }
                 },
                 {
                     type: "c.page.fetch",
-                    url: "/",
+                    options: { url: "/", contentType: "text" },
                     name: "fetch 页面内容",
-                    contentType: "text"
+
                 },
                 {
                     type: "code",
                     name: "输出cookie",
-                    code: "console.log('fetch res:', preRes);"
+                    options: { code: "console.log('fetch res:', $preRes);" }
                 }
             ]
         }
-      ]
+        ]
     }]
 };
 

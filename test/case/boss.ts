@@ -26,7 +26,7 @@ const activityProps: IActivityConfig = {
                         {
                             type: "for",
                             name: "遍历",
-                            options: "{{$gCtx.cList}}",
+                            options: { values: "{{$gCtx.cList}}" },
                             children: [
                                 {
                                     useParentCtx: true,
@@ -49,13 +49,13 @@ const activityProps: IActivityConfig = {
                                             {
                                                 type: "c.page.$",
                                                 name: "查询下一页",
-                                                options:  `[ka="page-next"].disabled`                                                ,
+                                                options: { selector: `[ka="page-next"].disabled` },
                                             },
                                             {
                                                 type: "code",
                                                 name: "",
                                                 options:
-                                                    "return $preRes == null",
+                                                    { code: "return $preRes == null" },
                                             },
                                         ],
                                     },
@@ -86,23 +86,23 @@ const activityProps: IActivityConfig = {
                                         {
                                             type: "code",
                                             name: "存入",
-                                            options:  "$v.results.push(...($preRes || []))",
+                                            options: { code: "$v.results.push(...($preRes || []))" },
                                         },
                                         {
                                             type: "c.page.eClick",
                                             name: "点击下一页",
-                                            options: `[ka="page-next"]`
+                                            options: { selector: `[ka="page-next"]` }
                                         },
                                         {
                                             type: "delay",
-                                            options: 5000,
+                                            options: { timeout: 5000 },
                                             name: "延时5s",
                                         },
                                         {
                                             type: "code",
-                                            options: "console.log('准备下一页')",
+                                            options: { code: "console.log('准备下一页')" },
                                             name: "延时5s",
-                                        }                                
+                                        }
                                     ],
                                 },
                             ],
@@ -113,7 +113,7 @@ const activityProps: IActivityConfig = {
             after: {
                 type: "code",
                 name: "输出结果",
-                options: "return $v.results",
+                options: { code: "return $v.results" },
             },
         },
     ],

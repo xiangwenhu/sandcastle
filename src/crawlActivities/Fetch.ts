@@ -2,7 +2,7 @@ import { IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
 export interface FetchActivityOptions {
-    input: RequestInfo | URL;
+    url: RequestInfo | URL;
     init?: RequestInit | undefined;
     contentType?: "text" | "json";
 }
@@ -14,13 +14,13 @@ export default class FetchActivity<C = any, R = any> extends PageChildActivity<
 > {
     buildTask() {
         return (this.task = async (paramObj: IActivityRunParams) => {
-            const { input, init, contentType = "json" } = this.options;
+            const { url: input, init = {}, contentType = "json" } = this.options;
             const rInput = this.replaceVariable<RequestInfo | URL>(
                 input,
                 paramObj
             );
             const rInit = this.replaceVariable<RequestInit | undefined>(
-                init || {},
+                init,
                 paramObj
             );
             const res = await this.page!.evaluate(
