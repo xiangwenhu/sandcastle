@@ -12,34 +12,18 @@ export interface CodeActivityOptions {
     code: string;
 }
 
-interface EE {
-    $tt: string
-}
-
 export default class CodeActivity<C = any, R = any> extends Activity<
     C,
     R,
-    CodeActivityOptions,
-    {},
-    EE
+    CodeActivityOptions
 > {
     buildTask() {
         const { code } = this.options;
         if (isFunction(code)) {
-            return (paramObject: IActivityExecuteParams<{}, EE>) =>
+            return (paramObject: IActivityExecuteParams) =>
                 code.call(null, paramObject);
         }
         return this.buildWithCode(code);
-    }
-
-    getExtraExecuteParamsNames(): [keyof EE] {
-        return ["$tt"]
-    }
-
-    override getExtraExecuteParams(): EE {
-        return {
-            $tt: "哈哈"
-        }
     }
 
     /**
@@ -48,7 +32,7 @@ export default class CodeActivity<C = any, R = any> extends Activity<
      */
     buildWithCode(
         code: string
-    ): IActivityTaskFunction<{}, EE> {
+    ): IActivityTaskFunction {
         if (!isString(code) && !isBoolean(code)) {
             throw new ActivityError(
                 "buildWithCode方法的code参数必须是字符串",
@@ -59,8 +43,6 @@ export default class CodeActivity<C = any, R = any> extends Activity<
         const g = this.globalBuiltObject;
         const $c = g.properties.placeholder || "$c";
         const $m = g.methods.placeholder || "$m";
-
-        const names = this.getExtraExecuteParamsNames();
 
         this.task = createOneParamAsyncFunction(code, [
             "$gCtx", // 全局上下文
@@ -75,7 +57,6 @@ export default class CodeActivity<C = any, R = any> extends Activity<
             "$item",
             "$index",
             "$a",
-            ...names
         ]) as IActivityTaskFunction;
         this.status = EnumActivityStatus.BUILDED;
         return this.task;
