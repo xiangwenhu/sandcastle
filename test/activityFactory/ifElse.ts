@@ -1,8 +1,8 @@
 
-import { IActivityConfig } from './../../src/types/activity';
+import { IActivityConfig, IfElseActivityConfig } from './../../src/types/activity';
 import createActivity from "../../src/factory/activity"
 
-const activityProps: IActivityConfig = {
+const activityProps: IfElseActivityConfig = {
     type: 'ifElse',
     name: 'if else 测试',
     context: {
@@ -17,11 +17,11 @@ const activityProps: IActivityConfig = {
             useParentCtx: true,
             type: 'code',
             name: '分支输出',
-            code: `console.log("count小于等于5分支", $ctx.count)`
+           options:{ code: `console.log("count小于等于5分支", $ctx.count)`}
         },{
             type: 'delay',
             name: 'delay 5 秒',
-            time: 1000
+            options:{  timeout: 1000}
         }, {
             type: 'sequence',
             name: '连续睡觉',
@@ -30,21 +30,22 @@ const activityProps: IActivityConfig = {
                 name: '连续睡觉二',
                 children: [{
                     type: 'delay',
-                    timeout: 2000,
+                    options:{ timeout: 2000},
                     name: '连续睡觉delay2000'
                 }, {
                     type: 'delay',
-                    timeout: 500
+                    name: "delay",
+                    options:{ timeout: 500}
                 }]
             }, {
                 type: 'code',
                 name: '输出连续睡觉二 code Activity',
-                code: 'console.log("连续睡觉二 code Activity")'
+                options:{  code: 'console.log("连续睡觉二 code Activity")'}
             }]
         }, {
             type: 'code',
             name: '输出当前时间',
-            code: 'console.log(new Date().toLocaleString())'
+            options:{  code: 'console.log(new Date().toLocaleString())'}
         }]
     },
     elseif: [{
@@ -54,15 +55,15 @@ const activityProps: IActivityConfig = {
         children: [{
             type: 'code',
             name: '分支输出',
-            code: `console.log("count小于等于10分支")`
+            options:{  code: `console.log("count小于等于10分支")`}
         },{
             type: 'delay',
             name: 'delay 10 秒',
-            time: 10000
+            options:{  timeout: 10000}
         }, {
             type: 'code',
             name: '输出当前时间',
-            code: 'console.log(new Date().toLocaleString())'
+            options:{  code: 'console.log(new Date().toLocaleString())'}
         }]
     }, {
         type: "sequence",
@@ -71,15 +72,15 @@ const activityProps: IActivityConfig = {
         children: [{
             type: 'code',
             name: '分支输出',
-            code: `console.log("count小于等于15分支")`
+            options:{  code: `console.log("count小于等于15分支")`}
         },{
             type: 'delay',
             name: 'delay 15秒',
-            time: 15000
+            options:{  timeout: 15000}
         }, {
             type: 'code',
             name: '输出当前时间',
-            code: 'console.log(new Date().toLocaleString())'
+            options:{  code: 'console.log(new Date().toLocaleString())'}
         }]
     }, {
         type: "sequence",
@@ -88,15 +89,15 @@ const activityProps: IActivityConfig = {
         children: [{
             type: 'code',
             name: '分支输出',
-            code: `console.log("count小于等于25分支")`
+            options:{  code: `console.log("count小于等于25分支")`}
         },{
             type: 'delay',
             name: 'delay 25秒',
-            time: 25000
+            options:{  timeout: 25000}
         }, {
             type: 'code',
             name: '输出当前时间',
-            code: 'console.log(new Date().toLocaleString())'
+            options:{  code: 'console.log(new Date().toLocaleString())'}
         }]
     }],
     else: {
@@ -105,15 +106,15 @@ const activityProps: IActivityConfig = {
         children: [{
             type: 'code',
             name: '分支输出',
-            code: `console.log("count大于25分支", $ctx.count)`
+            options:{  code: `console.log("count大于25分支", $ctx.count)`}
         },{
             type: 'delay',
             name: 'delay 50秒',
-            time: 50000
+            options:{  timeout: 50000}
         }, {
             type: 'code',
             name: '输出当前时间',
-            code: 'console.log(new Date().toLocaleString())'
+            options:{  code: 'console.log(new Date().toLocaleString())'}
         }]
     }
 }

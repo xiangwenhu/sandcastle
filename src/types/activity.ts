@@ -1,7 +1,7 @@
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 
-export type IActivityConfig<C = any> = {
+export interface IActivityConfig<C = any, O = any, E = any> {
     type: BaseActivityType | string;
     context?: C;
     name: string;
@@ -11,7 +11,21 @@ export type IActivityConfig<C = any> = {
     assert?: string | IActivityConfig;
     useParentCtx?: boolean;
     toVariable?: string;
-} & Record<string, any>;
+    options?: O;
+    eOptions?: E;
+}
+
+export interface IfElseActivityConfig<C = any, O = any, E = any>
+    extends IActivityConfig {
+    if: IActivityConfig;
+    elseif?: IActivityConfig[];
+    else?: IActivityConfig;
+}
+
+export interface ITryCatchActivityConfig<C = any, O = any, E = any>
+    extends IActivityConfig {
+    catch: IActivityConfig;
+}
 
 export interface ActivityFactory<
     P extends IActivityConfig = any,
@@ -56,17 +70,21 @@ export interface GlobalActivityContext {
     [GK_TERMINATED_MESSAGE]?: string;
 }
 
-export interface IActivityRunParams {
+export type ExtendParams = Record<string, any>;
+
+export type IActivityRunParams<E extends ExtendParams = {}> = {
     $preRes: any;
     $extra: Record<PropertyKey, any>;
-    $item?: any
-}
+} & E;
 
-export interface IActivityExecuteParams extends IActivityRunParams {
+export type IActivityExecuteParams<
+    ER extends ExtendParams = {},
+    EE extends ExtendParams = {}
+> = {
     /**
      * 上下文
      */
-    $ctx: any,
+    $ctx: any;
     /**
      * 全局上下文
      */
@@ -93,8 +111,12 @@ export interface IActivityExecuteParams extends IActivityRunParams {
     $res: any;
 
     $a: Record<string, Activity>;
-}
+} & EE &
+    IActivityRunParams<ER>;
 
-export interface IActivityTaskFunction {
-    (paramObject: IActivityRunParams): any;
+export interface IActivityTaskFunction<
+    ER extends ExtendParams = {},
+    EE extends ExtendParams = {}
+> {
+    (paramObject: IActivityExecuteParams<ER, EE>): any;
 }

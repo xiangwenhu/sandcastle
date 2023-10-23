@@ -2,19 +2,25 @@ import { isString } from "lodash";
 import Activity from "./Activity";
 import { IActivityRunParams } from "../types/activity";
 
-export default class DelayActivity<C = any, R = any> extends Activity<C, R> {
-    constructor(context: C, private timeout: number) {
-        super(context);
-    }
+export interface  DelayActivityOptions {
+     timeout: number;
+}
 
-    buildTask(timeout?: number) {
-        this.timeout = timeout || this.timeout;
+export default class DelayActivity<C = any, R = any> extends Activity<
+    C,
+    R,
+    DelayActivityOptions
+> {
+
+    buildTask() {
         return (paramObj: IActivityRunParams) => {
-            const tt = isString(this.timeout) ? this.replaceVariable(this.timeout, paramObj) as number: this.timeout;
+            const tt = isString(this.options.timeout)
+                ? (this.replaceVariable(this.options.timeout, paramObj))
+                : this.options.timeout;
             return new Promise((resolve, _reject) => {
                 setTimeout(function () {
                     resolve(paramObj.$preRes);
-                }, tt);
+                }, tt as number);
             });
         };
     }

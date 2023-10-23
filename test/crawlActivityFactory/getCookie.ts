@@ -17,9 +17,11 @@ const activityProps: IActivityConfig = {
                 {
                     type: "c.page.goto",
                     name: "跳转",
-                    url: "https://www.kuaishou.com/?isHome=1",
                     options: {
-                        "waitUntil": "load"
+                        url: "https://www.kuaishou.com/?isHome=1",
+                        options: {
+                            "waitUntil": "load"
+                        }
                     }
                 },
                 {
@@ -29,7 +31,7 @@ const activityProps: IActivityConfig = {
                 {
                     type: "code",
                     name: "输出cookie",
-                    code: "console.log('快手res', preRes);"
+                    options: { code: "console.log('快手res', preRes);" }
                 }
             ]
         },
@@ -40,9 +42,11 @@ const activityProps: IActivityConfig = {
                 {
                     type: "c.page.goto",
                     name: "跳转",
-                    url: "https://www.douyin.com/",
                     options: {
-                        "waitUntil": "load"
+                        url: "https://www.douyin.com/",
+                        options: {
+                            "waitUntil": "load"
+                        }
                     }
                 },
                 {
@@ -52,7 +56,7 @@ const activityProps: IActivityConfig = {
                 {
                     type: "code",
                     name: "输出cookie",
-                    code: "console.log('抖音res', preRes);"
+                    options: { code: "console.log('抖音res', preRes);" }
                 }
             ]
         }]

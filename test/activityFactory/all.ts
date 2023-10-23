@@ -1,37 +1,43 @@
-import { IActivityConfig } from './../../src/types/activity';
-import createActivity from "../../src/factory/activity"
+import { IActivityConfig } from "./../../src/types/activity";
+import createActivity from "../../src/factory/activity";
 
 const activityProps: IActivityConfig = {
     type: "sequence",
     name: "sequence执行",
     context: {
-        name: "啊家具"
+        name: "啊家具",
     },
     children: [
         {
             useParentCtx: true,
             type: "code",
             name: "打印all开始时间",
-            code: `console.log('all开始时间:', new Date(), $ctx.name)`
-        }, {
+            options: {
+                code: `console.log('all开始时间:', new Date(), $ctx.name)`,
+            },
+        },
+        {
             type: "sequence",
             name: "all哈哈",
-            children: [{
-                name: "delay 3000",
-                type: "delay",
-                timeout: 3000
-            }, {
-                name: "delay 6000",
-                type: "delay",
-                timeout: 6000
-            }]
+            children: [
+                {
+                    name: "delay 3000",
+                    type: "delay",
+                    options: { timeout: 3000 },
+                },
+                {
+                    name: "delay 6000",
+                    type: "delay",
+                    options: { timeout: 6000 },
+                },
+            ],
         },
         {
             type: "code",
             name: "打印all结束时间",
-            code: `console.log('all结束时间:', new Date())`
-        }
-    ]
+            options: { code: `console.log('all结束时间:', new Date())`}
+        },
+    ],
 };
 
 const activity = createActivity(activityProps);

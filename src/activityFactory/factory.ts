@@ -1,7 +1,9 @@
-import _, { isFunction, isNumber, isString, isSymbol } from "lodash";
+import _, { isFunction, isString } from "lodash";
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
+import { GLOBAL_BUILTIN } from "../const";
 import { BaseActivityType, IActivityConfig } from "../types/activity";
+import { GlobalBuiltInObject } from "../types/factory";
 import {
     ActivityConstructor,
     IFactoryConfigValue,
@@ -9,8 +11,6 @@ import {
     IFactoryP$HConfigValue,
     PropertyConfigItem,
 } from "./factory.type";
-import { GLOBAL_BUILTIN } from "../const";
-import { GlobalBuiltInObject } from "../types/factory";
 
 const configMap = new Map<string, IFactoryConfigValue>();
 
@@ -36,11 +36,22 @@ export function createChildren(
     return props.map((p) => createSingle(p, globalContext));
 }
 
-const BUILTIN_PARAMS: PropertyConfigItem[] = ["context"];
+const BUILTIN_PARAMS: PropertyConfigItem[] = [{
+    name: "context",
+    default: {}
+}, {
+    name: "options",
+    default: {}
+}];
+const BUILTIN_BUILD_PARAMS: PropertyConfigItem[] = [];
 const BUILTIN_PROPERTIES: PropertyConfigItem[] = [
     "name",
     "type",
-    "useParentCtx",
+    { name: "useParentCtx", default: false },
+    {
+        name: "eOptions",
+        default: {},
+    },
 ];
 
 function getPropertyValue(
@@ -92,7 +103,9 @@ function getBuildParams(
     factoryConfig: IFactoryConfigValue,
     actConfig: IActivityConfig
 ): any[] {
-    const keys: PropertyConfigItem[] = factoryConfig?.buildParams || [];
+    const keys: PropertyConfigItem[] = !factoryConfig.buildParams
+        ? BUILTIN_BUILD_PARAMS
+        : BUILTIN_BUILD_PARAMS.concat(factoryConfig.buildParams || []);
     return keys.map((key) => getPropertyValue(actConfig, key));
 }
 
@@ -106,14 +119,17 @@ function getProperties(
     factoryConfig: IFactoryConfigValue,
     actConfig: IActivityConfig
 ): Record<PropertyKey, any> {
-    const keys: PropertyConfigItem[] = !factoryConfig.properties
-        ? BUILTIN_PROPERTIES
-        : BUILTIN_PROPERTIES.concat(actConfig.properties || []);
-    return keys.reduce((obj: Record<string, any>, cur: PropertyConfigItem) => {
-        const key = isString(cur) ? cur : cur.name;
-        obj[key] = _.get(actConfig, key);
-        return obj;
-    }, {});
+    const keys: PropertyConfigItem[] = BUILTIN_PROPERTIES;
+    return keys.reduce(
+        (obj: Record<PropertyKey, any>, cur: PropertyConfigItem) => {
+            const key = isString(cur) ? cur : cur.name;
+            const toKey = isString(cur) ? cur : cur.toName || cur.name;
+            // @ts-ignore
+            obj[toKey] = actConfig[key];
+            return obj;
+        },
+        {}
+    );
 }
 
 function createSingle<A extends Activity>(
@@ -160,26 +176,26 @@ function createSingle<A extends Activity>(
     if (before) {
         activity.before = isString(before)
             ? createSingle(
-                  {
-                      type: "code",
-                      code: before,
-                      name: `${actConfig.name} before`,
-                  },
-                  globalContext
-              )
+                {
+                    type: "code",
+                    options: { code: before },
+                    name: `${actConfig.name} before`,
+                },
+                globalContext
+            )
             : createSingle(before, globalContext);
     }
     // 创建after
     if (after) {
         activity.after = isString(after)
             ? createSingle(
-                  {
-                      type: "code",
-                      code: after,
-                      name: `${actConfig.name} after`,
-                  },
-                  globalContext
-              )
+                {
+                    type: "code",
+                    options: { code: after },
+                    name: `${actConfig.name} after`,
+                },
+                globalContext
+            )
             : createSingle(after, globalContext);
     }
     // assert
@@ -187,14 +203,14 @@ function createSingle<A extends Activity>(
         activity.assert = (
             isString(actConfig.assert)
                 ? (createSingle(
-                      {
-                          type: "code",
-                          code: `return ${actConfig.assert}`,
-                          name: `${actConfig.name} after`,
-                          useParentCtx: true,
-                      },
-                      globalContext
-                  ) as Activity)
+                    {
+                        type: "code",
+                        options: {code:  `return ${actConfig.assert}` },
+                        name: `${actConfig.name} after`,
+                        useParentCtx: true,
+                    },
+                    globalContext
+                ) as Activity)
                 : createSingle(assert as IActivityConfig, globalContext)
         ) as Activity;
     }

@@ -12,22 +12,22 @@ const activityProps: IActivityConfig = {
         useParentCtx: true,
         type: "code",
         name: "assert",
-        code: 'return $ctx.count < 5'
+        options: {code: 'return $ctx.count < 5'}
     },
     children: [{
         useParentCtx: true,
         type: 'code',
         name: 'count加1',
-        code: '$ctx.count++'
+        options: {code: '$ctx.count++'}
     }, {
         type: 'delay',
         name: '睡500ms',
-        timeout: 1500
+        options: { timeout: 1500}
     }, {
         useParentCtx: true,
         type: 'code',
         name: '输出count',
-        code: 'console.log("count:" + $ctx.count)'
+        options: { code: 'console.log("count:" + $ctx.count)'}
     }]
 }
 

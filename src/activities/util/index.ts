@@ -4,7 +4,6 @@ export function createTaskRunDefaultParams(): IActivityRunParams {
     return {
         $preRes: undefined,
         $extra: {},
-        $item: undefined
     }
 }
 

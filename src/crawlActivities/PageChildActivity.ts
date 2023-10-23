@@ -3,7 +3,7 @@ import Activity from "../activities/Activity";
 import { isFunction } from "lodash";
 import PageActivity from "./Page";
 
-export default class PageChildActivity<C = any, R = any> extends Activity<C, R>  {
+export default class PageChildActivity<C = any, R = any, TO = any> extends Activity<C, R, TO>  {
 
     get browser(): Browser | undefined {
         return this.page!.browser();

@@ -1,17 +1,21 @@
-import { EvaluateFuncWith, NodeFor, WaitForOptions } from "puppeteer";
+import { EvaluateFuncWith } from "puppeteer";
 import PageChildActivity from "./PageChildActivity";
 
-export default class $EvalActivity<
-    C = any,
-    R = any
-> extends PageChildActivity<C, R> {
-    constructor(ctx: C) {
-        super(ctx)
-    }
+export interface $EvalActivityOptions {
+    selector: string;
+    pageFunction: string | EvaluateFuncWith<Element, any[]>
+    args: any[];
+}
 
-    buildTask<Selector extends string, Params extends unknown[], Func extends EvaluateFuncWith<NodeFor<Selector>, Params> = EvaluateFuncWith<NodeFor<Selector>, Params>>(selector: Selector, pageFunction: Func | string, ...args: Params) {
-        return this.task =  (..._args: any[]) => {
-            return this.page!.$eval(selector, pageFunction, ...args)
-        }
+export default class $EvalActivity<C = any, R = any> extends PageChildActivity<
+    C,
+    R,
+    $EvalActivityOptions
+> {
+    buildTask() {
+        return (this.task = (..._args: any[]) => {
+            const { selector, pageFunction, args } = this.options;
+            return this.page!.$eval(selector, pageFunction, ...args);
+        });
     }
 }

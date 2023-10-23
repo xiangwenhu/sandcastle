@@ -8,20 +8,20 @@ const activityProps: IActivityConfig = {
         before: {
             type: "code",
             name: "code before",
-            code: "console.log('code before')"
+            options: { code: "console.log('code before')" }
         },
         type: 'code',
-        name: '输出当前日期',
-        code: 'return {a:1, b:2}',
-        after: '$res.c = 3'
+        name: '设置一个值',
+        options: { code: 'return {a:1, b:2}' },
+        after: '$preRes.c = 3'
     }, {
         type: 'delay',
         name: '延时2秒',
-        timeout: 2000
+        options: { timeout: 2000 }
     }, {
         type: 'code',
         name: '输出当前日期',
-        code: 'console.log($preRes)'
+        options: { code: 'console.log($preRes)' }
     }]
 }
 

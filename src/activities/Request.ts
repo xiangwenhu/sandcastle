@@ -2,17 +2,16 @@ import { IActivityRunParams } from "../types/activity";
 import Activity from "./Activity";
 import axios, { AxiosRequestConfig } from "axios";
 
-export default class RequestActivity<C = any, R = any> extends Activity<C, R> {
-    constructor(context: C = {} as C, protected config: AxiosRequestConfig) {
-        super(context);
-    }
+export type RequestActivityOptions = AxiosRequestConfig;
 
-    buildTask(config: AxiosRequestConfig) {
-        this.config = config || this.config;
+export default class RequestActivity<C = any, R = any> extends Activity<C, R, RequestActivityOptions> {
+    buildTask() {
         return (paramObj: IActivityRunParams) => {
-            const cg = this.replaceVariable<AxiosRequestConfig>(this.config, paramObj);
-            return axios(cg)
-        }
+            const cg = this.replaceVariable<AxiosRequestConfig>(
+                this.options,
+                paramObj
+            );
+            return axios(cg);
+        };
     }
 }
-

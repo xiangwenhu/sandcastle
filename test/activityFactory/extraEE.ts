@@ -1,22 +1,26 @@
-import { isBoolean, isFunction, isString } from "lodash";
-import { ActivityError } from "../ActivityError";
-import { EnumActivityStatus } from "../enum";
-import { createOneParamAsyncFunction } from "../factory/function";
 import {
+    IActivityConfig,
     IActivityExecuteParams,
     IActivityTaskFunction,
-} from "../types/activity";
-import Activity from "./Activity";
+} from "./../../src/types/activity";
+import createActivity from "../../src/factory/activity";
+
+import { isBoolean, isFunction, isString } from "lodash";
+import Activity from "../../src/activities/Activity";
+import { EnumActivityStatus } from "../../src/enum";
+import { createOneParamAsyncFunction } from "../../src/factory/function";
+import { ActivityError } from "../../src/ActivityError";
+import { register } from "../../src/activityFactory";
 
 export interface CodeActivityOptions {
     code: string;
 }
 
 interface EE {
-    $tt: string
+    $tt: string;
 }
 
-export default class CodeActivity<C = any, R = any> extends Activity<
+export default class CCodeActivity<C = any, R = any> extends Activity<
     C,
     R,
     CodeActivityOptions,
@@ -33,22 +37,20 @@ export default class CodeActivity<C = any, R = any> extends Activity<
     }
 
     getExtraExecuteParamsNames(): [keyof EE] {
-        return ["$tt"]
+        return ["$tt"];
     }
 
     override getExtraExecuteParams(): EE {
         return {
-            $tt: "哈哈"
-        }
+            $tt: "哈哈",
+        };
     }
 
     /**
      *
      * @param {代码} code
      */
-    buildWithCode(
-        code: string
-    ): IActivityTaskFunction<{}, EE> {
+    buildWithCode(code: string): IActivityTaskFunction<{}, EE> {
         if (!isString(code) && !isBoolean(code)) {
             throw new ActivityError(
                 "buildWithCode方法的code参数必须是字符串",
@@ -75,9 +77,27 @@ export default class CodeActivity<C = any, R = any> extends Activity<
             "$item",
             "$index",
             "$a",
-            ...names
+            ...names,
         ]) as IActivityTaskFunction;
         this.status = EnumActivityStatus.BUILDED;
         return this.task;
     }
 }
+
+register("ccode", CCodeActivity);
+
+const activityProps: IActivityConfig = {
+    type: "ccode",
+    name: "如果ctx.count小于5,加加",
+    toVariable: "sb",
+    context: {
+        count: 100,
+    },
+    options: {
+        code: "console.log('$tt', $tt);",
+    },
+};
+
+const activity = createActivity(activityProps);
+
+activity.run();

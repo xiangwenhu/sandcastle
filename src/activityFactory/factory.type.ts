@@ -1,7 +1,7 @@
 import Activity from "../activities/Activity";
 import { IActivityConfig } from "../types/activity";
 
-export type ActivityConstructor<A extends Activity = Activity> = new (
+export type ActivityConstructor<A extends Activity<any, any, any, any, any> = Activity> = new (
     ctx?: any,
     ...args: any[]
 ) => A;
@@ -12,6 +12,7 @@ export interface IFactoryConfigValue extends IFactoryP$HConfigValue {
 
 interface PropertyConfig<T = any> {
     name: string;
+    toName?: PropertyKey;
     default?: any | (() => any);
     init?: (v: T) => T;
 }
@@ -46,11 +47,9 @@ export interface IFactoryHandlerConfig {
 }
 
 export interface IFactoryParamsPropertyConfig {
-    properties?: PropertyConfigItem[];
     params?: PropertyConfigItem[];
     buildParams?: PropertyConfigItem[];
 }
 
 export type IFactoryP$HConfigValue = IFactoryParamsPropertyConfig &
     IFactoryHandlerConfig;
-

@@ -1,14 +1,19 @@
 import { IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
+
+export interface SetRequestInterceptionActivityOptions {
+    value: boolean;
+}
+
 export default class  SetRequestInterceptionActivity<
     C = any,
     R = any
-> extends PageChildActivity<C, R> {
+> extends PageChildActivity<C, R, SetRequestInterceptionActivityOptions> {
 
-    buildTask(value: boolean) {
+    buildTask() {
         return this.task = (paramObj: IActivityRunParams) => {
-            return this.page!.setRequestInterception(value)
+            return this.page!.setRequestInterception(this.options.value)
         }
     }
 }

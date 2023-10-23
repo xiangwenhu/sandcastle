@@ -23,25 +23,22 @@ import CreateVariableActivity from "../activities/variable/CreateVariable";
 import DeleteVariableActivity from "../activities/variable/DeleteVariable";
 import { isString } from "lodash";
 import { ActivityConstructor, IFactoryP$HConfigValue } from "./factory.type";
+import { IfElseActivityConfig, ITryCatchActivityConfig } from "../types/activity";
 
 const factory = {
     create,
     createChildren
 }
 
-function register<A extends Activity>(type: string,
+function register<A extends Activity<any, any, any, any, any>>(type: string,
     _class_: ActivityConstructor<A>,
     config: IFactoryP$HConfigValue = {},
 ) {
     _register(type, _class_, config);
 }
 
-register("code", CodeActivity, {
-    params: ["code"]
-});
-register("delay", DelayActivity, {
-    params: ["timeout"]
-});
+register("code", CodeActivity);
+register("delay", DelayActivity);
 register("sequence", SequenceActivity);
 register("parallel", ParallelActivity);
 register("race", RaceActivity);
@@ -49,54 +46,39 @@ register("while", WhileActivity);
 register("doWhile", DoWhileActivity);
 register("ifElse", IFElseActivity, {
     before({ factory, globalContext, config, activity }) {
-        const act = (activity! as IFElseActivity);
-        act.if = factory.create(config.if, globalContext) as SequenceActivity;
-        if (config.elseif) {
-            act.elseif = factory.createChildren(config.elseif, globalContext) as SequenceActivity[];
+        const ifConfig = config as IfElseActivityConfig;
+        const act = (activity! as any);
+        act.if = factory.create(ifConfig.if, globalContext) as SequenceActivity;
+        if (ifConfig.elseif) {
+            act.elseif = factory.createChildren(ifConfig.elseif, globalContext) as SequenceActivity[];
         }
-        if (config.else) {
-            act.else = factory.create(config.else, globalContext) as SequenceActivity;
+        if (ifConfig.else) {
+            act.else = factory.create(ifConfig.else, globalContext) as SequenceActivity;
         }
     }
 });
-register("request", RequestActivity, {
-    params: ["config"]
+register("request", RequestActivity);
+register("break", BreakActivity,);
+register("terminate", TerminateActivity);
+register("tryCatch", TryCatchActivity,{
+    before({ factory, globalContext, config, activity }) {
+        const ifConfig = config as ITryCatchActivityConfig;
+        const act = (activity! as any);
+        act.catch = factory.create(ifConfig.catch, globalContext) as SequenceActivity;
+    }
 });
-register("break", BreakActivity, {
-    params: ["message"]
-});
-register("terminate", TerminateActivity, {
-    params: ["message"]
-});
-register("tryCatch", TryCatchActivity);
-register("for", ForActivity, {
-    buildParams: ["values"]
-});
-register("parallelFor", ParallelForActivity, {
-    params: ["values"]
-});
+register("for", ForActivity);
+register("parallelFor", ParallelForActivity);
 
 // fs
-register("fs.readFile", ReadFileActivity, {
-    buildParams: ["dist", "type", "options"]
-});
-register("fs.writeFile", WriteFileActivity, {
-    buildParams: ["dist", "content", "options"]
-});
-register("fs.downloadFile", DownloadFileActivity, {
-    buildParams: ["url", "dist", "options"]
-});
-register("fs.removeFile", RemoveFileActivity, {
-    buildParams: ["dist"]
-});
+register("fs.readFile", ReadFileActivity);
+register("fs.writeFile", WriteFileActivity);
+register("fs.downloadFile", DownloadFileActivity);
+register("fs.removeFile", RemoveFileActivity);
 
 // variable
-register("v.create", CreateVariableActivity, {
-    buildParams: ["vName", "value"]
-});
-register("v.delete", DeleteVariableActivity, {
-    buildParams: ["vName"]
-});
+register("v.create", CreateVariableActivity);
+register("v.delete", DeleteVariableActivity);
 
 
 export default factory;

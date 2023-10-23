@@ -10,11 +10,11 @@ import { replaceVariable } from "../../../src/activities/util/variable";
 // "res",       // 本活动执行完毕的返回值
 // "extra",     // 额外的参数
 const r = replaceVariable({
-    words: "${ctx.name}, Good Morning, ${ctx.name}",
-    words2: "{{ctx.name}}",
+    words: "${$ctx.name}, Good Morning, ${$ctx.name}",
+    words2: "{{$ctx.name}}",
 })({
-    gCtx: {},
-    ctx: {
+    $gCtx: {},
+    $ctx: {
         name: "name"
     }
 });

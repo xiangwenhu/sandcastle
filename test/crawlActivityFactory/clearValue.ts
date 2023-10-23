@@ -17,41 +17,45 @@ const activityProps: IActivityConfig = {
                 {
                     type: "code",
                     name: "代码",
-                    code: "console.log(Date.now());"
+                    options: { code: "console.log(Date.now());" }
                 },
                 {
                     type: "c.page.goto",
                     name: "跳转",
-                    url: "https://www.baidu.com/",
                     options: {
-                        "waitUntil": "load"
-                    }
+                        url: "https://www.baidu.com/", options: {
+                            "waitUntil": "load"
+                        }
+                    },
+
                 }, {
                     type: "c.page.waitForSelector",
                     name: "等待节点",
-                    selector: "#kw",
+                    options: { selector: "#kw" },
                 }, {
                     type: "c.page.type",
-                    selector: `#kw`,
-                    name: "输入",
-                    text: "高源",
                     options: {
-                        delay: 1 * 1000
+                        selector: `#kw`, text: "高源",
+                        options: {
+                            delay: 1 * 1000
+                        },
                     },
+                    name: "输入",
+
                 },
                 {
                     type: "delay",
-                    timeout: 2000,
+                    options: { timeout: 2000 },
                     name: "等待2s"
                 },
                 {
                     type: "c.page.clearValue",
-                    selector: '#kw',
+                    options: { selector: '#kw' },
                     name: "清空值"
                 },
                 {
                     type: "delay",
-                    timeout: 10 * 1000,
+                    options: { timeout: 10 * 1000 },
                     name: "等待10s"
                 },
             ]

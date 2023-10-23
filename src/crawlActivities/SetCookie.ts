@@ -2,19 +2,17 @@ import { Protocol } from "puppeteer";
 import PageChildActivity from "./PageChildActivity";
 import { IActivityRunParams } from "../types/activity";
 
+
+export type SetCookieAActivityOptions = Protocol.Network.CookieParam[]
+
 export default class SetCookieActivity<
-C = any,
-R = any
-> extends PageChildActivity<C, R> {
+    C = any,
+    R = any
+> extends PageChildActivity<C, R, SetCookieAActivityOptions> {
 
-    constructor(ctx: any, protected cookies: Protocol.Network.CookieParam[] = []){
-        super(ctx);
-    }
-
-    buildTask(cookies: Protocol.Network.CookieParam[]) {
-        this.cookies = cookies || this.cookies;
-        return this.task = (paramObject: IActivityRunParams) => {
-            return this.action("setCookie", ...this.cookies)
-        }
+    buildTask() {
+        return (this.task = (paramObject: IActivityRunParams) => {
+            return this.action("setCookie", ...(this.options || []));
+        });
     }
 }

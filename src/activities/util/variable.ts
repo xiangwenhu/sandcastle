@@ -14,7 +14,8 @@ function createReplaceFunc(code: string) {
         "$res", // 本活动执行完毕的返回值
         "$extra", // 额外的参数
         "$item",   // 集合处理的item
-        "$a"
+        "$a",
+        "$index"
     ]);
 }
 

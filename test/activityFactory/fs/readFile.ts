@@ -1,23 +1,22 @@
-import { IActivityConfig } from '../../../src/types/activity';
-import createActivity from "../../../src/factory/activity"
+import { IActivityConfig } from "../../../src/types/activity";
+import createActivity from "../../../src/factory/activity";
 
 const activityProps: IActivityConfig = {
-    type: 'sequence',
-    name: 'sequence',
-    children: [ {
-        type: 'fs.readFile',
-        name: '读取文件',
-        contentType: "text",
-        dist: `D:\\data\\tmp2\\txt.txt`
-    }, {
-        type: 'code',
-        name: '输出内容',
-        code: 'console.log(res)'
-    }]
-}
-
-
-
+    type: "sequence",
+    name: "sequence",
+    children: [
+        {
+            type: "fs.readFile",
+            name: "读取文件",
+            options: { contentType: "text", dist: `D:\\data\\tmp2\\txt.txt` },
+        },
+        {
+            type: "code",
+            name: "输出内容",
+            options: {code: "console.log($preRes)"},
+        },
+    ],
+};
 
 const activity = createActivity(activityProps);
 activity.run();
