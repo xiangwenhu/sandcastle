@@ -6,13 +6,18 @@ export interface ParallelForActivityOptions<V = any> {
     values: V[]
 }
 
+interface ER {
+    $item: any;
+    $index: number;
+}
+
 export default class ParallelForActivity<
     C = any,
     R = any
-> extends SequenceActivity<C, R, ParallelForActivityOptions> {
+> extends SequenceActivity<C, R, ParallelForActivityOptions, ER > {
 
 
-    run(paramObj: IActivityRunParams = this.defaultTaskRunParam): Promise<any> {
+    run(paramObj: IActivityRunParams<ER> = this.defaultTaskRunParam): Promise<any> {
         const values = this.options.values;
         return new Promise(async (resolve, reject) => {
             this.ctx = this.ctx || {};

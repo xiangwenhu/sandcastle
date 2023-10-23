@@ -1,9 +1,12 @@
+import { ExtendParams } from "../types/activity";
 import Activity from "./Activity";
 
-export default class ContainerActivity<C = any, R = any, TO = any> extends Activity<
+export default class ContainerActivity<C = any, R = any, O = any, ER extends ExtendParams = {}, EE extends ExtendParams = {}> extends Activity<
     C,
     R,
-    TO
+    O,
+    ER,
+    EE
 > {
     #children: Activity[] = [];
 
@@ -21,7 +24,7 @@ export default class ContainerActivity<C = any, R = any, TO = any> extends Activ
             child.pre = index === 0 ? undefined : this.children[index - 1];
             // 使用父容器的ctx
             child.globalCtx = this.globalCtx;
-            child.parent = this;
+            child.parent = this as any;
             child.next =
                 index === this.#children.length - 2
                     ? undefined

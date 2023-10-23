@@ -11,17 +11,19 @@ export interface IActivityConfig<C = any, O = any, E = any> {
     assert?: string | IActivityConfig;
     useParentCtx?: boolean;
     toVariable?: string;
-    options?: O,
-    eOptions?: E
-};
-
-export interface IfElseActivityConfig<C = any, O = any, E = any> extends IActivityConfig {
-    if: IActivityConfig;
-    elseif?: IActivityConfig[],
-    else?: IActivityConfig
+    options?: O;
+    eOptions?: E;
 }
 
-export interface ITryCatchActivityConfig<C = any, O = any, E = any> extends IActivityConfig {
+export interface IfElseActivityConfig<C = any, O = any, E = any>
+    extends IActivityConfig {
+    if: IActivityConfig;
+    elseif?: IActivityConfig[];
+    else?: IActivityConfig;
+}
+
+export interface ITryCatchActivityConfig<C = any, O = any, E = any>
+    extends IActivityConfig {
     catch: IActivityConfig;
 }
 
@@ -68,14 +70,17 @@ export interface GlobalActivityContext {
     [GK_TERMINATED_MESSAGE]?: string;
 }
 
-export interface IActivityRunParams {
+export type ExtendParams = Record<string, any>;
+
+export type IActivityRunParams<E extends ExtendParams = {}> = {
     $preRes: any;
     $extra: Record<PropertyKey, any>;
-    $item?: any;
-    $index?: number;
-}
+} & E;
 
-export interface IActivityExecuteParams extends IActivityRunParams {
+export type IActivityExecuteParams<
+    ER extends ExtendParams = {},
+    EE extends ExtendParams = {}
+> = {
     /**
      * 上下文
      */
@@ -106,8 +111,12 @@ export interface IActivityExecuteParams extends IActivityRunParams {
     $res: any;
 
     $a: Record<string, Activity>;
-}
+} & EE &
+    IActivityRunParams<ER>;
 
-export interface IActivityTaskFunction {
-    (paramObject: IActivityExecuteParams): any;
+export interface IActivityTaskFunction<
+    ER extends ExtendParams = {},
+    EE extends ExtendParams = {}
+> {
+    (paramObject: IActivityExecuteParams<ER, EE>): any;
 }

@@ -2,13 +2,15 @@ import ContainerActivity from "./ContainerActivity";
 import Activity from "./Activity";
 import { ActivityError } from "../ActivityError";
 import BreakActivity from "./Break";
-import { IActivityRunParams } from "../types/activity";
+import { ExtendParams, IActivityRunParams } from "../types/activity";
 
 export default class SequenceActivity<
     C = any,
     R = any,
-    TO = any
-> extends ContainerActivity<C, R, TO> {
+    O = any,
+    ER extends ExtendParams = {},
+    EE extends ExtendParams = {}
+> extends ContainerActivity<C, R, O, ER, EE> {
     buildTask() {
         return (paramObj: IActivityRunParams) =>
             new Promise(async (resolve, reject) => {

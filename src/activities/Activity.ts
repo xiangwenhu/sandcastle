@@ -10,6 +10,7 @@ import {
     IActivityRunParams,
     IActivityExecuteParams,
     IActivityTaskFunction,
+    ExtendParams,
 } from "../types/activity";
 import { firstToLower } from "../util";
 import { replaceVariable } from "./util/variable";
@@ -21,7 +22,16 @@ import {
 } from "./util";
 import _ from "lodash";
 
-class Activity<C = any, R = any, O = any> {
+/**
+ * C context
+ * R res
+ * O options
+ * E taskOptions 的宽展
+ */
+class Activity<C = any, R = any, O = any, 
+ER extends ExtendParams = {},
+EE extends ExtendParams = {}
+> {
     pre: Activity | undefined = undefined;
     next: Activity | undefined = undefined;
     before: Activity | undefined = undefined;
@@ -33,7 +43,7 @@ class Activity<C = any, R = any, O = any> {
     public status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
 
     public globalCtx: GlobalActivityContext = {};
-    public task: IActivityTaskFunction | undefined;
+    public task: IActivityTaskFunction<ER, EE> | undefined;
 
     accessor checkStatus: boolean = true;
 
@@ -42,12 +52,12 @@ class Activity<C = any, R = any, O = any> {
         return this.globalCtx[GLOBAL_BUILTIN];
     }
 
-    protected get defaultTaskRunParam(): IActivityRunParams {
-        return createTaskRunDefaultParams();
+    protected get defaultTaskRunParam(): IActivityRunParams<ER> {
+        return createTaskRunDefaultParams() as IActivityRunParams<ER>;
     }
 
-    protected get defaultTaskExecuteParam(): IActivityExecuteParams {
-        return createTaskExecuteDefaultParams();
+    protected get defaultTaskExecuteParam(): IActivityExecuteParams<ER, EE> {
+        return createTaskExecuteDefaultParams() as IActivityExecuteParams<ER, EE>;
     }
 
     protected get globalVariables(): Record<string, any> {
@@ -77,11 +87,11 @@ class Activity<C = any, R = any, O = any> {
     set assert(value: Activity | undefined) {
         this.#assert = value;
         if (value) {
-            value.parent = this as Activity;
+            value.parent = this as unknown as Activity;
         }
     }
 
-    constructor(ctx: C,  public options: O) {
+    constructor(ctx: C, public options: O) {
         this.#ctx = ctx || {};
         this.parent = undefined;
         this.name = undefined;
@@ -92,21 +102,21 @@ class Activity<C = any, R = any, O = any> {
         this.task = undefined;
     }
 
-    protected runBefore(paramObject: IActivityRunParams): unknown {
+    protected runBefore(paramObject: IActivityExecuteParams<ER,EE>): unknown {
         if (!this.before || !(this.before instanceof Activity)) {
             return;
         }
         return this.before.run(paramObject);
     }
 
-    protected runAfter(paramObject: IActivityExecuteParams): unknown {
+    protected runAfter(paramObject: IActivityExecuteParams<ER,EE>): unknown {
         if (!this.after || !(this.after instanceof Activity)) {
             return;
         }
         return this.after.run(paramObject);
     }
 
-    protected async runAssert(paramObject: IActivityExecuteParams) {
+    protected async runAssert(paramObject: IActivityExecuteParams<ER,EE>) {
         if (!this.assert || !(this.assert instanceof Activity)) {
             return true;
         }
@@ -121,14 +131,15 @@ class Activity<C = any, R = any, O = any> {
      * @param {其他参数} otherParams
      */
     async run(
-        { $preRes, $extra, $item , $index}: IActivityRunParams = this
-            .defaultTaskRunParam
+        paramsObject: IActivityRunParams<ER> = this
+            .defaultTaskRunParam as IActivityRunParams<ER>
     ) {
         const globalCtx = this.globalCtx;
         // 如果已经终止
         if (globalCtx[GK_TERMINATED]) {
             return;
         }
+
         // TODO::
         // if (this.checkStatus && this.status >= EnumActivityStatus.EXECUTING) {
         //     throw new ActivityError("活动已经执行", this);
@@ -143,24 +154,24 @@ class Activity<C = any, R = any, O = any> {
         const self = this;
         try {
             const gb = this.globalBuiltObject;
-            const argObject: IActivityExecuteParams = {
+
+            const extraExecuteParams = this.getExtraExecuteParams();
+            const argObject: IActivityExecuteParams<ER,EE> = {
                 $gCtx: globalCtx,
                 $ctx: mContext,
                 $c: gb.properties.properties,
                 $m: gb.methods.properties,
                 $v: this.globalVariables,
                 $parent: this.parent,
-                $item,
-                $index,
-                $preRes,
                 $res: undefined,
-                $extra,
                 $a: gb.activities.properties,
+                ...paramsObject,
+                ...extraExecuteParams
             };
 
             const needRun = await this.runAssert(argObject);
             if (!needRun) {
-                return $preRes;
+                return paramsObject.$preRes;
             }
 
             // 执行前
@@ -176,7 +187,7 @@ class Activity<C = any, R = any, O = any> {
                 globalCtx[GK_TERMINATED] = true;
                 globalCtx[GK_TERMINATED_MESSAGE] = res as string;
                 // 执行后
-                throw new TerminateError(res as string, this);
+                throw new TerminateError(res as string, this as any as Activity);
             }
             return res === undefined ? afterRes : res;
         } catch (err) {
@@ -185,59 +196,35 @@ class Activity<C = any, R = any, O = any> {
         }
     }
 
-    buildTask(...args: any[]): IActivityTaskFunction {
+    getExtraExecuteParams(): EE {
+        return {} as EE;
+    }
+
+    buildTask(
+        ...args: any[]
+    ): IActivityTaskFunction<ER, EE> {
         return () => {};
     }
 
     build(...args: any[]) {
         this.status = EnumActivityStatus.BUILDING;
-        this.task = this.buildTask(...args);
+        this.task = this.buildTask(...args) as unknown as IActivityTaskFunction<ER, EE>;
         this.status = EnumActivityStatus.BUILDED;
-    }
-
-    /**
-     *
-     * @param {代码} code
-     */
-    buildWithCode(code: string): IActivityTaskFunction {
-        if (!isString(code) && !isBoolean(code)) {
-            throw new ActivityError(
-                "buildWithCode方法的code参数必须是字符串",
-                this
-            );
-        }
-        this.status = EnumActivityStatus.BUILDING;
-        const g = this.globalBuiltObject;
-        const $c = g.properties.placeholder || "$c";
-        const $m = g.methods.placeholder || "$m";
-        this.task = createOneParamAsyncFunction(code, [
-            "$gCtx", // 全局上下文
-            "$ctx", // 上下文
-            $c, // 内置变量
-            $m, // 内置方法
-            "$v",
-            "$parent", // 父节点
-            "$preRes", // 上一个活动的返回值
-            "$res", // 本活动执行完毕的返回值
-            "$extra", // 额外的参数
-            "$item",
-            "$index",
-            "$a",
-        ]) as IActivityTaskFunction;
-        this.status = EnumActivityStatus.BUILDED;
-        return this.task;
     }
 
     protected replaceVariable<C = any>(
         config: C,
-        paramObj: IActivityRunParams
+        paramObj: IActivityRunParams<ER>
     ) {
         if (config == undefined || Array.isArray(config)) {
             return config as C;
         }
         const gb = this.globalBuiltObject;
         let mContext = this.ctx || {};
-        const paramObject: IActivityExecuteParams = {
+
+        const extraExecuteParams = this.getExtraExecuteParams();
+
+        const paramObject: IActivityExecuteParams<ER,EE> = {
             $gCtx: this.globalCtx,
             $ctx: mContext,
             $c: gb.properties.properties,
@@ -247,6 +234,7 @@ class Activity<C = any, R = any, O = any> {
             $res: undefined,
             $a: gb.activities.properties,
             ...paramObj,
+            ...extraExecuteParams
         };
 
         return replaceVariable(config).call(this, paramObject) as C;
@@ -272,7 +260,7 @@ class Activity<C = any, R = any, O = any> {
     }
 
     getClosestParent<A = Activity>(targetActivity: Object): A | undefined {
-        let act: Activity | undefined = this;
+        let act: Activity<any, any, any, any, any> | undefined = this;
 
         while (act != undefined) {
             if (act instanceof (targetActivity as any as Function)) {

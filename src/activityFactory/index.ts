@@ -30,7 +30,7 @@ const factory = {
     createChildren
 }
 
-function register<A extends Activity>(type: string,
+function register<A extends Activity<any, any, any, any, any>>(type: string,
     _class_: ActivityConstructor<A>,
     config: IFactoryP$HConfigValue = {},
 ) {
