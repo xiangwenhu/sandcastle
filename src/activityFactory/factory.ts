@@ -36,23 +36,18 @@ export function createChildren(
     return props.map((p) => createSingle(p, globalContext));
 }
 
-const BUILTIN_PARAMS: PropertyConfigItem[] = ["context"];
-const BUILTIN_BUILD_PARAMS: PropertyConfigItem[] = [
-    // {
-    //     name: "options",
-    //     default: {},
-    //     toName: "taskOptions",
-    // },
-];
+const BUILTIN_PARAMS: PropertyConfigItem[] = [{
+    name: "context",
+    default: {}
+}, {
+    name: "options",
+    default: {}
+}];
+const BUILTIN_BUILD_PARAMS: PropertyConfigItem[] = [];
 const BUILTIN_PROPERTIES: PropertyConfigItem[] = [
     "name",
     "type",
     { name: "useParentCtx", default: false },
-    {
-        name: "options",
-        default: {},
-        toName: "taskOptions",
-    },
     {
         name: "eOptions",
         default: {},
@@ -181,26 +176,26 @@ function createSingle<A extends Activity>(
     if (before) {
         activity.before = isString(before)
             ? createSingle(
-                  {
-                      type: "code",
-                      options: { code: before },
-                      name: `${actConfig.name} before`,
-                  },
-                  globalContext
-              )
+                {
+                    type: "code",
+                    options: { code: before },
+                    name: `${actConfig.name} before`,
+                },
+                globalContext
+            )
             : createSingle(before, globalContext);
     }
     // 创建after
     if (after) {
         activity.after = isString(after)
             ? createSingle(
-                  {
-                      type: "code",
-                      options: { code: after },
-                      name: `${actConfig.name} after`,
-                  },
-                  globalContext
-              )
+                {
+                    type: "code",
+                    options: { code: after },
+                    name: `${actConfig.name} after`,
+                },
+                globalContext
+            )
             : createSingle(after, globalContext);
     }
     // assert
@@ -208,14 +203,14 @@ function createSingle<A extends Activity>(
         activity.assert = (
             isString(actConfig.assert)
                 ? (createSingle(
-                      {
-                          type: "code",
-                          options: `return ${actConfig.assert}`,
-                          name: `${actConfig.name} after`,
-                          useParentCtx: true,
-                      },
-                      globalContext
-                  ) as Activity)
+                    {
+                        type: "code",
+                        options: {code:  `return ${actConfig.assert}` },
+                        name: `${actConfig.name} after`,
+                        useParentCtx: true,
+                    },
+                    globalContext
+                ) as Activity)
                 : createSingle(assert as IActivityConfig, globalContext)
         ) as Activity;
     }

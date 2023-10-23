@@ -2,7 +2,7 @@ import { ClickOptions } from "puppeteer";
 import { IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
-export interface ClickTaskOptions {
+export interface ClickActivityOptions {
     selector: string;
     options?: Readonly<ClickOptions>;
 }
@@ -10,12 +10,11 @@ export interface ClickTaskOptions {
 export default class ClickActivity<C = any, R = any> extends PageChildActivity<
     C,
     R,
-    ClickTaskOptions
+    ClickActivityOptions
 > {
-    buildTask(options: ClickTaskOptions) {
-        this.taskOptions = options;
+    buildTask() {
         return (this.task = (paramObj: IActivityRunParams) => {
-            const { selector, options } = this.taskOptions;
+            const { selector, options } = this.options;
             return this.page!.click(selector, options);
         });
     }

@@ -1,7 +1,7 @@
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 
-export interface IActivityConfig<O = any, C = any, E = any>{
+export interface IActivityConfig<C = any, O = any, E = any> {
     type: BaseActivityType | string;
     context?: C;
     name: string;
@@ -15,10 +15,14 @@ export interface IActivityConfig<O = any, C = any, E = any>{
     eOptions?: E
 };
 
-export interface IfElseActivityConfig<O = any, C = any, E = any> extends IActivityConfig {
+export interface IfElseActivityConfig<C = any, O = any, E = any> extends IActivityConfig {
     if: IActivityConfig;
     elseif?: IActivityConfig[],
     else?: IActivityConfig
+}
+
+export interface ITryCatchActivityConfig<C = any, O = any, E = any> extends IActivityConfig {
+    catch: IActivityConfig;
 }
 
 export interface ActivityFactory<

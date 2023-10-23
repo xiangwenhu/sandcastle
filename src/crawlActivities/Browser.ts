@@ -14,16 +14,9 @@ export default class BrowserActivity<
         return this.#browser;
     }
 
-    constructor(
-        ctx: any
-    ) {
-        super(ctx);
-    }
-
-
     async run(paramObj: IActivityRunParams = this.defaultTaskRunParam): Promise<any> {
         try {
-            this.#browser = await launch(this.taskOptions);
+            this.#browser = await launch(this.options);
             const res = await super.run(paramObj);
             return res;
         } catch (err) {

@@ -3,17 +3,16 @@ import PageChildActivity from "./PageChildActivity";
 import { IActivityRunParams } from "../types/activity";
 
 
-export type SetCookieATaskOptions = Protocol.Network.CookieParam[]
+export type SetCookieAActivityOptions = Protocol.Network.CookieParam[]
 
 export default class SetCookieActivity<
     C = any,
     R = any
-> extends PageChildActivity<C, R, SetCookieATaskOptions> {
+> extends PageChildActivity<C, R, SetCookieAActivityOptions> {
 
-    buildTask(cookies: Protocol.Network.CookieParam[]) {
-        this.taskOptions = cookies;
+    buildTask() {
         return (this.task = (paramObject: IActivityRunParams) => {
-            return this.action("setCookie", ...this.taskOptions!);
+            return this.action("setCookie", ...(this.options || []));
         });
     }
 }

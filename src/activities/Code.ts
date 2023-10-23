@@ -1,11 +1,11 @@
 import Activity from "./Activity";
 
-export interface CodeTaskOptions {
+export interface CodeActivityOptions {
     code: string;
 }
 
-export default class CodeActivity<C = any, R = any> extends Activity<C, R, CodeTaskOptions> {
+export default class CodeActivity<C = any, R = any> extends Activity<C, R, CodeActivityOptions> {
     buildTask() {
-        return this.buildWithCode(this.taskOptions.code);
+        return this.buildWithCode(this.options.code);
     }
 }

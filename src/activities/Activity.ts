@@ -21,7 +21,7 @@ import {
 } from "./util";
 import _ from "lodash";
 
-class Activity<C = any, R = any, TO = any> {
+class Activity<C = any, R = any, O = any> {
     pre: Activity | undefined = undefined;
     next: Activity | undefined = undefined;
     before: Activity | undefined = undefined;
@@ -34,8 +34,6 @@ class Activity<C = any, R = any, TO = any> {
 
     public globalCtx: GlobalActivityContext = {};
     public task: IActivityTaskFunction | undefined;
-
-    public accessor taskOptions: TO  = {} as TO;
 
     accessor checkStatus: boolean = true;
 
@@ -83,7 +81,7 @@ class Activity<C = any, R = any, TO = any> {
         }
     }
 
-    constructor(ctx: C) {
+    constructor(ctx: C,  public options: O) {
         this.#ctx = ctx || {};
         this.parent = undefined;
         this.name = undefined;
@@ -137,7 +135,7 @@ class Activity<C = any, R = any, TO = any> {
         // }
 
         if (this.status < EnumActivityStatus.BUILDED) {
-            this.buildTask(this.taskOptions);
+            this.buildTask(this.options);
         }
 
         let mContext = this.ctx || {};
@@ -170,7 +168,7 @@ class Activity<C = any, R = any, TO = any> {
             const res: R = await this.task!.call(self, argObject);
             this.status = EnumActivityStatus.EXECUTED;
             // 执行后
-            argObject.$res = res;
+            argObject.$preRes = res;
             const afterRes = await this.runAfter.call(self, argObject);
 
             if (this.type == "terminate") {

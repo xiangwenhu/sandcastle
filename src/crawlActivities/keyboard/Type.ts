@@ -2,7 +2,7 @@ import { KeyInput, KeyboardTypeOptions } from "puppeteer";
 import PageChildActivity from "../PageChildActivity";
 import { IActivityRunParams } from "../../types/activity";
 
-export interface KeyboardTypeTaskOptions {
+export interface KeyboardTypeActivityOptions {
     key: KeyInput;
     options?: Readonly<KeyboardTypeOptions>;
 }
@@ -10,10 +10,10 @@ export interface KeyboardTypeTaskOptions {
 export default class KeyboardTypeActivity<
     C = any,
     R = any
-> extends PageChildActivity<C, R, KeyboardTypeTaskOptions> {
+> extends PageChildActivity<C, R, KeyboardTypeActivityOptions> {
     buildTask() {
         return (paramObj: IActivityRunParams) => {
-            const { key, options } = this.taskOptions;
+            const { key, options } = this.options;
             return this.page!.keyboard.type(key, options);
         };
     }

@@ -1,7 +1,7 @@
 import { IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
-export interface SelectTaskOptions {
+export interface SelectActivityOptions {
     selector: string;
     values: string[];
 }
@@ -9,12 +9,11 @@ export interface SelectTaskOptions {
 export default class SelectActivity<C = any, R = any> extends PageChildActivity<
     C,
     R,
-    SelectTaskOptions
+    SelectActivityOptions
 > {
-    buildTask(options: SelectTaskOptions) {
-        this.taskOptions = options;
+    buildTask() {
         return (this.task = (paramObj: IActivityRunParams) => {
-            const { selector, values } = this.taskOptions!;
+            const { selector, values } = this.options!;
             return this.page!.select(selector, ...values);
         });
     }

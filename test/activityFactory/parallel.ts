@@ -11,12 +11,12 @@ const activityProps: IActivityConfig = {
         useParentCtx: true,
         type: 'code',
         name: '最多延时秒',
-        code: "console.log($ctx.timeout)"
+        options:{code: "console.log($ctx.timeout)"}
     }, {
         useParentCtx: true,
         type: 'code',
         name: '输出当前日期',
-        code: 'console.log($ctx.name)'
+        options:{code: 'console.log($ctx.name)'}
     }]
 }
 

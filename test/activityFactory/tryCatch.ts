@@ -1,7 +1,7 @@
-import { IActivityConfig } from './../../src/types/activity';
+import { IActivityConfig, ITryCatchActivityConfig } from './../../src/types/activity';
 import createActivity from "../../src/factory/activity"
 
-const activityProps: IActivityConfig = {
+const activityProps: ITryCatchActivityConfig = {
     type: 'sequence',
     name: 'tryCatch测试',
     children: [{
@@ -13,31 +13,30 @@ const activityProps: IActivityConfig = {
             children: [{
                 type: "code",
                 name: "",
-                code: "console.log('catch中的code')"
-            },{
+                options: { code: "console.log('catch中的code')" }
+            }, {
                 type: "terminate",
                 name: "",
-                message: "终止"
+                options: { message: "终止" }
             }]
         }],
-        catch: {
-            type: "code",
-            name: "catch后处理函数",
-            code: "console.log('catch触发后的处理函数');"
-        }
     }, {
         type: "code",
         name: "tryCatch后输出",
-        code: "console.log('catch后');"
-    }]
-
+        options: { code: "console.log('catch后');" }
+    }],
+    catch: {
+        type: "code",
+        name: "catch后处理函数",
+        options: { code: "console.log('catch触发后的处理函数');" }
+    }
 }
 
 const activity = createActivity(activityProps);
 
-;(async function(){
+; (async function () {
     const r = await activity.run();
     console.log("r:", r);
-    
+
 })()
 

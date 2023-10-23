@@ -7,7 +7,7 @@ const activityProps: IActivityConfig = {
     children: [
         {
             type: "fs.removeFile",
-            name: "读取文件",
+            name: "删除文件",
             options: {
                 url: "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png",
                 dist: `D:\\data\\tmp2\\cc\\dd\\bd.png`,

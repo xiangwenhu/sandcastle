@@ -4,7 +4,7 @@ import { IActivityRunParams } from "../types/activity";
 import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
 
-export default class IFElseActivity<C = any, R = any> extends Activity<C, R> {
+export default class IFElseActivity<C = any, R = any, O = any> extends Activity<C, R, O> {
     accessor #if: SequenceActivity | undefined = undefined;
     accessor #elseif: SequenceActivity[] | undefined = undefined;
     accessor #else: SequenceActivity | undefined = undefined;
@@ -41,8 +41,8 @@ export default class IFElseActivity<C = any, R = any> extends Activity<C, R> {
         return this.#else;
     }
 
-    constructor(context: C) {
-        super(context);
+    constructor(context: C, public options: O) {
+        super(context, options);
         this.type = "ifElse";
     }
 

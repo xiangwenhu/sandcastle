@@ -1,16 +1,19 @@
-import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
 import { ActivityError } from "../ActivityError";
 import { IActivityRunParams } from "../types/activity";
 
+export interface ParallelForActivityOptions<V = any> {
+    values: V[]
+}
+
 export default class ParallelForActivity<
     C = any,
     R = any
-> extends SequenceActivity<C, R, any[]> {
+> extends SequenceActivity<C, R, ParallelForActivityOptions> {
 
 
     run(paramObj: IActivityRunParams = this.defaultTaskRunParam): Promise<any> {
-        const values = this.taskOptions;
+        const values = this.options.values;
         return new Promise(async (resolve, reject) => {
             this.ctx = this.ctx || {};
             try {

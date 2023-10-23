@@ -3,7 +3,7 @@ import { downloadFileWithRetry } from "../../util/loader";
 import Activity from "../Activity";
 import { IActivityRunParams } from "../../types/activity";
 
-export interface DownloadFileTaskOptions {
+export interface DownloadFileActivityOptions {
     url: string;
     dist: string;
     options?: {
@@ -16,11 +16,11 @@ export interface DownloadFileTaskOptions {
 export default class DownloadFileActivity<C = any> extends Activity<
     C,
     string,
-    DownloadFileTaskOptions
+    DownloadFileActivityOptions
 > {
     buildTask() {
         return (paramObj: IActivityRunParams) => {
-            const { url, options, dist } = this.taskOptions;
+            const { url, options, dist } = this.options;
             const rUrl = this.replaceVariable(url, paramObj) as string;
             const rDist = this.replaceVariable(dist, paramObj) as string;
             return downloadFileWithRetry(rUrl, rDist, options);

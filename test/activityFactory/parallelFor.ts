@@ -7,20 +7,22 @@ const activityProps: IActivityConfig = {
     context: {
         name: "cname"
     },
-    values: [
-        { name: 'name1', timeout: 3 * 1000 }, 
-        { name: 'name2', timeout: 5 * 1000 }
-    ],
+    options: {
+        values: [
+            { name: 'name1', timeout: 3 * 1000 },
+            { name: 'name2', timeout: 5 * 1000 }
+        ]
+    },
     children: [{
         // useParentCtx: true,
         type: 'delay',
         name: '最多延时秒',
-        timeout: "{{$item.timeout}}"
+        options: { timeout: "{{$item.timeout}}" }
     }, {
         useParentCtx: true,
         type: 'code',
         name: '输出当前日期',
-        code: 'console.log($item.name,$ctx.name)'
+        options: { code: 'console.log($item.name,$ctx.name)' }
     }]
 }
 

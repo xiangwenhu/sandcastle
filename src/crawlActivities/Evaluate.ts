@@ -1,17 +1,20 @@
 import { isFunction } from "lodash";
 import { IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
-import { getFunctionBody } from "../util/funtion";
+import { getFunctionBody } from "../util/function";
+
+export interface EvaluateActivityOptions {
+    code: string | Function; args: any[]
+}
 
 export default class EvaluateActivity<
     C = any,
     R = any
-> extends PageChildActivity<C, R> {
+> extends PageChildActivity<C, R, EvaluateActivityOptions> {
 
-    buildTask(options: { code: string | Function; args: any[] }) {
-        this.taskOptions = options;
+    buildTask() {
         return (this.task = async (paramObj: IActivityRunParams) => {
-            const { code, args = [] } = this.taskOptions;
+            const { code, args = [] } = this.options;
             // 替换code变量
             let rCode = isFunction(code) ? getFunctionBody(code) : `${code}`;
             rCode = this.replaceVariable(rCode, paramObj) as string;

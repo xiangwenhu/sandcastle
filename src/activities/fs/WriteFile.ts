@@ -5,7 +5,7 @@ import { IActivityRunParams } from "../../types/activity";
 import { ensureDir } from "../../util/fs";
 import Activity from "../Activity";
 
-export interface WriteFileTaskOptions {
+export interface WriteFileActivityOptions {
     dist: string;
     content: any;
     options?:
@@ -20,11 +20,11 @@ export interface WriteFileTaskOptions {
 export default class WriteFileActivity<C = any> extends Activity<
     C,
     string,
-    WriteFileTaskOptions
+    WriteFileActivityOptions
 > {
     buildTask() {
         return async (paramObj: IActivityRunParams) => {
-            const { dist, content, options } = this.taskOptions;
+            const { dist, content, options } = this.options;
             const rDist = this.replaceVariable(dist, paramObj) as string;
             const rContent = this.replaceVariable(content, paramObj) as any;
             const data = isPlainObject(rContent)

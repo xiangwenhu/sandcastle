@@ -2,7 +2,7 @@ import { IActivityRunParams } from "../types/activity";
 import Activity from "./Activity";
 
 
-export interface BreakTaskOptions {
+export interface BreakActivityOptions {
     message: string;
 }
 
@@ -12,9 +12,9 @@ export interface BreakTaskOptions {
 export default class BreakActivity<C = any> extends Activity<
     C,
     string,
-    BreakTaskOptions
+    BreakActivityOptions
 > {
     buildTask() {
-        return (paramObj: IActivityRunParams) => Promise.resolve(this.taskOptions.message);
+        return (paramObj: IActivityRunParams) => Promise.resolve(this.options.message);
     }
 }

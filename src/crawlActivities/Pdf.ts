@@ -2,19 +2,16 @@ import { PDFOptions } from "puppeteer";
 import { IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
-export type PdfTaskOptions = PDFOptions;
+export type PdfActivityOptions = PDFOptions;
 
 export default class PdfActivity<C = any, R = any> extends PageChildActivity<
     C,
     R,
-    PdfTaskOptions
+    PdfActivityOptions
 > {
-    buildTask(options?: PdfTaskOptions) {
-        if (options) {
-            this.taskOptions = options;
-        }
+    buildTask() {
         return (this.task = (paramObj: IActivityRunParams) => {
-            return this.page!.pdf(options);
+            return this.page!.pdf(this.options);
         });
     }
 }

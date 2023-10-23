@@ -16,7 +16,7 @@ const activityProps: IActivityConfig = {
         {
             type: "code",
             name: "打印all开始时间",
-            code: `console.log('all开始时间:', $m.getName(), $c.money)`
+            options: { code: `console.log('all开始时间:', $m.getName(), $c.money)` }
         }
     ]
 };

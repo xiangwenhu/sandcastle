@@ -2,14 +2,16 @@ import { WaitForOptions } from "puppeteer";
 import PageChildActivity from "./PageChildActivity";
 import { IActivityRunParams } from "../types/activity";
 
-export default class WaitForNavActivity<
+export type WaitForNavigationActivityOptions =WaitForOptions
+
+export default class WaitForNavigationActivity<
 C = any,
 R = any
-> extends PageChildActivity<C, R> {
+> extends PageChildActivity<C, R, WaitForNavigationActivityOptions> {
 
-    buildTask(options: WaitForOptions) {
+    buildTask() {
         return this.task = (paramObject: IActivityRunParams)=> {
-            return this.page!.waitForNavigation(options)
+            return this.page!.waitForNavigation(this.options)
         }
     }
 }

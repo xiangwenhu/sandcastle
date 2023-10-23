@@ -23,7 +23,7 @@ import CreateVariableActivity from "../activities/variable/CreateVariable";
 import DeleteVariableActivity from "../activities/variable/DeleteVariable";
 import { isString } from "lodash";
 import { ActivityConstructor, IFactoryP$HConfigValue } from "./factory.type";
-import { IfElseActivityConfig } from "../types/activity";
+import { IfElseActivityConfig, ITryCatchActivityConfig } from "../types/activity";
 
 const factory = {
     create,
@@ -60,7 +60,13 @@ register("ifElse", IFElseActivity, {
 register("request", RequestActivity);
 register("break", BreakActivity,);
 register("terminate", TerminateActivity);
-register("tryCatch", TryCatchActivity);
+register("tryCatch", TryCatchActivity,{
+    before({ factory, globalContext, config, activity }) {
+        const ifConfig = config as ITryCatchActivityConfig;
+        const act = (activity! as any);
+        act.catch = factory.create(ifConfig.catch, globalContext) as SequenceActivity;
+    }
+});
 register("for", ForActivity);
 register("parallelFor", ParallelForActivity);
 

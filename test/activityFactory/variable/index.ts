@@ -21,7 +21,7 @@ const activityProps: IActivityConfig = {
         {
             type: "v.delete",
             name: "删除变量",
-            options: "v1",
+            options: { name: "v1" },
         },
         {
             type: "code",

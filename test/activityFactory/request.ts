@@ -8,8 +8,8 @@ const activityProps: IActivityConfig = {
     context: {
         url: "https://www.baidu.com"
     },
-    config: {
-        url: "{{gCtx.url}}" // "${ctx.url}"
+    options: {
+        url: "{{$gCtx.url}}" // "${ctx.url}"
     }
 }
 

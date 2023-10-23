@@ -18,7 +18,7 @@ export default class SequenceActivity<
                     try {
                         // 终止
                         if (child.type === "break") {
-                            return resolve((child as BreakActivity).taskOptions.message);
+                            return resolve((child as BreakActivity).options.message);
                         }
                         paramObj.$preRes = preRes;
                         preRes = await child.run(paramObj);

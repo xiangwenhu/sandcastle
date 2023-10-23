@@ -1,14 +1,19 @@
 import { IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
+export interface $$ActivityOptions {
+    selector: string
+};
+
+
 export default class $$Activity<C = any, R = any> extends PageChildActivity<
     C,
-    R
+    R,
+    $$ActivityOptions
 > {
-    buildTask<Selector extends string>(options: Selector) {
-        this.taskOptions = options;
+    buildTask() {
         return (this.task = (paramObj: IActivityRunParams) => {
-            return this.page!.$$(this.taskOptions);
+            return this.page!.$$(this.options.selector);
         });
     }
 }

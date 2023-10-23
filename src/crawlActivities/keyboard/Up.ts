@@ -9,9 +9,8 @@ export default class KeyboardUpActivity<C = any, R = any> extends PageChildActiv
     buildTask(
         options: KeyInput,
     ) {
-        this.taskOptions = options;
-        return (paramObj: IActivityRunParams) => {
-            return this.page!.keyboard.up(this.taskOptions);
+                return (paramObj: IActivityRunParams) => {
+            return this.page!.keyboard.up(this.options);
         };
     }
 }
