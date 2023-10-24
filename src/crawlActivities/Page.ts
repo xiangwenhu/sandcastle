@@ -24,7 +24,7 @@ export default class PageActivity<C = any, R = any> extends SequenceActivity<C, 
                 const res = await superTask.call(this, paramObject);
                 return res;
             } catch (err: any) {
-                throw new ActivityError(err && err.message, this)
+                throw this.createActivityError(err)
             }
         }
     }

@@ -36,7 +36,7 @@ export default class ParallelForActivity<
                     const res = await Promise.all(ps);
                     resolve(res);
                 } catch (err: any) {
-                    reject(new ActivityError(err && err.message, this));
+                    reject(this.createActivityError(err));
                 }
             });
         }

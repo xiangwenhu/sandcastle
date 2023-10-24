@@ -39,8 +39,7 @@ export default class ForActivity<C = any, R = any> extends SequenceActivity<
                             [indexName]: $index,
                         });
                     } catch (err: any) {
-                        reject(new ActivityError(err && err.message, that));
-                    } finally {
+                        reject(this.createActivityError(err));
                     }
                 }
                 resolve(preRes);

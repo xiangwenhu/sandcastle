@@ -23,7 +23,7 @@ export default class BrowserActivity<
                 const res = await superTask.call(this, paramObj);
                 return res;
             } catch (err) {
-
+                throw this.createActivityError(err)
             } finally {
                 if (!!this.#browser) {
                     await this.#browser.close();

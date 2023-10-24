@@ -5,7 +5,7 @@ import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 import { KeyInput, KeyPressOptions } from "puppeteer";
 
 export interface ClearValueActivityOptions {
-    key: KeyInput,
+    selector: KeyInput,
     options?: Readonly<KeyPressOptions> | undefined
 }
 
@@ -15,12 +15,12 @@ export default class ClearValueActivity<
 > extends PageChildActivity<C, R, ClearValueActivityOptions> {
     buildTask() {
         return (this.task = async (paramObj: IActivityExecuteParams) => {
-            const { key, options } = this.getReplacedOptions(paramObj)
+            const { selector, options } = this.getReplacedOptions(paramObj)
             const page = this.page;
-            const el = await page!.$(key);
+            const el = await page!.$(selector);
             if (!el) {
                 throw new ActivityError(
-                    `未找到selector的${key}的节点`,
+                    `未找到selector的${selector}的节点`,
                     this
                 );
             }

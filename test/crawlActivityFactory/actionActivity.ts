@@ -8,8 +8,8 @@ const activityProps: IActivityConfig = {
         headless: false
     },
     children: [{
-        type: "parallel",
-        name: "并行",
+        type: "sequence",
+        name: "顺序",
         children: [{
             type: "c.page",
             name: "快手页面啊",
@@ -57,7 +57,7 @@ const activityProps: IActivityConfig = {
                 },
                 {
                     type: "c.page.clearValue",
-                    options: { selector: '#kw' },
+                    options: { key: '#kw' }, // TODO::
                     name: "清空值"
                 },
                 {
@@ -73,4 +73,6 @@ const activityProps: IActivityConfig = {
 
 const activity = createActivity(activityProps);
 
-activity.run();
+activity.run().catch(err=> {
+    console.log("err", err)
+});

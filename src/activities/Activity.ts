@@ -1,4 +1,5 @@
-import { TerminateError } from "../ActivityError";
+import _ from "lodash";
+import { ActivityError, TerminateError } from "../ActivityError";
 import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS } from "../const";
 import { EnumActivityStatus } from "../enum";
 import {
@@ -7,11 +8,12 @@ import {
     GK_TERMINATED_MESSAGE,
     IActivityExecuteParams,
     IActivityRunParams,
-    IActivityTaskFunction
+    IActivityTaskFunction,
 } from "../types/activity";
 import { extractOwnOtherKeys } from "../util";
 import ActivityBase from "./ActivityBase";
 import { replaceVariable } from "./util/variable";
+import { createActivityError } from "./util";
 
 /**
  * C context
@@ -19,13 +21,18 @@ import { replaceVariable } from "./util/variable";
  * O options
  * E taskOptions 的宽展
  */
-class Activity<C = any, R = any, O = any,
+class Activity<
+    C = any,
+    R = any,
+    O = any,
     ER extends ExtendParams = {},
     EE extends ExtendParams = {}
 > extends ActivityBase<C, R, O, ER, EE> {
     constructor(ctx: C, public options: O) {
         super(ctx, options);
     }
+
+    protected createActivityError = createActivityError;
 
     protected runBefore(paramObject: IActivityExecuteParams<ER, EE>): unknown {
         if (!this.before || !(this.before instanceof Activity)) {
@@ -49,7 +56,6 @@ class Activity<C = any, R = any, O = any,
         return !!res;
     }
 
-
     private getExecuteParamsObject(paramsObject: IActivityRunParams<ER>) {
         const { globalBuiltObject: gb, globalCtx } = this;
         let mContext = this.ctx || {};
@@ -65,7 +71,7 @@ class Activity<C = any, R = any, O = any,
             $res: undefined,
             $a: gb.activities.properties,
             ...paramsObject,
-            ...extraExecuteParams
+            ...extraExecuteParams,
         };
         return argObject;
     }
@@ -93,7 +99,8 @@ class Activity<C = any, R = any, O = any,
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
-            const argObject: IActivityExecuteParams<ER, EE> = this.getExecuteParamsObject(paramsObject);
+            const argObject: IActivityExecuteParams<ER, EE> =
+                this.getExecuteParamsObject(paramsObject);
             const needRun = await this.runAssert(argObject);
             if (!needRun) {
                 return paramsObject.$preRes;
@@ -112,12 +119,15 @@ class Activity<C = any, R = any, O = any,
                 globalCtx[GK_TERMINATED] = true;
                 globalCtx[GK_TERMINATED_MESSAGE] = res as string;
                 // 执行后
-                throw new TerminateError(res as string, self as any as Activity);
+                throw new TerminateError(
+                    res as string,
+                    self as any as Activity
+                );
             }
             return res === undefined ? afterRes : res;
         } catch (err) {
             self.status = EnumActivityStatus.EXCEPTION;
-            throw err;
+            throw this.createActivityError(err);
         }
     }
 
@@ -125,41 +135,46 @@ class Activity<C = any, R = any, O = any,
         return {} as EE;
     }
 
-    buildTask(
-        ...args: any[]
-    ): IActivityTaskFunction<ER, EE> {
-        return () => { };
+    buildTask(...args: any[]): IActivityTaskFunction<ER, EE> {
+        return () => {};
     }
 
     build(...args: any[]) {
         this.status = EnumActivityStatus.BUILDING;
-        const task = this.buildTask(...args) as unknown as IActivityTaskFunction<ER, EE>;
+        const task = this.buildTask(
+            ...args
+        ) as unknown as IActivityTaskFunction<ER, EE>;
         if (task) {
             this.task = task;
         }
     }
 
     private getReplaceVariableParamKeys(mParamObject: IActivityRunParams<ER>) {
-        const extraKeys = extractOwnOtherKeys(mParamObject, ACTIVITY_TASK_BUILTIN_PARAMS_KEYS) as string[];
+        const extraKeys = extractOwnOtherKeys(
+            mParamObject,
+            ACTIVITY_TASK_BUILTIN_PARAMS_KEYS
+        ) as string[];
         return extraKeys.concat(extraKeys);
     }
 
-    public getReplacedOptions(
-        paramObj: IActivityExecuteParams<ER>,
-    ) {
-        return this.baseReplaceVariable(paramObj, this.options)
+    public getReplacedOptions(paramObj: IActivityExecuteParams<ER>) {
+        return this.baseReplaceVariable(paramObj, this.options);
     }
 
-    protected baseReplaceVariable<OT>(paramObj: IActivityExecuteParams<ER>, options: OT) {
+    protected baseReplaceVariable<OT>(
+        paramObj: IActivityExecuteParams<ER>,
+        options: OT
+    ) {
         if (options == undefined) {
             return options as OT;
         }
-        const mParamObject: IActivityExecuteParams<ER, EE> = this.getExecuteParamsObject(paramObj);
+        const mParamObject: IActivityExecuteParams<ER, EE> =
+            this.getExecuteParamsObject(paramObj);
         const extraKeys = this.getReplaceVariableParamKeys(mParamObject);
         return replaceVariable(options, {
             deep: this.isDeepReplace,
             replaceArray: this.isReplaceArray,
-            extraKeys
+            extraKeys,
         }).call(this, mParamObject) as OT;
     }
 

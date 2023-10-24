@@ -30,7 +30,7 @@ export default class DoWhileActivity<C = any, R = any> extends SequenceActivity<
                     } while ((assertR = await this.assert!.run(paramObj)))
                     return resolve(r);
                 } catch (err) {
-                    return reject(err);
+                    return reject(this.createActivityError(err));
                 }
             });
         };

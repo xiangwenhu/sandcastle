@@ -4,7 +4,7 @@ import { BaseActivityType, ExtendParams, GlobalActivityContext, IActivityExecute
 import { EnumActivityStatus } from "../enum";
 import { firstToLower } from "../util";
 import { GlobalBuiltInObject } from "../types/factory";
-import { createTaskExecuteDefaultParams, createTaskRunDefaultParams } from "./util";
+import { createTaskExecuteDefaultParams, createTaskRunDefaultParams, createActivityError } from "./util";
 import { GLOBAL_BUILTIN, GLOBAL_VARIABLES } from "../const"
 
 class ActivityBase<C = any, R = any, O = any,
@@ -31,7 +31,6 @@ class ActivityBase<C = any, R = any, O = any,
     get task() {
         return this.#task
     }
-
     accessor checkStatus: boolean = true;
 
     protected get globalBuiltObject(): GlobalBuiltInObject {

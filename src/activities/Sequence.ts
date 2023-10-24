@@ -27,7 +27,7 @@ export default class SequenceActivity<
                         preRes = await child.run(paramObj);
                     } catch (err: any) {
                         return reject(
-                            new ActivityError(err && err.message, child)
+                            this.createActivityError(err, child)
                         );
                     }
                 }

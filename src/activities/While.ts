@@ -30,7 +30,7 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
                     }
                     return resolve(r);
                 } catch (err) {
-                    return reject(err);
+                    return reject(this.createActivityError(err));
                 }
             });
         };
