@@ -151,4 +151,4 @@ batchRegisterMethods
 - [x] Activity.run 参数属性，例如`$preRes`, `$item`等的多级传递性
 - [x] 改进或者删除AssertSequence
 - [x] 给父节点打名称，通过名称访问
-- [ ] 改进变量替换
+- [x] 改进变量替换

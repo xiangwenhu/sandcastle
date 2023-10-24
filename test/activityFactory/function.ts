@@ -1,6 +1,6 @@
 import { IActivityConfig, IFunctionActivityConfig } from "./../../src/types/activity";
-import createActivity from "../../src/factory/activity";
-
+import createInstance from "../../src/factory/activity";
+const { createActivity } = createInstance()
 const activityProps: IActivityConfig = {
     type: "sequence",
     name: "如果ctx.count小于5,加加",

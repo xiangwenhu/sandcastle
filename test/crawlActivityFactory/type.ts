@@ -1,6 +1,6 @@
 import { IActivityConfig } from "../../src/types/activity";
-import createActivity from "../../src/factory/activity";
-import { HTTPResponse } from "puppeteer";
+import createInstance from "../../src/factory/activity";
+const { createActivity } = createInstance()import { HTTPResponse } from "puppeteer";
 
 const activityProps: IActivityConfig = {
     type: "c.browser",

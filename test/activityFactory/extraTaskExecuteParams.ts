@@ -3,14 +3,15 @@ import {
     IActivityExecuteParams,
     IActivityTaskFunction,
 } from "../../src/types/activity";
-import createActivity from "../../src/factory/activity";
-
 import { isBoolean, isFunction, isString } from "lodash";
 import Activity from "../../src/activities/Activity";
 import { EnumActivityStatus } from "../../src/enum";
 import { createOneParamAsyncFunction } from "../../src/factory/function";
 import { ActivityError } from "../../src/ActivityError";
 import { register } from "../../src/activityFactory";
+
+import createInstance from "../../src/factory/activity";
+const { createActivity } = createInstance();
 
 export interface CodeActivityOptions {
     code: string;
