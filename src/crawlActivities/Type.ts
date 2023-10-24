@@ -1,6 +1,6 @@
-import { KeyboardTypeOptions, Protocol } from "puppeteer";
+import { KeyboardTypeOptions } from "puppeteer";
+import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
-import { IActivityRunParams } from "../types/activity";
 
 export interface TypeActivityOptions {
     selector: string;
@@ -14,8 +14,8 @@ export default class TypeActivity<C = any, R = any> extends PageChildActivity<
     TypeActivityOptions
 > {
     buildTask() {
-        return (this.task = (paramObject: IActivityRunParams) => {
-            const { selector, text, options } = this.options!;
+        return (this.task = (paramObject: IActivityExecuteParams) => {
+            const { selector, text, options } = this.getReplacedOptions(paramObject);
             return this.page!.type(selector, text, options);
         });
     }

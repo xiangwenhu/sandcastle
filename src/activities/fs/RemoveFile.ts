@@ -10,14 +10,13 @@ export interface RemoveFileActivityOptions {
 export default class RemoveFileActivity<C = any> extends Activity<C, string, RemoveFileActivityOptions> {
     buildTask() {
         return async (paramObj: IActivityExecuteParams) => {
-            const rDist = this.replaceVariable(
-                this.options.dist,
+            const { dist } = this.getReplacedOptions(
                 paramObj
-            ) as string;
-            if (!fs.existsSync(rDist)) {
+            );
+            if (!fs.existsSync(dist)) {
                 return false;
             }
-            await fsp.unlink(rDist);
+            await fsp.unlink(dist);
             return true;
         };
     }

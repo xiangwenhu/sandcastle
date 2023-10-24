@@ -13,6 +13,8 @@ export interface IActivityConfig<C = any, O = any, E = any> {
     toVariable?: string;
     options?: O;
     eOptions?: E;
+    deepReplace?: boolean;
+    replaceArray?: boolean;
 }
 
 export interface IfElseActivityConfig<C = any, O = any, E = any>

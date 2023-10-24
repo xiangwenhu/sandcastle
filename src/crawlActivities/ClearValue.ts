@@ -1,7 +1,7 @@
 import { isString } from "lodash";
 import { ActivityError } from "../ActivityError";
 import PageChildActivity from "./PageChildActivity";
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 import { KeyInput, KeyPressOptions } from "puppeteer";
 
 export interface ClearValueActivityOptions {
@@ -14,12 +14,13 @@ export default class ClearValueActivity<
     R = any
 > extends PageChildActivity<C, R, ClearValueActivityOptions> {
     buildTask() {
-        return (this.task = async (paramObj: IActivityRunParams) => {
+        return (this.task = async (paramObj: IActivityExecuteParams) => {
+            const { key, options } = this.getReplacedOptions(paramObj)
             const page = this.page;
-            const el = await page!.$(this.options.key);
+            const el = await page!.$(key);
             if (!el) {
                 throw new ActivityError(
-                    `未找到selector的${this.options}的节点`,
+                    `未找到selector的${key}的节点`,
                     this
                 );
             }
@@ -28,7 +29,7 @@ export default class ClearValueActivity<
             await el?.focus();
             if (isString(inputValue) && inputValue.length > 0) {
                 for (let i = 0; i < inputValue!.length; i++) {
-                    await page!.keyboard.press("Backspace", this.options.options);
+                    await page!.keyboard.press("Backspace", options);
                 }
             }
         });

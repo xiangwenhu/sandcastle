@@ -1,6 +1,6 @@
 import { WaitForOptions } from "puppeteer";
 import PageChildActivity from "./PageChildActivity";
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 
 export type GoBackActivityOptions = WaitForOptions | undefined;
 
@@ -10,8 +10,9 @@ export default class GoBackActivity<C = any, R = any> extends PageChildActivity<
     GoBackActivityOptions
 > {
     buildTask() {
-        return (this.task = (paramObj: IActivityRunParams) => {
-            return this.page!.goBack(this.options);
+        return (this.task = (paramObj: IActivityExecuteParams) => {
+            const options = this.getReplacedOptions(paramObj);
+            return this.page!.goBack(options);
         });
     }
 }

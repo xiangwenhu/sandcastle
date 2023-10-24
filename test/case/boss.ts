@@ -61,15 +61,6 @@ const activityProps: IActivityConfig = {
                                     },
                                     children: [
                                         {
-                                            type: "code",
-                                            name: "输出当前索引值",
-                                            options: {
-                                                code: function (paramObj: any) {
-                                                    console.log("paramObj:", paramObj.$index);
-                                                }
-                                            }
-                                        },
-                                        {
                                             type: "c.page.evaluate",
                                             name: "查询节点集合",
                                             options: {

@@ -1,4 +1,4 @@
-import { IActivityRunParams } from "../../types/activity";
+import { IActivityExecuteParams } from "../../types/activity";
 import PageChildActivity from "../PageChildActivity";
 
 export default class MouseResetActivity<
@@ -7,7 +7,7 @@ export default class MouseResetActivity<
 > extends PageChildActivity<C, R> {
     buildTask(
     ) {
-        return (paramObj: IActivityRunParams) => {
+        return (paramObj: IActivityExecuteParams) => {
             return this.page!.mouse.reset();
         };
     }

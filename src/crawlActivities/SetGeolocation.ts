@@ -1,5 +1,5 @@
 import { GeolocationOptions } from "puppeteer";
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
 
@@ -11,8 +11,9 @@ export default class SetGeolocationActivity<
 > extends PageChildActivity<C, R, SetGeolocationActivityOptions> {
 
     buildTask() {
-        return this.task = (paramObj: IActivityRunParams) => {
-            return this.page!.setGeolocation(this.options)
-        }
+        return (this.task = (paramObj: IActivityExecuteParams) => {
+            const options = this.getReplacedOptions(paramObj);
+            return this.page!.setGeolocation(options)
+        })
     }
 }

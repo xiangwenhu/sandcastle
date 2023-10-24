@@ -1,7 +1,7 @@
 import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
 import { ActivityError } from "../ActivityError";
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 
 export interface ForActivityOptions {
     values: any[];
@@ -20,35 +20,32 @@ export default class ForActivity<C = any, R = any> extends SequenceActivity<
     ForActivityOptions,
     ER
 > {
-    run(
-        paramObj: IActivityRunParams<ER> = {
-            $preRes: undefined,
-            $extra: {},
-        } as any
-    ): Promise<R | undefined> {
-        const that = this as Activity;
-        return new Promise(async (resolve, reject) => {
-            const values = this.replaceVariable(
-                this.options.values,
-                paramObj
-            ) as any[];
-            let preRes;
-            const { itemName = '$item', indexName = '$index' } = this.options;
-            for (let index = 0; index < values.length; index++) {
-                const $item = values[index];
-                const $index = index;
-                try {
-                    preRes = await super.run({
-                        ...paramObj,
-                        [itemName]: $item,
-                        [indexName]: $index,
-                    });
-                } catch (err: any) {
-                    reject(new ActivityError(err && err.message, that));
-                } finally {
+
+    buildTask() {
+        return (paramObj: IActivityExecuteParams<ER>) => {
+            const that = this as Activity<any, any, any, ER>;
+            return new Promise(async (resolve, reject) => {
+                const { values, itemName = '$item', indexName = '$index' } = this.getReplacedOptions(paramObj);
+                let preRes;
+                const superTask = super.buildTask();
+
+                for (let index = 0; index < values.length; index++) {
+                    const $item = values[index];
+                    const $index = index;
+                    try {
+                        preRes = await superTask.call(this, {
+                            ...paramObj,
+                            [itemName]: $item,
+                            [indexName]: $index,
+                        });
+                    } catch (err: any) {
+                        reject(new ActivityError(err && err.message, that));
+                    } finally {
+                    }
                 }
-            }
-            resolve(preRes);
-        });
+                resolve(preRes);
+            });
+        };
     }
+
 }

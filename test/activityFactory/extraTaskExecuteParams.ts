@@ -2,7 +2,7 @@ import {
     IActivityConfig,
     IActivityExecuteParams,
     IActivityTaskFunction,
-} from "./../../src/types/activity";
+} from "../../src/types/activity";
 import createActivity from "../../src/factory/activity";
 
 import { isBoolean, isFunction, isString } from "lodash";

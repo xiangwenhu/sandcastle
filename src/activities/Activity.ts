@@ -1,4 +1,5 @@
 import { TerminateError } from "../ActivityError";
+import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS } from "../const";
 import { EnumActivityStatus } from "../enum";
 import {
     ExtendParams,
@@ -8,6 +9,7 @@ import {
     IActivityRunParams,
     IActivityTaskFunction
 } from "../types/activity";
+import { extractOwnOtherKeys } from "../util";
 import ActivityBase from "./ActivityBase";
 import { replaceVariable } from "./util/variable";
 
@@ -47,6 +49,27 @@ class Activity<C = any, R = any, O = any,
         return !!res;
     }
 
+
+    private getExecuteParamsObject(paramsObject: IActivityRunParams<ER>) {
+        const { globalBuiltObject: gb, globalCtx } = this;
+        let mContext = this.ctx || {};
+
+        const extraExecuteParams = this.getExtraExecuteParams();
+        const argObject: IActivityExecuteParams<ER, EE> = {
+            $gCtx: globalCtx,
+            $ctx: mContext,
+            $c: gb.properties.properties,
+            $m: gb.methods.properties,
+            $v: this.globalVariables,
+            $parent: this.parent,
+            $res: undefined,
+            $a: gb.activities.properties,
+            ...paramsObject,
+            ...extraExecuteParams
+        };
+        return argObject;
+    }
+
     /**
      *
      * @param {执行上下文} ctx
@@ -67,26 +90,10 @@ class Activity<C = any, R = any, O = any,
             this.buildTask();
         }
 
-        let mContext = this.ctx || {};
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
-            const gb = this.globalBuiltObject;
-
-            const extraExecuteParams = this.getExtraExecuteParams();
-            const argObject: IActivityExecuteParams<ER, EE> = {
-                $gCtx: globalCtx,
-                $ctx: mContext,
-                $c: gb.properties.properties,
-                $m: gb.methods.properties,
-                $v: this.globalVariables,
-                $parent: this.parent,
-                $res: undefined,
-                $a: gb.activities.properties,
-                ...paramsObject,
-                ...extraExecuteParams
-            };
-
+            const argObject: IActivityExecuteParams<ER, EE> = this.getExecuteParamsObject(paramsObject);
             const needRun = await this.runAssert(argObject);
             if (!needRun) {
                 return paramsObject.$preRes;
@@ -132,32 +139,28 @@ class Activity<C = any, R = any, O = any,
         }
     }
 
-    protected replaceVariable<C = any>(
-        config: C,
-        paramObj: IActivityRunParams<ER>
+    private getReplaceVariableParamKeys(mParamObject: IActivityRunParams<ER>) {
+        const extraKeys = extractOwnOtherKeys(mParamObject, ACTIVITY_TASK_BUILTIN_PARAMS_KEYS) as string[];
+        return extraKeys.concat(extraKeys);
+    }
+
+    public getReplacedOptions(
+        paramObj: IActivityExecuteParams<ER>,
     ) {
-        if (config == undefined || Array.isArray(config)) {
-            return config as C;
+        return this.baseReplaceVariable(paramObj, this.options)
+    }
+
+    protected baseReplaceVariable<OT>(paramObj: IActivityExecuteParams<ER>, options: OT) {
+        if (options == undefined) {
+            return options as OT;
         }
-        const gb = this.globalBuiltObject;
-        let mContext = this.ctx || {};
-
-        const extraExecuteParams = this.getExtraExecuteParams();
-
-        const paramObject: IActivityExecuteParams<ER, EE> = {
-            $gCtx: this.globalCtx,
-            $ctx: mContext,
-            $c: gb.properties.properties,
-            $m: gb.methods.properties,
-            $v: this.globalVariables,
-            $parent: this.parent,
-            $res: undefined,
-            $a: gb.activities.properties,
-            ...paramObj,
-            ...extraExecuteParams
-        };
-
-        return replaceVariable(config).call(this, paramObject) as C;
+        const mParamObject: IActivityExecuteParams<ER, EE> = this.getExecuteParamsObject(paramObj);
+        const extraKeys = this.getReplaceVariableParamKeys(mParamObject);
+        return replaceVariable(options, {
+            deep: this.isDeepReplace,
+            replaceArray: this.isReplaceArray,
+            extraKeys
+        }).call(this, mParamObject) as OT;
     }
 
     protected getProperty<P = any>(

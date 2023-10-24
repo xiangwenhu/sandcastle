@@ -80,6 +80,15 @@ class ActivityBase<C = any, R = any, O = any,
 
     public id: string;
 
+    /**
+     * 深度替换变量，默认替换一级
+     */
+    public accessor isDeepReplace: boolean = false;
+    /**
+     * 数组变量替换
+     */
+    public accessor isReplaceArray: boolean = false;
+
     constructor(ctx: C, public options: O) {
         this.#ctx = ctx || {};
         this.parent = undefined;

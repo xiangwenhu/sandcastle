@@ -28,7 +28,7 @@ export default class CodeActivity<C = any, R = any> extends Activity<
         }
 
         return (paramObject: IActivityExecuteParams) => {
-            const extraKeys = extractOwnOtherKeys(paramObject, ACTIVITY_TASK_BUILTIN_PARAMS_KEYS)
+            const extraKeys = extractOwnOtherKeys(paramObject, ACTIVITY_TASK_BUILTIN_PARAMS_KEYS);
             return this.buildWithCode(`${code}`, extraKeys as string[]).call(null, paramObject);
         }
     }

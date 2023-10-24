@@ -1,7 +1,7 @@
 import { Browser, PuppeteerLaunchOptions, launch } from "puppeteer";
 import Activity from "../activities/Activity";
 import SequenceActivity from "../activities/Sequence";
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 
 export default class BrowserActivity<
     C = any,
@@ -14,16 +14,20 @@ export default class BrowserActivity<
         return this.#browser;
     }
 
-    async run(paramObj: IActivityRunParams = this.defaultTaskRunParam): Promise<any> {
-        try {
-            this.#browser = await launch(this.options);
-            const res = await super.run(paramObj);
-            return res;
-        } catch (err) {
+    buildTask() {
+        return this.task = async (paramObj: IActivityExecuteParams) => {
+            try {
+                const options = this.getReplacedOptions(paramObj);
+                this.#browser = await launch(options);
+                const superTask = super.buildTask();
+                const res = await superTask.call(this, paramObj);
+                return res;
+            } catch (err) {
 
-        } finally {
-            if (!!this.#browser) {
-                await this.#browser.close();
+            } finally {
+                if (!!this.#browser) {
+                    await this.#browser.close();
+                }
             }
         }
     }

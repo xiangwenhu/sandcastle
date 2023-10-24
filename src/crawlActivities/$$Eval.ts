@@ -1,5 +1,5 @@
 import PageChildActivity from "./PageChildActivity";
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 import { EvaluateFuncWith } from "puppeteer";
 
 export interface $$EvalActivityOptions {
@@ -14,8 +14,8 @@ export default class $$EvalActivity<C = any, R = any> extends PageChildActivity<
     $$EvalActivityOptions
 > {
     buildTask() {
-        return (this.task = (paramObj: IActivityRunParams) => {
-            const { selector, pageFunction, args } = this.options;
+        return (this.task = (paramObj: IActivityExecuteParams) => {
+            const { selector, pageFunction, args } = this.getReplacedOptions(paramObj);
             return this.page!.$$eval(selector, pageFunction, ...args);
         });
     }

@@ -1,6 +1,6 @@
 import { WaitForSelectorOptions } from "puppeteer";
 import PageChildActivity from "./PageChildActivity";
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams } from "../types/activity";
 
 export interface WaitForSelectorActivityOptions {
     selector: string,
@@ -12,8 +12,8 @@ export default class WaitForSelectorActivity<
     R = any
 > extends PageChildActivity<C, R, WaitForSelectorActivityOptions> {
     buildTask() {
-        return this.task = (paramObject: IActivityRunParams) => {
-            const { selector, options } = this.options;
+        return this.task = (paramObject: IActivityExecuteParams) => {
+            const { selector, options } = this.getReplacedOptions(paramObject);
             return this.page!.waitForSelector(selector, options)
         }
     }

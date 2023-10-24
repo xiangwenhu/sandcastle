@@ -1,6 +1,6 @@
 import { MouseMoveOptions } from "puppeteer";
+import { IActivityExecuteParams } from "../../types/activity";
 import PageChildActivity from "../PageChildActivity";
-import { IActivityRunParams } from "../../types/activity";
 
 export interface MouseMoveActivityOptions {
     x: number;
@@ -13,8 +13,8 @@ export default class MouseMoveActivity<
     R = any
 > extends PageChildActivity<C, R> {
     buildTask() {
-        return (paramObj: IActivityRunParams) => {
-            const { x, y, options } = this.options;
+        return (paramObj: IActivityExecuteParams) => {
+            const { x, y, options } = this.getReplacedOptions(paramObj);
             return this.page!.mouse.move(x, y, options);
         };
     }

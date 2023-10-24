@@ -24,16 +24,14 @@ export default class WriteFileActivity<C = any> extends Activity<
 > {
     buildTask() {
         return async (paramObj: IActivityExecuteParams) => {
-            const { dist, content, options } = this.options;
-            const rDist = this.replaceVariable(dist, paramObj) as string;
-            const rContent = this.replaceVariable(content, paramObj) as any;
-            const data = isPlainObject(rContent)
-                ? JSON.stringify(rContent, undefined, "\t")
-                : rContent;
+            const { dist, content, options } = this.getReplacedOptions(paramObj)
+            const data = isPlainObject(content)
+                ? JSON.stringify(content, undefined, "\t")
+                : content;
 
-            await ensureDir(rDist);
+            await ensureDir(dist);
 
-            return fsp.writeFile(rDist, data, options);
+            return fsp.writeFile(dist, data, options);
         };
     }
 }

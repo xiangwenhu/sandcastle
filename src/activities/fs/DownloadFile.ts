@@ -20,10 +20,8 @@ export default class DownloadFileActivity<C = any> extends Activity<
 > {
     buildTask() {
         return (paramObj: IActivityExecuteParams) => {
-            const { url, options, dist } = this.options;
-            const rUrl = this.replaceVariable(url, paramObj) as string;
-            const rDist = this.replaceVariable(dist, paramObj) as string;
-            return downloadFileWithRetry(rUrl, rDist, options);
+            const { url, options, dist } =  this.getReplacedOptions(paramObj);
+            return downloadFileWithRetry(url, dist, options);
         };
     }
 }

@@ -7,28 +7,28 @@ export interface ReadFileActivityOptions {
     dist: string;
     type: "text" | "json"
     options?:
-        | (ObjectEncodingOptions & {
-              flag?: OpenMode | undefined;
-          })
-        | BufferEncoding
-        | null;
+    | (ObjectEncodingOptions & {
+        flag?: OpenMode | undefined;
+    })
+    | BufferEncoding
+    | null;
 }
 
 export default class ReadFileActivity<C = any> extends Activity<C, string, ReadFileActivityOptions> {
     buildTask() {
         return async (paramObj: IActivityExecuteParams) => {
-            const rDist = this.replaceVariable(this.options.dist, paramObj) as string;
+            const { dist, options } = this.getReplacedOptions(paramObj);
 
             const res = await fsp.readFile(
-                rDist,
-                this.options.options || {
+                dist,
+                options || {
                     encoding: "utf-8",
                 }
             );
             switch (this.options.type) {
                 case "json":
                     // @ts-ignore
-                    return JSON.parse(res as string); 
+                    return JSON.parse(res as string);
                 default:
                     return res;
             }

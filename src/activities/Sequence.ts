@@ -1,8 +1,7 @@
-import ContainerActivity from "./ContainerActivity";
-import Activity from "./Activity";
 import { ActivityError } from "../ActivityError";
+import { ExtendParams, IActivityExecuteParams } from "../types/activity";
 import BreakActivity from "./Break";
-import { ExtendParams, IActivityRunParams } from "../types/activity";
+import ContainerActivity from "./ContainerActivity";
 
 export default class SequenceActivity<
     C = any,
@@ -12,7 +11,7 @@ export default class SequenceActivity<
     EE extends ExtendParams = {}
 > extends ContainerActivity<C, R, O, ER, EE> {
     buildTask() {
-        return (paramObj: IActivityRunParams) =>
+        return (paramObj: IActivityExecuteParams<ER>) =>
             new Promise(async (resolve, reject) => {
                 let preRes: any;
                 for (let i = 0; i < this.children.length; i++) {
@@ -20,7 +19,9 @@ export default class SequenceActivity<
                     try {
                         // 终止
                         if (child.type === "break") {
-                            return resolve((child as BreakActivity).options.message);
+                            const c = child as BreakActivity;
+                            const { message } = c.getReplacedOptions(paramObj);
+                            return resolve(message);
                         }
                         paramObj.$preRes = preRes;
                         preRes = await child.run(paramObj);

@@ -1,4 +1,4 @@
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
 
@@ -12,10 +12,11 @@ export default class EvaluateClickActivity<
 > extends PageChildActivity<C, R, EvaluateClickActivityOptions> {
 
     buildTask() {
-        return this.task = (paramObj: IActivityRunParams) => {
+        return this.task = (paramObj: IActivityExecuteParams) => {
+            const { selector } = this.getReplacedOptions(paramObj);
             return this.page!.evaluate((selector) => {
                 return (document.querySelector(selector) as HTMLElement)?.click()
-            }, this.options.selector)
+            }, selector)
         }
     }
 }

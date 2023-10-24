@@ -1,4 +1,4 @@
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
 export type HoverActivityOptions = {
@@ -6,13 +6,14 @@ export type HoverActivityOptions = {
 };
 
 export default class HoverActivity<
-C = any,
-R = any
+    C = any,
+    R = any
 > extends PageChildActivity<C, R, HoverActivityOptions> {
 
     buildTask() {
-        return this.task = (paramObject: IActivityRunParams)=> {
-            return this.page!.hover(this.options.selector)
-        }
+        return (this.task = (paramObj: IActivityExecuteParams) => {
+            const options = this.getReplacedOptions(paramObj);
+            return this.page!.hover(options.selector)
+        })
     }
 }

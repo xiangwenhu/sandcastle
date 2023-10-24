@@ -10,8 +10,8 @@ export default class SetViewportActivity<
 > extends PageChildActivity<C, R, SetViewportActivityOptions> {
 
     buildTask() {
-        return this.task = (paramObj: IActivityRunParams) => {
+        return (this.task = (paramObj: IActivityRunParams) => {
             return this.page!.setViewport(this.options)
-        }
+        })
     }
 }

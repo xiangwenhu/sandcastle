@@ -24,8 +24,8 @@
 | Terminate      | terminate      | ❌              | ✅    | 终止整个流程                               |
 | TryCatch       | tryCatch       | ✅              | ✅    | try catch                                  |
 | For            | for            | ✅              | ✅    | for                                        |
-| ParallelFor    | parallelFor    | ✅              | ✅    | parallel For                               |
-
+| ParallelFor    | parallelFor    | ✅              | ✅    | parallel For  |
+| Function       | function       | ✅              | ✅    | 执行某个函数  |
 
 **fs**
 | 类名         | 注册类型        | 是否有children | 状态 | 说明               |
@@ -125,9 +125,8 @@ TODO::
     * 动态创建的函数，传入this, 使用with语句
     * 额外参数，展开所有属性
      改良版本，`$c`注册的变量，`$m` 注册的方法
-- [ ] 集合?变量?的操作和管理
+- [x] 集合?变量?的操作和管理
     * 比如for循环
-    * 比如page的children操作
 - [x] 注册函数和变量
 ```typescript  
 // 使用 默认属性为 $c, 方法为 $m

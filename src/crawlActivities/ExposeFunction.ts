@@ -1,4 +1,4 @@
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
 export interface ExposeFunctionActivityOptions {
@@ -15,10 +15,9 @@ export default class ExposeFunctionActivity<
     R = any
 > extends PageChildActivity<C, R, ExposeFunctionActivityOptions> {
     buildTask() {
-        return (this.task = (paramObj: IActivityRunParams) => {
-            const { name, function: pptrFunction } = this.options;
-            const rName = this.replaceVariable(name, paramObj);
-            return this.page!.exposeFunction(rName, pptrFunction);
+        return (this.task = (paramObj: IActivityExecuteParams) => {
+            const { name, function: pptrFunction } = this.getReplacedOptions(paramObj);
+            return this.page!.exposeFunction(name, pptrFunction);
         });
     }
 }

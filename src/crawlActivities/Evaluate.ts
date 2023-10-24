@@ -1,7 +1,7 @@
 import { isFunction } from "lodash";
-import { IActivityRunParams } from "../types/activity";
-import PageChildActivity from "./PageChildActivity";
+import { IActivityExecuteParams } from "../types/activity";
 import { getFunctionBody } from "../util/function";
+import PageChildActivity from "./PageChildActivity";
 
 export interface EvaluateActivityOptions {
     code: string | Function; args: any[]
@@ -13,13 +13,11 @@ export default class EvaluateActivity<
 > extends PageChildActivity<C, R, EvaluateActivityOptions> {
 
     buildTask() {
-        return (this.task = async (paramObj: IActivityRunParams) => {
-            const { code, args = [] } = this.options;
+        return (this.task = async (paramObj: IActivityExecuteParams) => {
+            const { code, args = [] } = this.getReplacedOptions(paramObj);
             // 替换code变量
-            let rCode = isFunction(code) ? getFunctionBody(code) :  this.replaceVariable(code, paramObj) as string;
-            const rArgs = args.map((arg: any) =>
-                this.replaceVariable(arg, paramObj)
-            );
+            let rCode = isFunction(code) ? getFunctionBody(code) : `${code}`;
+
             const res = await this.page!.evaluate(
                 (_code, ..._args) => {
                     const f = new Function(_code);
@@ -28,7 +26,7 @@ export default class EvaluateActivity<
                     return results;
                 },
                 rCode,
-                ...rArgs
+                ...args
             );
             return res;
         });

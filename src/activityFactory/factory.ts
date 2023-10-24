@@ -52,6 +52,16 @@ const BUILTIN_PROPERTIES: PropertyConfigItem[] = [
         name: "eOptions",
         default: {},
     },
+    {
+        name: "deepReplace",
+        toName: "isDeepReplace",
+        default: false,
+    },
+    {
+        name: "replaceArray",
+        toName: "isReplaceArray",
+        default: false,
+    },
 ];
 
 function getPropertyValue(
