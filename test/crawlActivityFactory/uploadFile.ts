@@ -17,27 +17,30 @@ const activityProps: IActivityConfig = {
                 {
                     type: "c.page.goto",
                     name: "跳转",
-                    url: "http://127.0.0.1:5501/uploadVideos/index.html",
                     options: {
-                        "waitUntil": "load"
+                        url: "http://127.0.0.1:5501/uploadVideos/index.html",
+                        options: {
+                            "waitUntil": "load"
+                        }
                     }
                 }, {
                     type: "c.page.waitForSelector",
                     name: "等待节点",
-                    selector: "#file",
+                    options: { selector: "#file" },
                 }, {
                     type: "c.page.uploadFile",
-                    selector: `#file`,
-                    paths: ["D:\\data\\tmp2\\1.mp4"],
-                    name: "输入",
-                    text: "高源",
                     options: {
-                        delay: 1 * 1000
+                        selector: `#file`, paths: ["D:\\data\\tmp2\\1.mp4"],
+                        text: "高源",
+                        options: {
+                            delay: 1 * 1000
+                        },
                     },
+                    name: "输入",
                 },
                 {
                     type: "delay",
-                    timeout: 10 * 1000,
+                    options: { timeout: 10 * 1000 },
                     name: "等待10s"
                 },
             ]
