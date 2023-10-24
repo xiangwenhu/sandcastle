@@ -22,9 +22,14 @@ export interface IfElseActivityConfig<C = any, O = any, E = any>
     else?: IActivityConfig;
 }
 
-export interface ITryCatchActivityConfig<C = any, O = any, E = any>
+export interface IFunctionActivityConfig<C = any, O = any, E = any>
     extends IActivityConfig {
     catch: IActivityConfig;
+}
+
+export interface IFunctionActivityConfig<C = any, O = any, E = any>
+    extends IActivityConfig {
+    task: IActivityTaskFunction;
 }
 
 export interface ActivityFactory<

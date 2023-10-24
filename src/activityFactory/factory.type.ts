@@ -15,6 +15,8 @@ interface PropertyConfig<T = any> {
     toName?: PropertyKey;
     default?: any | (() => any);
     init?: (v: T) => T;
+    //TODO:: 之后用于值类型检查
+    type?: Number | String | undefined | null | Symbol | Object | Function
 }
 
 export type PropertyConfigItem = PropertyConfig | string;

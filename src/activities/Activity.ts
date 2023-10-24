@@ -1,26 +1,15 @@
-import { isBoolean, isString } from "lodash";
-import { ActivityError, TerminateError } from "../ActivityError";
+import { TerminateError } from "../ActivityError";
 import { EnumActivityStatus } from "../enum";
-import { createOneParamAsyncFunction } from "../factory/function";
 import {
-    BaseActivityType,
+    ExtendParams,
     GK_TERMINATED,
     GK_TERMINATED_MESSAGE,
-    GlobalActivityContext,
-    IActivityRunParams,
     IActivityExecuteParams,
-    IActivityTaskFunction,
-    ExtendParams,
+    IActivityRunParams,
+    IActivityTaskFunction
 } from "../types/activity";
-import { firstToLower } from "../util";
+import ActivityBase from "./ActivityBase";
 import { replaceVariable } from "./util/variable";
-import { GLOBAL_BUILTIN, GLOBAL_VARIABLES } from "../const";
-import { GlobalBuiltInObject } from "../types/factory";
-import {
-    createTaskExecuteDefaultParams,
-    createTaskRunDefaultParams,
-} from "./util";
-import _ from "lodash";
 
 /**
  * C context
@@ -28,95 +17,29 @@ import _ from "lodash";
  * O options
  * E taskOptions 的宽展
  */
-class Activity<C = any, R = any, O = any, 
-ER extends ExtendParams = {},
-EE extends ExtendParams = {}
-> {
-    pre: Activity | undefined = undefined;
-    next: Activity | undefined = undefined;
-    before: Activity | undefined = undefined;
-    after: Activity | undefined = undefined;
-
-    accessor parent: Activity | undefined;
-    public name: string | undefined;
-    public type: BaseActivityType;
-    public status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
-
-    public globalCtx: GlobalActivityContext = {};
-    public task: IActivityTaskFunction<ER, EE> | undefined;
-
-    accessor checkStatus: boolean = true;
-
-    protected get globalBuiltObject(): GlobalBuiltInObject {
-        // @ts-ignore
-        return this.globalCtx[GLOBAL_BUILTIN];
-    }
-
-    protected get defaultTaskRunParam(): IActivityRunParams<ER> {
-        return createTaskRunDefaultParams() as IActivityRunParams<ER>;
-    }
-
-    protected get defaultTaskExecuteParam(): IActivityExecuteParams<ER, EE> {
-        return createTaskExecuteDefaultParams() as IActivityExecuteParams<ER, EE>;
-    }
-
-    protected get globalVariables(): Record<string, any> {
-        // @ts-ignore
-        return this.globalCtx[GLOBAL_VARIABLES];
-    }
-
-    public accessor useParentCtx: boolean = false;
-
-    #ctx: any = {};
-    get ctx() {
-        if (this.useParentCtx) {
-            return this.parent?.ctx;
-        }
-        return this.#ctx;
-    }
-    set ctx(ctx: any) {
-        this.#ctx = ctx;
-    }
-
-    #assert: Activity | undefined = undefined;
-
-    get assert(): Activity | undefined {
-        return this.#assert;
-    }
-
-    set assert(value: Activity | undefined) {
-        this.#assert = value;
-        if (value) {
-            value.parent = this as unknown as Activity;
-        }
-    }
-
+class Activity<C = any, R = any, O = any,
+    ER extends ExtendParams = {},
+    EE extends ExtendParams = {}
+> extends ActivityBase<C, R, O, ER, EE> {
     constructor(ctx: C, public options: O) {
-        this.#ctx = ctx || {};
-        this.parent = undefined;
-        this.name = undefined;
-        // @ts-ignore
-        this.type =
-            firstToLower(this.constructor.name.replace("Activity", "")) ||
-            "activity";
-        this.task = undefined;
+        super(ctx, options);
     }
 
-    protected runBefore(paramObject: IActivityExecuteParams<ER,EE>): unknown {
+    protected runBefore(paramObject: IActivityExecuteParams<ER, EE>): unknown {
         if (!this.before || !(this.before instanceof Activity)) {
             return;
         }
         return this.before.run(paramObject);
     }
 
-    protected runAfter(paramObject: IActivityExecuteParams<ER,EE>): unknown {
+    protected runAfter(paramObject: IActivityExecuteParams<ER, EE>): unknown {
         if (!this.after || !(this.after instanceof Activity)) {
             return;
         }
         return this.after.run(paramObject);
     }
 
-    protected async runAssert(paramObject: IActivityExecuteParams<ER,EE>) {
+    protected async runAssert(paramObject: IActivityExecuteParams<ER, EE>) {
         if (!this.assert || !(this.assert instanceof Activity)) {
             return true;
         }
@@ -140,13 +63,8 @@ EE extends ExtendParams = {}
             return;
         }
 
-        // TODO::
-        // if (this.checkStatus && this.status >= EnumActivityStatus.EXECUTING) {
-        //     throw new ActivityError("活动已经执行", this);
-        // }
-
         if (this.status < EnumActivityStatus.BUILDED) {
-            this.buildTask(this.options);
+            this.buildTask();
         }
 
         let mContext = this.ctx || {};
@@ -156,7 +74,7 @@ EE extends ExtendParams = {}
             const gb = this.globalBuiltObject;
 
             const extraExecuteParams = this.getExtraExecuteParams();
-            const argObject: IActivityExecuteParams<ER,EE> = {
+            const argObject: IActivityExecuteParams<ER, EE> = {
                 $gCtx: globalCtx,
                 $ctx: mContext,
                 $c: gb.properties.properties,
@@ -187,7 +105,7 @@ EE extends ExtendParams = {}
                 globalCtx[GK_TERMINATED] = true;
                 globalCtx[GK_TERMINATED_MESSAGE] = res as string;
                 // 执行后
-                throw new TerminateError(res as string, this as any as Activity);
+                throw new TerminateError(res as string, self as any as Activity);
             }
             return res === undefined ? afterRes : res;
         } catch (err) {
@@ -203,13 +121,15 @@ EE extends ExtendParams = {}
     buildTask(
         ...args: any[]
     ): IActivityTaskFunction<ER, EE> {
-        return () => {};
+        return () => { };
     }
 
     build(...args: any[]) {
         this.status = EnumActivityStatus.BUILDING;
-        this.task = this.buildTask(...args) as unknown as IActivityTaskFunction<ER, EE>;
-        this.status = EnumActivityStatus.BUILDED;
+        const task = this.buildTask(...args) as unknown as IActivityTaskFunction<ER, EE>;
+        if (task) {
+            this.task = task;
+        }
     }
 
     protected replaceVariable<C = any>(
@@ -224,7 +144,7 @@ EE extends ExtendParams = {}
 
         const extraExecuteParams = this.getExtraExecuteParams();
 
-        const paramObject: IActivityExecuteParams<ER,EE> = {
+        const paramObject: IActivityExecuteParams<ER, EE> = {
             $gCtx: this.globalCtx,
             $ctx: mContext,
             $c: gb.properties.properties,

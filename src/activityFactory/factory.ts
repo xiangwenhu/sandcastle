@@ -1,4 +1,4 @@
-import _, { isFunction, isString } from "lodash";
+import { get, has, isFunction, isString } from "lodash";
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 import { GLOBAL_BUILTIN } from "../const";
@@ -66,13 +66,13 @@ function getPropertyValue(
         : pConfig;
 
     // 不存值，使用默认值
-    if (!_.has(actConfig, ppConfig.name)) {
+    if (!has(actConfig, ppConfig.name)) {
         return isFunction(ppConfig.default)
             ? ppConfig.default()
             : ppConfig.default;
     } else {
         // 值转换
-        const val = _.get(actConfig, ppConfig.name);
+        const val = get(actConfig, ppConfig.name);
         return isFunction(ppConfig.init) ? ppConfig.init(val) : val;
     }
 }
@@ -132,6 +132,26 @@ function getProperties(
     );
 }
 
+function createMaybeCodeActivity({
+    actConfig,
+    name,
+    globalContext,
+    addReturn
+}: { addReturn?: boolean; actConfig: string | IActivityConfig<any, any, any>, name: string, globalContext: any }) {
+    return isString(actConfig)
+        ? createSingle(
+            {
+                type: "code",
+                options: { code: addReturn ? `return ${actConfig}` : actConfig },
+                name: `${name}`,
+                useParentCtx: true
+            },
+            globalContext
+        )
+        : createSingle(actConfig, globalContext);
+}
+
+
 function createSingle<A extends Activity>(
     actConfig: IActivityConfig,
     globalContext: any = {}
@@ -153,7 +173,7 @@ function createSingle<A extends Activity>(
     const { before, after, assert } = actConfig;
     const { before: beforeHandler, after: afterHandler, init } = factoryConfig;
 
-    if (_.isFunction(init)) {
+    if (isFunction(init)) {
         init.call(null, paramsObject);
     }
     const { _class_: ClassConstructor } = factoryConfig;
@@ -173,56 +193,35 @@ function createSingle<A extends Activity>(
             globalContext
         );
     }
-    if (before) {
-        activity.before = isString(before)
-            ? createSingle(
-                {
-                    type: "code",
-                    options: { code: before },
-                    name: `${actConfig.name} before`,
-                },
-                globalContext
-            )
-            : createSingle(before, globalContext);
-    }
-    // 创建after
-    if (after) {
-        activity.after = isString(after)
-            ? createSingle(
-                {
-                    type: "code",
-                    options: { code: after },
-                    name: `${actConfig.name} after`,
-                },
-                globalContext
-            )
-            : createSingle(after, globalContext);
-    }
-    // assert
-    if (assert) {
-        activity.assert = (
-            isString(actConfig.assert)
-                ? (createSingle(
-                    {
-                        type: "code",
-                        options: {code:  `return ${actConfig.assert}` },
-                        name: `${actConfig.name} after`,
-                        useParentCtx: true,
-                    },
-                    globalContext
-                ) as Activity)
-                : createSingle(assert as IActivityConfig, globalContext)
-        ) as Activity;
-    }
+    // 创建before
+    before && (activity.before = createMaybeCodeActivity({
+        actConfig: before,
+        globalContext,
+        name: `${actConfig.name} before`
+    }));
 
-    if (_.isFunction(beforeHandler)) {
+    // 创建after
+    after && (activity.after = createMaybeCodeActivity({
+        actConfig: after,
+        globalContext,
+        name: `${actConfig.name} after`
+    }));
+    // assert
+    assert && (activity.assert = createMaybeCodeActivity({
+        actConfig: assert,
+        globalContext,
+        name: `${actConfig.name} assert`,
+        addReturn: true
+    }));
+
+    if (isFunction(beforeHandler)) {
         beforeHandler.call(null, paramsObject);
     }
 
     const buildParams = getBuildParams(factoryConfig, actConfig);
     activity.build(...buildParams);
 
-    if (_.isFunction(afterHandler)) {
+    if (isFunction(afterHandler)) {
         afterHandler.call(null, paramsObject);
     }
 

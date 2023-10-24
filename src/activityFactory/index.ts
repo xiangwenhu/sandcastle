@@ -1,6 +1,8 @@
 import { register as _register, create, createChildren } from "./factory";
-import Activity from "../activities/Activity";
+import { ActivityConstructor, IFactoryP$HConfigValue } from "./factory.type";
+import { IfElseActivityConfig, IFunctionActivityConfig } from "../types/activity";
 
+import Activity from "../activities/Activity";
 import CodeActivity from "../activities/Code";
 import DelayActivity from "../activities/Delay";
 import SequenceActivity from "../activities/Sequence";
@@ -21,9 +23,10 @@ import DownloadFileActivity from "../activities/fs/DownloadFile";
 import RemoveFileActivity from "../activities/fs/RemoveFile";
 import CreateVariableActivity from "../activities/variable/CreateVariable";
 import DeleteVariableActivity from "../activities/variable/DeleteVariable";
-import { isString } from "lodash";
-import { ActivityConstructor, IFactoryP$HConfigValue } from "./factory.type";
-import { IfElseActivityConfig, ITryCatchActivityConfig } from "../types/activity";
+import FunctionActivity from "../activities/Function";
+import { EnumActivityStatus } from "../enum";
+import { isFunction } from "lodash";
+
 
 const factory = {
     create,
@@ -60,9 +63,9 @@ register("ifElse", IFElseActivity, {
 register("request", RequestActivity);
 register("break", BreakActivity,);
 register("terminate", TerminateActivity);
-register("tryCatch", TryCatchActivity,{
+register("tryCatch", TryCatchActivity, {
     before({ factory, globalContext, config, activity }) {
-        const ifConfig = config as ITryCatchActivityConfig;
+        const ifConfig = config as IFunctionActivityConfig;
         const act = (activity! as any);
         act.catch = factory.create(ifConfig.catch, globalContext) as SequenceActivity;
     }
@@ -79,6 +82,15 @@ register("fs.removeFile", RemoveFileActivity);
 // variable
 register("v.create", CreateVariableActivity);
 register("v.delete", DeleteVariableActivity);
+
+register("function", FunctionActivity, {
+    after({ activity, config }) {
+        const c = config as IFunctionActivityConfig;
+        if (isFunction(c.task)) {
+            activity!.task = c.task;
+        }
+    }
+})
 
 
 export default factory;

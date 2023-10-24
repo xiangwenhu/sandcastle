@@ -9,7 +9,7 @@ import {
 import Activity from "./Activity";
 
 export interface CodeActivityOptions {
-    code: string;
+    code: string | Function;
 }
 
 export default class CodeActivity<C = any, R = any> extends Activity<
@@ -23,7 +23,7 @@ export default class CodeActivity<C = any, R = any> extends Activity<
             return (paramObject: IActivityExecuteParams) =>
                 code.call(null, paramObject);
         }
-        return this.buildWithCode(code);
+        return this.buildWithCode(`${code}`);
     }
 
     /**
