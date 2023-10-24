@@ -139,7 +139,7 @@ batchRegisterMethods
 ```
 - [ ] 注册的函数和变量 只读
 - [ ] 类型推导，已知type，推导具体的 IActivityConfig
-- [ ] ctx指向问题
+- [x] ctx指向问题, useParentCtx即可使用父节点的ctx替换自身的ctx
   - [x] For
   - [x] IFElse
   - [x] Parallel
@@ -149,7 +149,7 @@ batchRegisterMethods
   - [x] While
   - [x] All
   - [x] doWhile
-- [ ] 验证$preRes, $item的多级传递性
-- [ ] 改进或者删除AssertSequence
-- [ ] 给父节点打名称，通过名称访问
+- [x] Activity.run 参数属性，例如`$preRes`, `$item`等的多级传递性
+- [x] 改进或者删除AssertSequence
+- [x] 给父节点打名称，通过名称访问
 - [ ] 改进变量替换

@@ -5,6 +5,8 @@ import { IActivityRunParams } from "../types/activity";
 
 export interface ForActivityOptions {
     values: any[];
+    itemName: string;
+    indexName: string;
 }
 
 interface ER {
@@ -31,14 +33,15 @@ export default class ForActivity<C = any, R = any> extends SequenceActivity<
                 paramObj
             ) as any[];
             let preRes;
+            const { itemName = '$item', indexName = '$index' } = this.options;
             for (let index = 0; index < values.length; index++) {
                 const $item = values[index];
                 const $index = index;
                 try {
                     preRes = await super.run({
                         ...paramObj,
-                        $item,
-                        $index,
+                        [itemName]: $item,
+                        [indexName]: $index,
                     });
                 } catch (err: any) {
                     reject(new ActivityError(err && err.message, that));

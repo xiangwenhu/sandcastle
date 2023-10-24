@@ -78,8 +78,8 @@ export interface GlobalActivityContext {
 export type ExtendParams = Record<string, any>;
 
 export type IActivityRunParams<E extends ExtendParams = {}> = {
-    $preRes: any;
-    $extra: Record<PropertyKey, any>;
+    $preRes?: any;
+    $extra?: Record<PropertyKey, any>;
 } & E;
 
 export type IActivityExecuteParams<

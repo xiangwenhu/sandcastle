@@ -7,6 +7,9 @@ import {
     IActivityTaskFunction,
 } from "../types/activity";
 import Activity from "./Activity";
+import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS } from "../const";
+import _ from "lodash";
+import { extractOwnOtherKeys } from "../util";
 
 export interface CodeActivityOptions {
     code: string | Function;
@@ -23,7 +26,11 @@ export default class CodeActivity<C = any, R = any> extends Activity<
             return (paramObject: IActivityExecuteParams) =>
                 code.call(null, paramObject);
         }
-        return this.buildWithCode(`${code}`);
+
+        return (paramObject: IActivityExecuteParams) => {
+            const extraKeys = extractOwnOtherKeys(paramObject, ACTIVITY_TASK_BUILTIN_PARAMS_KEYS)
+            return this.buildWithCode(`${code}`, extraKeys as string[]).call(null, paramObject);
+        }
     }
 
     /**
@@ -31,7 +38,8 @@ export default class CodeActivity<C = any, R = any> extends Activity<
      * @param {代码} code
      */
     buildWithCode(
-        code: string
+        code: string,
+        extraParams: string[] = []
     ): IActivityTaskFunction {
         if (!isString(code) && !isBoolean(code)) {
             throw new ActivityError(
@@ -41,23 +49,11 @@ export default class CodeActivity<C = any, R = any> extends Activity<
         }
         this.status = EnumActivityStatus.BUILDING;
         const g = this.globalBuiltObject;
-        const $c = g.properties.placeholder || "$c";
-        const $m = g.methods.placeholder || "$m";
 
-        this.task = createOneParamAsyncFunction(code, [
-            "$gCtx", // 全局上下文
-            "$ctx", // 上下文
-            $c, // 内置变量
-            $m, // 内置方法
-            "$v",
-            "$parent", // 父节点
-            "$preRes", // 上一个活动的返回值
-            "$res", // 本活动执行完毕的返回值
-            "$extra", // 额外的参数
-            "$item",
-            "$index",
-            "$a",
-        ]) as IActivityTaskFunction;
+
+        const paramKeys = ACTIVITY_TASK_BUILTIN_PARAMS_KEYS.concat(extraParams);
+
+        this.task = createOneParamAsyncFunction(code, paramKeys) as IActivityTaskFunction;
         this.status = EnumActivityStatus.BUILDED;
         return this.task;
     }
