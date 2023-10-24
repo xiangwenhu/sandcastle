@@ -2,7 +2,7 @@ import { GlobalBuiltInObject } from "../types/factory";
 import _ from "lodash";
 
 export default class GlobalBuiltInObjectClass {
-    protected builtInObject: GlobalBuiltInObject = {
+    #builtInObject: GlobalBuiltInObject = {
         properties: {
             placeholder: "$c",
             properties: {},
@@ -18,25 +18,25 @@ export default class GlobalBuiltInObjectClass {
     };
 
     getBuiltIn() {
-        return this.builtInObject;
+        return this.#builtInObject;
     }
 
     batchRegisterVariables(properties: Record<string, any>) {
-        _.merge(this.builtInObject.properties.properties, properties);
+        _.merge(this.#builtInObject.properties.properties, properties);
     }
 
     batchRegisterMethods(methods: Record<string, Function>) {
-        _.merge(this.builtInObject.methods.properties, methods);
+        _.merge(this.#builtInObject.methods.properties, methods);
     }
 
     registerVariable(name: string, value: any) {
-        _.merge(this.builtInObject.properties.properties, {
+        _.merge(this.#builtInObject.properties.properties, {
             [name]: value,
         });
     }
 
     registerMethod(name: string, value: Function) {
-        _.merge(this.builtInObject.methods.properties, {
+        _.merge(this.#builtInObject.methods.properties, {
             [name]: value,
         });
     }

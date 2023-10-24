@@ -24,9 +24,13 @@ const createActivity =
 export default function createInstance() {
     const builtIn = new GlobalBuiltInObjectClass();
     const factory = createActivity(builtIn.getBuiltIn());
-
     return {
-        ...builtIn,
+        builtIn,
         createActivity: factory,
     };
 }
+
+
+const ins = createInstance();
+
+console.log("ins:", ins);
