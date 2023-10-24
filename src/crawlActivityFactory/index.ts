@@ -56,6 +56,8 @@ import SetGeolocationActivity from "../crawlActivities/SetGeolocation";
 import AddScriptTagActivity from "../crawlActivities/AddScriptTag";
 import AddStyleTagActivity from "../crawlActivities/AddStyleTag";
 import SelectActivity from "../crawlActivities/Select";
+import ActionActivity from "../crawlActivities/ActionActivity";
+import PropertyActivity from "../crawlActivities/PropertyActivity";
 
 register("c.browser", BrowserActivity);
 register("c.page", PageActivity);
@@ -120,5 +122,8 @@ register("c.page.setGeolocation", SetGeolocationActivity);
 register("c.page.addScriptTag", AddScriptTagActivity);
 register("c.page.addStyleTag", AddStyleTagActivity);
 register("c.page.select", SelectActivity);
+
+register("c.page.action", ActionActivity);
+register("c.page.property", PropertyActivity)
 
 export default factory;
