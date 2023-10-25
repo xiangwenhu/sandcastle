@@ -6,31 +6,35 @@ import Activity from "../activities/Activity";
 import { GlobalBuiltInObject } from "../types/factory";
 export * from "./builtIn";
 
-const createActivity =
+const createActivityHOC =
     (builtIn: GlobalBuiltInObject) =>
-    <C, R, O, ER extends ExtendParams, EE extends ExtendParams>(
-        activityProps: IActivityConfig,
-        globalContext: any = {}
-    ) => {
-        globalContext[GLOBAL_BUILTIN] = builtIn;
-        globalContext[GLOBAL_VARIABLES] = {};
-        const activity = factory.create(
-            activityProps,
-            globalContext
-        ) as any as Activity<C, R, O, ER, EE>;
-        return activity;
-    };
+        <C, R, O, ER extends ExtendParams, EE extends ExtendParams>(
+            activityProps: IActivityConfig,
+            globalContext: any = {}
+        ) => {
+            globalContext[GLOBAL_BUILTIN] = builtIn;
+            globalContext[GLOBAL_VARIABLES] = {};
+            const activity = factory.create(
+                activityProps,
+                globalContext
+            ) as any as Activity<C, R, O, ER, EE>;
+            return activity;
+        };
 
-export default function createInstance() {
+export function createInstance() {
     const builtIn = new GlobalBuiltInObjectClass();
-    const factory = createActivity(builtIn.getBuiltIn());
+    const createActivity = createActivityHOC(builtIn.getBuiltIn());
     return {
         builtIn,
-        createActivity: factory,
+        createActivity,
     };
 }
 
+const instance = createInstance();
 
-const ins = createInstance();
+export const batchRegisterMethods = instance.builtIn.batchRegisterMethods.bind(instance.builtIn);
+export const batchRegisterVariables = instance.builtIn.batchRegisterVariables.bind(instance.builtIn);
+export const registerMethod = instance.builtIn.registerMethod.bind(instance.builtIn);
+export const registerVariable = instance.builtIn.registerVariable.bind(instance.builtIn);
+export const createActivity = instance.createActivity;
 
-console.log("ins:", ins);

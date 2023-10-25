@@ -10,8 +10,8 @@ import { createOneParamAsyncFunction } from "../../src/factory/function";
 import { ActivityError } from "../../src/ActivityError";
 import { register } from "../../src/activityFactory";
 
-import createInstance from "../../src/factory/activity";
-const { createActivity } = createInstance();
+import { createActivity } from "../../src/factory/activity";
+
 
 export interface CodeActivityOptions {
     code: string;

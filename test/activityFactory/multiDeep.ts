@@ -1,6 +1,6 @@
 import { IActivityConfig, IActivityExecuteParams, IFunctionActivityConfig } from './../../src/types/activity';
-import createInstance from "../../src/factory/activity";
-const { createActivity } = createInstance();
+import { createActivity } from "../../src/factory/activity";
+
 
 
 const activityProps: IActivityConfig = {

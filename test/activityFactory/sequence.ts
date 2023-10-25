@@ -1,7 +1,7 @@
 
 import { IActivityConfig } from './../../src/types/activity';
-import createInstance from "../../src/factory/activity";
-const { createActivity } = createInstance()
+import { createActivity } from "../../src/factory/activity";
+
 
 const activityProps: IActivityConfig = {
     type: 'sequence',
@@ -13,22 +13,22 @@ const activityProps: IActivityConfig = {
         useParentCtx: true,
         type: "code",
         name: "assert",
-        options: {code: 'return $ctx.count < 5'}
+        options: { code: 'return $ctx.count < 5' }
     },
     children: [{
         useParentCtx: true,
         type: 'code',
         name: 'count加1',
-        options: {code: '$ctx.count++'}
+        options: { code: '$ctx.count++' }
     }, {
         type: 'delay',
         name: '睡500ms',
-        options: { timeout: 1500}
+        options: { timeout: 1500 }
     }, {
         useParentCtx: true,
         type: 'code',
         name: '输出count',
-        options: { code: 'console.log("count:" + $ctx.count)'}
+        options: { code: 'console.log("count:" + $ctx.count)' }
     }]
 }
 

@@ -1,6 +1,6 @@
 import { IActivityConfig } from "../../src/types/activity";
-import createInstance from "../../src/factory/activity";
-const { createActivity } = createInstance()import { DEFAULT_LAUNCH_OPTIONS } from "../../src/const";
+import { createActivity } from "../../src/factory/activity";
+import { DEFAULT_LAUNCH_OPTIONS } from "../../src/const";
 
 const activityProps: IActivityConfig = {
     type: "sequence",
