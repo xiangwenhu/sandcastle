@@ -153,3 +153,5 @@ batchRegisterMethods
 - [x] 改进或者删除AssertSequence
 - [x] 给父节点打名称，通过名称访问
 - [x] options 改进变量替换
+- [ ] globalContext的改进??
+  * 单独Activity，可以设置globalContext?

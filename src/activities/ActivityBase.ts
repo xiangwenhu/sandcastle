@@ -1,6 +1,7 @@
+import EventEmitter from "events";
 import * as uuid from "uuid";
 import Activity from "./Activity";
-import { BaseActivityType, ExtendParams, GlobalActivityContext, IActivityExecuteParams, IActivityRunParams, IActivityTaskFunction } from "../types/activity";
+import { ActEventName, BaseActivityType, ExtendParams, GlobalActivityContext, IActivityExecuteParams, IActivityRunParams, IActivityTaskFunction } from "../types/activity";
 import { EnumActivityStatus } from "../enum";
 import { firstToLower } from "../util";
 import { GlobalBuiltInObject } from "../types/factory";
@@ -10,7 +11,7 @@ import { GLOBAL_BUILTIN, GLOBAL_VARIABLES } from "../const"
 class ActivityBase<C = any, R = any, O = any,
     ER extends ExtendParams = {},
     EE extends ExtendParams = {}
-> {
+> extends EventEmitter {
     pre: Activity<C, R, O, ER, EE> | undefined = undefined;
     next: Activity<C, R, O, ER, EE> | undefined = undefined;
     before: Activity<C, R, O, ER, EE> | undefined = undefined;
@@ -19,7 +20,21 @@ class ActivityBase<C = any, R = any, O = any,
     accessor parent: Activity | undefined;
     public name: string | undefined;
     public type: BaseActivityType;
-    public status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
+    #status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
+
+    get status() {
+        return this.#status
+    }
+    set status(val: EnumActivityStatus) {
+        this.#status = val;
+        this.emit("status", {
+            value: this.#status
+        })
+    }
+
+    emit(eventName: ActEventName, ...args: any[]): boolean {
+        return super.emit(eventName, ...args)
+    }
 
     public globalCtx: GlobalActivityContext = {};
 
@@ -77,7 +92,10 @@ class ActivityBase<C = any, R = any, O = any,
         }
     }
 
-    public id: string;
+    #id: string;
+    get id() {
+        return this.#id
+    }
 
     /**
      * 深度替换变量，默认替换一级
@@ -96,7 +114,7 @@ class ActivityBase<C = any, R = any, O = any,
         this.type =
             firstToLower(this.constructor.name.replace("Activity", "")) ||
             "activity";
-        this.id = uuid.v4();
+        this.#id = uuid.v4();
     }
 }
 

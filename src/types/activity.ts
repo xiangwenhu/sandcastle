@@ -127,3 +127,6 @@ export interface IActivityTaskFunction<
 > {
     (paramObject: IActivityExecuteParams<ER, EE>): any;
 }
+
+
+export type ActEventName = "status" | "error" | "break" | "terminate";
