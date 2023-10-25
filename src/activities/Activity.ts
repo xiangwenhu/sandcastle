@@ -1,11 +1,9 @@
 import _ from "lodash";
 import { ActivityError, TerminateError } from "../ActivityError";
-import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS } from "../const";
+import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS, GLOBAL_TERMINATED, GLOBAL_TERMINATED_MESSAGE } from "../const";
 import { EnumActivityStatus } from "../enum";
 import {
     ExtendParams,
-    GK_TERMINATED,
-    GK_TERMINATED_MESSAGE,
     IActivityExecuteParams,
     IActivityRunParams,
     IActivityTaskFunction,
@@ -88,12 +86,12 @@ class Activity<
     ) {
         const globalCtx = this.globalCtx;
         // 如果已经终止
-        if (globalCtx[GK_TERMINATED]) {
+        if (globalCtx[GLOBAL_TERMINATED]) {
             return;
         }
 
         if (this.status < EnumActivityStatus.BUILDED) {
-            this.buildTask();
+            this.build();
         }
 
         this.status = EnumActivityStatus.EXECUTING;
@@ -116,8 +114,8 @@ class Activity<
             const afterRes = await this.runAfter.call(self, argObject);
 
             if (this.type == "terminate") {
-                globalCtx[GK_TERMINATED] = true;
-                globalCtx[GK_TERMINATED_MESSAGE] = res as string;
+                globalCtx[GLOBAL_TERMINATED] = true;
+                globalCtx[GLOBAL_TERMINATED_MESSAGE] = res as string;
                 // 执行后
                 throw new TerminateError(
                     res as string,
@@ -146,6 +144,10 @@ class Activity<
         ) as unknown as IActivityTaskFunction<ER, EE>;
         if (task) {
             this.task = task;
+        }
+        // @ts-ignore
+        if (this.status !== EnumActivityStatus.BUILDED) {
+            this.status = EnumActivityStatus.BUILDED;
         }
     }
 

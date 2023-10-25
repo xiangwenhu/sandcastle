@@ -1,17 +1,21 @@
-import EventEmitter from "events";
 import * as uuid from "uuid";
 import Activity from "./Activity";
-import { ActEventName, BaseActivityType, ExtendParams, GlobalActivityContext, IActivityExecuteParams, IActivityRunParams, IActivityTaskFunction } from "../types/activity";
+import {  ExtendParams, GlobalActivityContext, IActivityExecuteParams, IActivityRunParams, IActivityTaskFunction } from "../types/activity";
 import { EnumActivityStatus } from "../enum";
 import { firstToLower } from "../util";
 import { GlobalBuiltInObject } from "../types/factory";
-import { createTaskExecuteDefaultParams, createTaskRunDefaultParams, createActivityError } from "./util";
-import { GLOBAL_BUILTIN, GLOBAL_VARIABLES } from "../const"
+import { createTaskExecuteDefaultParams, createTaskRunDefaultParams } from "./util";
+import { GLOBAL_BUILTIN, GLOBAL_MESSENGER, GLOBAL_VARIABLES } from "../const"
+import Messenger from "../messenger";
 
 class ActivityBase<C = any, R = any, O = any,
     ER extends ExtendParams = {},
     EE extends ExtendParams = {}
-> extends EventEmitter {
+>  {
+    get messenger(): Messenger | undefined {
+        return this.globalCtx[GLOBAL_MESSENGER];
+    }
+
     pre: Activity<C, R, O, ER, EE> | undefined = undefined;
     next: Activity<C, R, O, ER, EE> | undefined = undefined;
     before: Activity<C, R, O, ER, EE> | undefined = undefined;
@@ -19,7 +23,7 @@ class ActivityBase<C = any, R = any, O = any,
 
     accessor parent: Activity | undefined;
     public name: string | undefined;
-    public type: BaseActivityType;
+    public type: string;
     #status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
 
     get status() {
@@ -27,14 +31,9 @@ class ActivityBase<C = any, R = any, O = any,
     }
     set status(val: EnumActivityStatus) {
         this.#status = val;
-        this.emit("status", {
-            value: this.#status
-        })
+        this.messenger?.emit("status", this.status, this);
     }
 
-    emit(eventName: ActEventName, ...args: any[]): boolean {
-        return super.emit(eventName, ...args)
-    }
 
     public globalCtx: GlobalActivityContext = {};
 
@@ -107,7 +106,6 @@ class ActivityBase<C = any, R = any, O = any,
     public accessor isReplaceArray: boolean = false;
 
     constructor(ctx: C, public options: O) {
-        super();
         this.#ctx = ctx || {};
         this.parent = undefined;
         this.name = undefined;
@@ -116,6 +114,7 @@ class ActivityBase<C = any, R = any, O = any,
             firstToLower(this.constructor.name.replace("Activity", "")) ||
             "activity";
         this.#id = uuid.v4();
+        this.status = EnumActivityStatus.INITIALIZED;
     }
 }
 

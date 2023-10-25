@@ -2,7 +2,7 @@ import { get, has, isFunction, isString } from "lodash";
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 import { GLOBAL_BUILTIN } from "../const";
-import { BaseActivityType, IActivityConfig } from "../types/activity";
+import { IActivityConfig } from "../types/activity";
 import { GlobalBuiltInObject } from "../types/factory";
 import {
     ActivityConstructor,
@@ -15,7 +15,7 @@ import {
 const configMap = new Map<string, IFactoryConfigValue>();
 
 export function register<A extends ActivityConstructor>(
-    type: BaseActivityType | string,
+    type:  string,
     _class_: A,
     phConfig: IFactoryP$HConfigValue = {}
 ) {
@@ -229,7 +229,8 @@ function createSingle<A extends Activity>(
     }
 
     const buildParams = getBuildParams(factoryConfig, actConfig);
-    activity.build(...buildParams);
+    // activity.build(...buildParams);
+    activity.build.bind(activity, ...buildParams);
 
     if (isFunction(afterHandler)) {
         afterHandler.call(null, paramsObject);

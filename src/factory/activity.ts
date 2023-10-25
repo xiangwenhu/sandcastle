@@ -1,19 +1,21 @@
 import { ExtendParams, IActivityConfig } from "../types/activity";
 import factory from "../crawlActivityFactory";
 import GlobalBuiltInObjectClass from "./builtIn";
-import { GLOBAL_BUILTIN, GLOBAL_VARIABLES } from "../const";
+import { GLOBAL_BUILTIN, GLOBAL_MESSENGER, GLOBAL_VARIABLES } from "../const";
 import Activity from "../activities/Activity";
 import { GlobalBuiltInObject } from "../types/factory";
+import Messenger from "../messenger";
 export * from "./builtIn";
 
 const createActivityHOC =
     (builtIn: GlobalBuiltInObject) =>
         <C, R, O, ER extends ExtendParams, EE extends ExtendParams>(
             activityProps: IActivityConfig,
-            globalContext: any = {}
+            globalContext: Record<PropertyKey, any> = {}
         ) => {
             globalContext[GLOBAL_BUILTIN] = builtIn;
             globalContext[GLOBAL_VARIABLES] = {};
+            globalContext[GLOBAL_MESSENGER] = new Messenger();
             const activity = factory.create(
                 activityProps,
                 globalContext
