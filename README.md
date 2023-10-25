@@ -82,7 +82,8 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 | AddStyleTag            | c.page.addStyleTag            | ❌              | ✅    | 添加style         |
 | AddScriptTag           | c.page.addScriptTag           | ❌              | ✅    | 添加script      |
 | Select                 | c.page.select                 | ❌              | ✅    | select选中      |
-
+| ActionActivity         | c.page.action                 | ❌              | ✅    | 通用page方法操作    |
+| PropertyActivity       | c.page.property               | ❌              | ✅    | 通用page获取属性  |
 
 **键盘**
 | 类名                  | 注册类型                      | 是否有children | 状态 | 说明     |
@@ -151,4 +152,4 @@ batchRegisterMethods
 - [x] Activity.run 参数属性，例如`$preRes`, `$item`等的多级传递性
 - [x] 改进或者删除AssertSequence
 - [x] 给父节点打名称，通过名称访问
-- [x] 改进变量替换
+- [x] options 改进变量替换

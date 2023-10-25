@@ -57,7 +57,7 @@ const activityProps: IActivityConfig = {
                 },
                 {
                     type: "c.page.clearValue",
-                    options: { key: '#kw' }, // TODO::
+                    options: { selector: '#kw' }, // TODO::
                     name: "清空值"
                 },
                 {
@@ -73,6 +73,6 @@ const activityProps: IActivityConfig = {
 
 const activity = createActivity(activityProps);
 
-activity.run().catch(err=> {
+activity.run().catch(err => {
     console.log("err", err)
 });
