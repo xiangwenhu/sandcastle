@@ -107,6 +107,7 @@ class ActivityBase<C = any, R = any, O = any,
     public accessor isReplaceArray: boolean = false;
 
     constructor(ctx: C, public options: O) {
+        super();
         this.#ctx = ctx || {};
         this.parent = undefined;
         this.name = undefined;
