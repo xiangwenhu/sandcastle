@@ -11,11 +11,12 @@ import {
     IFactoryP$HConfigValue,
     PropertyConfigItem,
 } from "./factory.type";
+import { ActivityType } from "../types/activityMap";
 
 const configMap = new Map<string, IFactoryConfigValue>();
 
 export function register<A extends ActivityConstructor>(
-    type:  string,
+    type:  ActivityType,
     _class_: A,
     phConfig: IFactoryP$HConfigValue = {}
 ) {

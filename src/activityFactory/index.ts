@@ -1,31 +1,30 @@
+import { IFunctionActivityConfig, IfElseActivityConfig } from "../types/activity";
 import { register as _register, create, createChildren } from "./factory";
 import { ActivityConstructor, IFactoryP$HConfigValue } from "./factory.type";
-import { IfElseActivityConfig, IFunctionActivityConfig } from "../types/activity";
 
+import { isFunction } from "lodash";
 import Activity from "../activities/Activity";
+import BreakActivity from "../activities/Break";
 import CodeActivity from "../activities/Code";
 import DelayActivity from "../activities/Delay";
-import SequenceActivity from "../activities/Sequence";
-import ParallelActivity from "../activities/Parallel";
-import RaceActivity from "../activities/Race";
-import WhileActivity from "../activities/DoWhile";
-import DoWhileActivity from "../activities/DoWhile";
+import { default as DoWhileActivity, default as WhileActivity } from "../activities/DoWhile";
+import ForActivity from "../activities/For";
+import FunctionActivity from "../activities/Function";
 import IFElseActivity from "../activities/IfElse";
+import ParallelActivity from "../activities/Parallel";
+import ParallelForActivity from "../activities/ParallelFor";
+import RaceActivity from "../activities/Race";
 import RequestActivity from "../activities/Request";
-import BreakActivity from "../activities/Break";
+import SequenceActivity from "../activities/Sequence";
 import TerminateActivity from "../activities/Terminate";
 import TryCatchActivity from "../activities/TryCatch";
-import ForActivity from "../activities/For";
-import ParallelForActivity from "../activities/ParallelFor";
-import ReadFileActivity from "../activities/fs/ReadFile";
-import WriteFileActivity from "../activities/fs/WriteFile";
 import DownloadFileActivity from "../activities/fs/DownloadFile";
+import ReadFileActivity from "../activities/fs/ReadFile";
 import RemoveFileActivity from "../activities/fs/RemoveFile";
+import WriteFileActivity from "../activities/fs/WriteFile";
 import CreateVariableActivity from "../activities/variable/CreateVariable";
 import DeleteVariableActivity from "../activities/variable/DeleteVariable";
-import FunctionActivity from "../activities/Function";
-import { EnumActivityStatus } from "../types/enum";
-import { isFunction } from "lodash";
+import { ActivityType } from "../types/activityMap";
 
 
 const factory = {
@@ -33,7 +32,7 @@ const factory = {
     createChildren
 }
 
-function register<A extends Activity<any, any, any, any, any>>(type: string,
+function register<A extends Activity<any, any, any, any, any>>(type: ActivityType,
     _class_: ActivityConstructor<A>,
     config: IFactoryP$HConfigValue = {},
 ) {
@@ -97,4 +96,4 @@ export default factory;
 
 export {
     register
-}
+};
