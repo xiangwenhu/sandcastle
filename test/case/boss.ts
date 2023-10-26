@@ -1,6 +1,7 @@
 import { IActivityConfig } from "../../src/types/activity";
 import { createActivity } from "../../src/factory/activity";
-import { DEFAULT_LAUNCH_OPTIONS } from "../../src/const";
+import { ACTIVITY_STATUS_MAP, DEFAULT_LAUNCH_OPTIONS } from "../../src/const";
+import { EnumActivityStatus } from "../../src/types/enum";
 
 const activityProps: IActivityConfig = {
     type: "sequence",
@@ -129,6 +130,9 @@ const globalContext = {
 };
 
 const activity = createActivity(activityProps, globalContext);
+activity.messenger?.on("status", function (status: EnumActivityStatus, act: any) {
+    console.log( act.type, act.name, ACTIVITY_STATUS_MAP[status])
+});
 
 activity
     .run()

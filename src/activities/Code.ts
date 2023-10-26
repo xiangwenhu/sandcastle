@@ -1,6 +1,6 @@
 import { isBoolean, isFunction, isString } from "lodash";
 import { ActivityError } from "../ActivityError";
-import { EnumActivityStatus } from "../enum";
+import { EnumActivityStatus } from "../types/enum";
 import { createOneParamAsyncFunction } from "../factory/function";
 import {
     IActivityExecuteParams,
@@ -20,6 +20,7 @@ export default class CodeActivity<C = any, R = any> extends Activity<
     R,
     CodeActivityOptions
 > {
+
     buildTask() {
         const { code } = this.options;
         if (isFunction(code)) {
@@ -47,14 +48,7 @@ export default class CodeActivity<C = any, R = any> extends Activity<
                 this
             );
         }
-        this.status = EnumActivityStatus.BUILDING;
-        const g = this.globalBuiltObject;
-
-
         const paramKeys = ACTIVITY_TASK_BUILTIN_PARAMS_KEYS.concat(extraParams);
-
-        this.task = createOneParamAsyncFunction(code, paramKeys) as IActivityTaskFunction;
-        this.status = EnumActivityStatus.BUILDED;
-        return this.task;
+        return createOneParamAsyncFunction(code, paramKeys) as IActivityTaskFunction;
     }
 }

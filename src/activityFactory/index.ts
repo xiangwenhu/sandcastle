@@ -24,7 +24,7 @@ import RemoveFileActivity from "../activities/fs/RemoveFile";
 import CreateVariableActivity from "../activities/variable/CreateVariable";
 import DeleteVariableActivity from "../activities/variable/DeleteVariable";
 import FunctionActivity from "../activities/Function";
-import { EnumActivityStatus } from "../enum";
+import { EnumActivityStatus } from "../types/enum";
 import { isFunction } from "lodash";
 
 

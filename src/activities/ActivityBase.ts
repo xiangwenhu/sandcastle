@@ -1,7 +1,7 @@
 import * as uuid from "uuid";
 import Activity from "./Activity";
-import {  ExtendParams, GlobalActivityContext, IActivityExecuteParams, IActivityRunParams, IActivityTaskFunction } from "../types/activity";
-import { EnumActivityStatus } from "../enum";
+import { ExtendParams, GlobalActivityContext, IActivityExecuteParams, IActivityRunParams, IActivityTaskFunction } from "../types/activity";
+import { EnumActivityStatus } from "../types/enum";
 import { firstToLower } from "../util";
 import { GlobalBuiltInObject } from "../types/factory";
 import { createTaskExecuteDefaultParams, createTaskRunDefaultParams } from "./util";
@@ -40,7 +40,9 @@ class ActivityBase<C = any, R = any, O = any,
     #task: IActivityTaskFunction<ER, EE> | undefined;
     set task(val: IActivityTaskFunction<ER, EE> | undefined) {
         this.#task = val;
-        this.status = EnumActivityStatus.BUILDED;
+        if (this.status !== EnumActivityStatus.BUILDED) {
+            this.status = EnumActivityStatus.BUILDED;
+        }
     }
     get task() {
         return this.#task

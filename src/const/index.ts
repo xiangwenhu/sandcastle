@@ -1,4 +1,5 @@
 import { PuppeteerLaunchOptions } from "puppeteer";
+import { EnumActivityStatus } from "../types/enum";
 
 export const PROPERTY_BROWSER: unique symbol = Symbol();
 export const PROPERTY_PAGE: unique symbol = Symbol();
@@ -52,3 +53,15 @@ export const ACTIVITY_TASK_BUILTIN_PARAMS_KEYS = [
 ];
 
 export const UNDEFINED_HOC = () => undefined;
+
+
+export const ACTIVITY_STATUS_MAP = {
+    [EnumActivityStatus.UNINITIALIZED]: "未初始化",
+    [EnumActivityStatus.INITIALIZED]: "已初始化",
+    [EnumActivityStatus.BUILDING]: "构建中",
+    [EnumActivityStatus.BUILDED]: "构建完毕",
+    [EnumActivityStatus.EXECUTING]: "执行中",
+    [EnumActivityStatus.EXECUTED]: "执行完毕",
+    [EnumActivityStatus.EXCEPTION]: "异常",
+    [EnumActivityStatus.TERMINATED]: "终止",
+}

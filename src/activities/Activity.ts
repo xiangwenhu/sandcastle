@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { ActivityError, TerminateError } from "../ActivityError";
 import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS, GLOBAL_TERMINATED, GLOBAL_TERMINATED_MESSAGE } from "../const";
-import { EnumActivityStatus } from "../enum";
+import { EnumActivityStatus } from "../types/enum";
 import {
     ExtendParams,
     IActivityExecuteParams,
@@ -109,6 +109,7 @@ class Activity<
 
             const res: R = await this.task!.call(self, argObject);
             this.status = EnumActivityStatus.EXECUTED;
+
             // 执行后
             argObject.$preRes = res;
             const afterRes = await this.runAfter.call(self, argObject);
@@ -134,7 +135,7 @@ class Activity<
     }
 
     buildTask(...args: any[]): IActivityTaskFunction<ER, EE> {
-        return () => {};
+        return () => { };
     }
 
     build(...args: any[]) {
