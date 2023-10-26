@@ -7,8 +7,8 @@ R = any
 > extends PageChildActivity<C, R> {
 
     buildTask() {
-        return this.task = (paramObject: IActivityRunParams) => {
+        return (this.task = (paramObject: IActivityRunParams) => {
             return this.page!.title()
-        }
+        })
     }
 }

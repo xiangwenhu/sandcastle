@@ -1,6 +1,6 @@
 import { ActivityError } from "../ActivityError";
-import { EnumActivityStatus } from "../enum";
-import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
+import { EnumActivityStatus } from "../types/enum";
+import { IActivityExecuteParams } from "../types/activity";
 import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
 

@@ -24,8 +24,8 @@
 | Terminate      | terminate      | ❌              | ✅    | 终止整个流程                               |
 | TryCatch       | tryCatch       | ✅              | ✅    | try catch                                  |
 | For            | for            | ✅              | ✅    | for                                        |
-| ParallelFor    | parallelFor    | ✅              | ✅    | parallel For                               |
-
+| ParallelFor    | parallelFor    | ✅              | ✅    | parallel For  |
+| Function       | function       | ✅              | ✅    | 执行某个函数  |
 
 **fs**
 | 类名         | 注册类型        | 是否有children | 状态 | 说明               |
@@ -82,7 +82,8 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 | AddStyleTag            | c.page.addStyleTag            | ❌              | ✅    | 添加style         |
 | AddScriptTag           | c.page.addScriptTag           | ❌              | ✅    | 添加script      |
 | Select                 | c.page.select                 | ❌              | ✅    | select选中      |
-
+| ActionActivity         | c.page.action                 | ❌              | ✅    | 通用page方法操作    |
+| PropertyActivity       | c.page.property               | ❌              | ✅    | 通用page获取属性  |
 
 **键盘**
 | 类名                  | 注册类型                      | 是否有children | 状态 | 说明     |
@@ -125,9 +126,8 @@ TODO::
     * 动态创建的函数，传入this, 使用with语句
     * 额外参数，展开所有属性
      改良版本，`$c`注册的变量，`$m` 注册的方法
-- [ ] 集合?变量?的操作和管理
+- [x] 集合?变量?的操作和管理
     * 比如for循环
-    * 比如page的children操作
 - [x] 注册函数和变量
 ```typescript  
 // 使用 默认属性为 $c, 方法为 $m
@@ -139,7 +139,7 @@ batchRegisterMethods
 ```
 - [ ] 注册的函数和变量 只读
 - [ ] 类型推导，已知type，推导具体的 IActivityConfig
-- [ ] ctx指向问题
+- [x] ctx指向问题, useParentCtx即可使用父节点的ctx替换自身的ctx
   - [x] For
   - [x] IFElse
   - [x] Parallel
@@ -149,7 +149,9 @@ batchRegisterMethods
   - [x] While
   - [x] All
   - [x] doWhile
-- [ ] 验证$preRes, $item的多级传递性
-- [ ] 改进或者删除AssertSequence
-- [ ] 给父节点打名称，通过名称访问
-- [ ] 改进变量替换
+- [x] Activity.run 参数属性，例如`$preRes`, `$item`等的多级传递性
+- [x] 改进或者删除AssertSequence
+- [x] 给父节点打名称，通过名称访问
+- [x] options 改进变量替换
+- [ ] globalContext的改进??
+  * 单独Activity，可以设置globalContext?

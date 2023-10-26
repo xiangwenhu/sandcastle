@@ -1,5 +1,6 @@
 import { IActivityConfig } from "../../../src/types/activity";
-import createActivity from "../../../src/factory/activity";
+import { createActivity } from "../../../src/factory/activity";
+
 
 const activityProps: IActivityConfig = {
     type: "sequence",
@@ -13,7 +14,7 @@ const activityProps: IActivityConfig = {
         {
             type: "code",
             name: "输出内容",
-            options: {code: "console.log($preRes)"},
+            options: { code: "console.log($preRes)" },
         },
     ],
 };

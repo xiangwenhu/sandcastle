@@ -1,16 +1,17 @@
 import { MouseOptions } from "puppeteer";
+import { IActivityExecuteParams } from "../../types/activity";
 import PageChildActivity from "../PageChildActivity";
-import { IActivityRunParams } from "../../types/activity";
 
-export type MouseUpActivityOptions =  Readonly<MouseOptions>;
+export type MouseUpActivityOptions = Readonly<MouseOptions>;
 
 export default class MouseUpActivity<
     C = any,
     R = any
 > extends PageChildActivity<C, R, MouseUpActivityOptions> {
     buildTask() {
-                return (paramObj: IActivityRunParams) => {
-            return this.page!.mouse.up(this.options);
+        return (paramObj: IActivityExecuteParams) => {
+            const options = this.getReplacedOptions(paramObj);
+            return this.page!.mouse.up(options);
         };
     }
 }

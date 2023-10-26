@@ -1,6 +1,7 @@
 
 import { IActivityConfig, IfElseActivityConfig } from './../../src/types/activity';
-import createActivity from "../../src/factory/activity"
+import { createActivity } from "../../src/factory/activity";
+
 
 const activityProps: IfElseActivityConfig = {
     type: 'ifElse',

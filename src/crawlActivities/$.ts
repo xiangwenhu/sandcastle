@@ -1,4 +1,4 @@
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
 export interface $ActivityOptions {
@@ -8,11 +8,12 @@ export interface $ActivityOptions {
 export default class $Activity<
     C = any,
     R = any
-> extends PageChildActivity<C, R,  $ActivityOptions > {
+> extends PageChildActivity<C, R, $ActivityOptions> {
     buildTask() {
-        return this.task = async (paramObj: IActivityRunParams) => {
-            const res = await this.page!.$(this.options.selector);
+        return (this.task = async (paramObj: IActivityExecuteParams) => {
+            const options = this.getReplacedOptions(paramObj);
+            const res = await this.page!.$(options.selector);
             return res;
-        }
+        })
     }
 }

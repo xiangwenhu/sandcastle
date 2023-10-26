@@ -1,7 +1,6 @@
 import { ActivityError } from "../ActivityError";
-import { EnumActivityStatus } from "../enum";
-import { IActivityRunParams } from "../types/activity";
-import Activity from "./Activity";
+import { EnumActivityStatus } from "../types/enum";
+import { IActivityExecuteParams } from "../types/activity";
 import SequenceActivity from "./Sequence";
 
 export default class WhileActivity<C = any, R = any> extends SequenceActivity<
@@ -14,7 +13,7 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
             throw new ActivityError("assert 未定义", this);
         }
         // 构建执行函数
-        return (paramObj: IActivityRunParams) => {
+        return (paramObj: IActivityExecuteParams) => {
             return new Promise(async (resolve, reject) => {
                 try {
                     let r;
@@ -31,7 +30,7 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
                     }
                     return resolve(r);
                 } catch (err) {
-                    return reject(err);
+                    return reject(this.createActivityError(err));
                 }
             });
         };

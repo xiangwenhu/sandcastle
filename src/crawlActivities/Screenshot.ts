@@ -1,5 +1,5 @@
 import { ScreenshotOptions } from "puppeteer";
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
 export type ScreenshotActivityOptions =
@@ -13,8 +13,9 @@ export default class ScreenshotActivity<
     R = any
 > extends PageChildActivity<C, R, ScreenshotActivityOptions> {
     buildTask() {
-        return (this.task = (paramObj: IActivityRunParams) => {
-            return this.page!.screenshot(this.options);
+        return (this.task = (paramObj: IActivityExecuteParams) => {
+            const options = this.getReplacedOptions(paramObj);
+            return this.page!.screenshot(options);
         });
     }
 }

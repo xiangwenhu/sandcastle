@@ -1,11 +1,10 @@
-import { IActivityRunParams } from "../types/activity";
-import Activity from "./Activity";
+import { IActivityExecuteParams } from "../types/activity";
 import ContainerActivity from "./ContainerActivity";
 
 export default class ParallelActivity<C = any, R = any> extends ContainerActivity<C, R>  {
 
     buildTask() {
-        return (paramObj: IActivityRunParams) =>
+        return (paramObj: IActivityExecuteParams) =>
             Promise.all(this.children.map(act => {
                 return act.run(paramObj)
             }))

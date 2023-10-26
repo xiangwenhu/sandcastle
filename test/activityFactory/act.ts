@@ -1,5 +1,5 @@
 import { IActivityConfig } from "./../../src/types/activity";
-import createActivity from "../../src/factory/activity";
+import { createActivity }  from "../../src/factory/activity";
 
 const activityProps: IActivityConfig = {
     type: "sequence",
@@ -12,7 +12,12 @@ const activityProps: IActivityConfig = {
         {
             type: "code",
             name: "count加1",
-            options: { code: "console.log($a.sb.ctx.count);" },
+            options: {
+                // $a.sb.ctx.count 
+                code: function (paramsObject: any) {
+                    console.log("paramsObject:", paramsObject);
+                }
+            },
         },
     ],
 };

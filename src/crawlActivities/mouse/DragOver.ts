@@ -1,6 +1,6 @@
 import { Point, Protocol } from "puppeteer";
+import { IActivityExecuteParams } from "../../types/activity";
 import PageChildActivity from "../PageChildActivity";
-import { IActivityRunParams } from "../../types/activity";
 
 export interface MouseDragOverActivityOptions {
     target: Point; data: Protocol.Input.DragData
@@ -11,8 +11,8 @@ export default class MouseDragOverActivity<
     R = any
 > extends PageChildActivity<C, R, MouseDragOverActivityOptions> {
     buildTask() {
-        return (paramObj: IActivityRunParams) => {
-            const { target, data } = this.options;
+        return (paramObj: IActivityExecuteParams) => {
+            const { target, data } = this.getReplacedOptions(paramObj);
             return this.page!.mouse.dragOver(target, data);
         };
     }

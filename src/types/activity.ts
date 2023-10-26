@@ -1,8 +1,11 @@
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
+import { GLOBAL_TERMINATED, GLOBAL_TERMINATED_MESSAGE, GLOBAL_BUILTIN, GLOBAL_LOGGER, GLOBAL_MESSENGER, GLOBAL_VARIABLES } from "../const";
+import Messenger from "../messenger";
+import { GlobalBuiltInObject } from "./factory";
 
 export interface IActivityConfig<C = any, O = any, E = any> {
-    type: BaseActivityType | string;
+    type: string;
     context?: C;
     name: string;
     children?: IActivityConfig[];
@@ -13,6 +16,8 @@ export interface IActivityConfig<C = any, O = any, E = any> {
     toVariable?: string;
     options?: O;
     eOptions?: E;
+    deepReplace?: boolean;
+    replaceArray?: boolean;
 }
 
 export interface IfElseActivityConfig<C = any, O = any, E = any>
@@ -22,9 +27,14 @@ export interface IfElseActivityConfig<C = any, O = any, E = any>
     else?: IActivityConfig;
 }
 
-export interface ITryCatchActivityConfig<C = any, O = any, E = any>
+export interface IFunctionActivityConfig<C = any, O = any, E = any>
     extends IActivityConfig {
     catch: IActivityConfig;
+}
+
+export interface IFunctionActivityConfig<C = any, O = any, E = any>
+    extends IActivityConfig {
+    task: IActivityTaskFunction;
 }
 
 export interface ActivityFactory<
@@ -46,35 +56,21 @@ export interface ActivityFactoryFactory<P extends IActivityConfig = any> {
     createChildren: ActivityChildrenFactory<P>;
 }
 
-export type BaseActivityType =
-    | "delay"
-    | "code"
-    | "sequence"
-    | "parallel"
-    | "race"
-    | "assert"
-    | "while"
-    | "ifElse"
-    | "request"
-    | "break"
-    | "terminate"
-    | "tryCatch";
-
-export type CrawlActivityType = "c.browser" | "c.page" | "c.page.getCookie";
-
-export const GK_TERMINATED = Symbol("terminated");
-export const GK_TERMINATED_MESSAGE = Symbol("terminated-message");
 
 export interface GlobalActivityContext {
-    [GK_TERMINATED]?: boolean;
-    [GK_TERMINATED_MESSAGE]?: string;
+    [GLOBAL_TERMINATED]?: boolean;
+    [GLOBAL_TERMINATED_MESSAGE]?: string;
+    [GLOBAL_BUILTIN]?: GlobalBuiltInObject;
+    [GLOBAL_VARIABLES]?: Record<string, any>;
+    [GLOBAL_MESSENGER]?: Messenger;
+    [GLOBAL_LOGGER]?: any;
 }
 
 export type ExtendParams = Record<string, any>;
 
 export type IActivityRunParams<E extends ExtendParams = {}> = {
-    $preRes: any;
-    $extra: Record<PropertyKey, any>;
+    $preRes?: any;
+    $extra?: Record<PropertyKey, any>;
 } & E;
 
 export type IActivityExecuteParams<
@@ -120,3 +116,6 @@ export interface IActivityTaskFunction<
 > {
     (paramObject: IActivityExecuteParams<ER, EE>): any;
 }
+
+
+export type ActEventName = "status" | "error" | "break" | "terminate";

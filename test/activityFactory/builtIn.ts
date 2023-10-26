@@ -1,5 +1,5 @@
 import { IActivityConfig } from './../../src/types/activity';
-import createActivity, { registerMethod, registerVariable } from "../../src/factory/activity"
+import { registerMethod, registerVariable, createActivity } from "../../src/factory/activity"
 
 registerMethod("getName",
     function getName() {

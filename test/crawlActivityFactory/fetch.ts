@@ -1,5 +1,5 @@
 import { IActivityConfig } from '../../src/types/activity';
-import createActivity from "../../src/factory/activity";
+import { createActivity } from "../../src/factory/activity";
 
 const activityProps: IActivityConfig = {
     type: "c.browser",

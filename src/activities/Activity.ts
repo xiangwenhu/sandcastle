@@ -1,26 +1,17 @@
-import { isBoolean, isString } from "lodash";
-import { ActivityError, TerminateError } from "../ActivityError";
-import { EnumActivityStatus } from "../enum";
-import { createOneParamAsyncFunction } from "../factory/function";
-import {
-    BaseActivityType,
-    GK_TERMINATED,
-    GK_TERMINATED_MESSAGE,
-    GlobalActivityContext,
-    IActivityRunParams,
-    IActivityExecuteParams,
-    IActivityTaskFunction,
-    ExtendParams,
-} from "../types/activity";
-import { firstToLower } from "../util";
-import { replaceVariable } from "./util/variable";
-import { GLOBAL_BUILTIN, GLOBAL_VARIABLES } from "../const";
-import { GlobalBuiltInObject } from "../types/factory";
-import {
-    createTaskExecuteDefaultParams,
-    createTaskRunDefaultParams,
-} from "./util";
 import _ from "lodash";
+import { ActivityError, TerminateError } from "../ActivityError";
+import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS, GLOBAL_TERMINATED, GLOBAL_TERMINATED_MESSAGE } from "../const";
+import { EnumActivityStatus } from "../types/enum";
+import {
+    ExtendParams,
+    IActivityExecuteParams,
+    IActivityRunParams,
+    IActivityTaskFunction,
+} from "../types/activity";
+import { extractOwnOtherKeys } from "../util";
+import ActivityBase from "./ActivityBase";
+import { replaceVariable } from "./util/variable";
+import { createActivityError } from "./util";
 
 /**
  * C context
@@ -28,100 +19,59 @@ import _ from "lodash";
  * O options
  * E taskOptions 的宽展
  */
-class Activity<C = any, R = any, O = any, 
-ER extends ExtendParams = {},
-EE extends ExtendParams = {}
-> {
-    pre: Activity | undefined = undefined;
-    next: Activity | undefined = undefined;
-    before: Activity | undefined = undefined;
-    after: Activity | undefined = undefined;
-
-    accessor parent: Activity | undefined;
-    public name: string | undefined;
-    public type: BaseActivityType;
-    public status: EnumActivityStatus = EnumActivityStatus.UNINITIALIZED;
-
-    public globalCtx: GlobalActivityContext = {};
-    public task: IActivityTaskFunction<ER, EE> | undefined;
-
-    accessor checkStatus: boolean = true;
-
-    protected get globalBuiltObject(): GlobalBuiltInObject {
-        // @ts-ignore
-        return this.globalCtx[GLOBAL_BUILTIN];
-    }
-
-    protected get defaultTaskRunParam(): IActivityRunParams<ER> {
-        return createTaskRunDefaultParams() as IActivityRunParams<ER>;
-    }
-
-    protected get defaultTaskExecuteParam(): IActivityExecuteParams<ER, EE> {
-        return createTaskExecuteDefaultParams() as IActivityExecuteParams<ER, EE>;
-    }
-
-    protected get globalVariables(): Record<string, any> {
-        // @ts-ignore
-        return this.globalCtx[GLOBAL_VARIABLES];
-    }
-
-    public accessor useParentCtx: boolean = false;
-
-    #ctx: any = {};
-    get ctx() {
-        if (this.useParentCtx) {
-            return this.parent?.ctx;
-        }
-        return this.#ctx;
-    }
-    set ctx(ctx: any) {
-        this.#ctx = ctx;
-    }
-
-    #assert: Activity | undefined = undefined;
-
-    get assert(): Activity | undefined {
-        return this.#assert;
-    }
-
-    set assert(value: Activity | undefined) {
-        this.#assert = value;
-        if (value) {
-            value.parent = this as unknown as Activity;
-        }
-    }
-
+class Activity<
+    C = any,
+    R = any,
+    O = any,
+    ER extends ExtendParams = {},
+    EE extends ExtendParams = {}
+> extends ActivityBase<C, R, O, ER, EE> {
     constructor(ctx: C, public options: O) {
-        this.#ctx = ctx || {};
-        this.parent = undefined;
-        this.name = undefined;
-        // @ts-ignore
-        this.type =
-            firstToLower(this.constructor.name.replace("Activity", "")) ||
-            "activity";
-        this.task = undefined;
+        super(ctx, options);
     }
 
-    protected runBefore(paramObject: IActivityExecuteParams<ER,EE>): unknown {
+    protected createActivityError = createActivityError;
+
+    protected runBefore(paramObject: IActivityExecuteParams<ER, EE>): unknown {
         if (!this.before || !(this.before instanceof Activity)) {
             return;
         }
         return this.before.run(paramObject);
     }
 
-    protected runAfter(paramObject: IActivityExecuteParams<ER,EE>): unknown {
+    protected runAfter(paramObject: IActivityExecuteParams<ER, EE>): unknown {
         if (!this.after || !(this.after instanceof Activity)) {
             return;
         }
         return this.after.run(paramObject);
     }
 
-    protected async runAssert(paramObject: IActivityExecuteParams<ER,EE>) {
+    protected async runAssert(paramObject: IActivityExecuteParams<ER, EE>) {
         if (!this.assert || !(this.assert instanceof Activity)) {
             return true;
         }
         const res = await this.assert.run(paramObject);
         return !!res;
+    }
+
+    private getExecuteParamsObject(paramsObject: IActivityRunParams<ER>) {
+        const { globalBuiltObject: gb, globalCtx } = this;
+        let mContext = this.ctx || {};
+
+        const extraExecuteParams = this.getExtraExecuteParams();
+        const argObject: IActivityExecuteParams<ER, EE> = {
+            $gCtx: globalCtx,
+            $ctx: mContext,
+            $c: gb.properties.properties,
+            $m: gb.methods.properties,
+            $v: this.globalVariables,
+            $parent: this.parent,
+            $res: undefined,
+            $a: gb.activities.properties,
+            ...paramsObject,
+            ...extraExecuteParams,
+        };
+        return argObject;
     }
 
     /**
@@ -136,39 +86,19 @@ EE extends ExtendParams = {}
     ) {
         const globalCtx = this.globalCtx;
         // 如果已经终止
-        if (globalCtx[GK_TERMINATED]) {
+        if (globalCtx[GLOBAL_TERMINATED]) {
             return;
         }
 
-        // TODO::
-        // if (this.checkStatus && this.status >= EnumActivityStatus.EXECUTING) {
-        //     throw new ActivityError("活动已经执行", this);
-        // }
-
         if (this.status < EnumActivityStatus.BUILDED) {
-            this.buildTask(this.options);
+            this.build();
         }
 
-        let mContext = this.ctx || {};
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
-            const gb = this.globalBuiltObject;
-
-            const extraExecuteParams = this.getExtraExecuteParams();
-            const argObject: IActivityExecuteParams<ER,EE> = {
-                $gCtx: globalCtx,
-                $ctx: mContext,
-                $c: gb.properties.properties,
-                $m: gb.methods.properties,
-                $v: this.globalVariables,
-                $parent: this.parent,
-                $res: undefined,
-                $a: gb.activities.properties,
-                ...paramsObject,
-                ...extraExecuteParams
-            };
-
+            const argObject: IActivityExecuteParams<ER, EE> =
+                this.getExecuteParamsObject(paramsObject);
             const needRun = await this.runAssert(argObject);
             if (!needRun) {
                 return paramsObject.$preRes;
@@ -179,20 +109,24 @@ EE extends ExtendParams = {}
 
             const res: R = await this.task!.call(self, argObject);
             this.status = EnumActivityStatus.EXECUTED;
+
             // 执行后
             argObject.$preRes = res;
             const afterRes = await this.runAfter.call(self, argObject);
 
             if (this.type == "terminate") {
-                globalCtx[GK_TERMINATED] = true;
-                globalCtx[GK_TERMINATED_MESSAGE] = res as string;
+                globalCtx[GLOBAL_TERMINATED] = true;
+                globalCtx[GLOBAL_TERMINATED_MESSAGE] = res as string;
                 // 执行后
-                throw new TerminateError(res as string, this as any as Activity);
+                throw new TerminateError(
+                    res as string,
+                    self as any as Activity
+                );
             }
             return res === undefined ? afterRes : res;
         } catch (err) {
             self.status = EnumActivityStatus.EXCEPTION;
-            throw err;
+            throw this.createActivityError(err);
         }
     }
 
@@ -200,44 +134,51 @@ EE extends ExtendParams = {}
         return {} as EE;
     }
 
-    buildTask(
-        ...args: any[]
-    ): IActivityTaskFunction<ER, EE> {
-        return () => {};
+    buildTask(...args: any[]): IActivityTaskFunction<ER, EE> {
+        return () => { };
     }
 
     build(...args: any[]) {
         this.status = EnumActivityStatus.BUILDING;
-        this.task = this.buildTask(...args) as unknown as IActivityTaskFunction<ER, EE>;
-        this.status = EnumActivityStatus.BUILDED;
+        const task = this.buildTask(
+            ...args
+        ) as unknown as IActivityTaskFunction<ER, EE>;
+        if (task) {
+            this.task = task;
+        }
+        // @ts-ignore
+        if (this.status !== EnumActivityStatus.BUILDED) {
+            this.status = EnumActivityStatus.BUILDED;
+        }
     }
 
-    protected replaceVariable<C = any>(
-        config: C,
-        paramObj: IActivityRunParams<ER>
+    private getReplaceVariableParamKeys(mParamObject: IActivityRunParams<ER>) {
+        const extraKeys = extractOwnOtherKeys(
+            mParamObject,
+            ACTIVITY_TASK_BUILTIN_PARAMS_KEYS
+        ) as string[];
+        return extraKeys.concat(extraKeys);
+    }
+
+    public getReplacedOptions(paramObj: IActivityExecuteParams<ER>) {
+        return this.baseReplaceVariable(paramObj, this.options);
+    }
+
+    protected baseReplaceVariable<OT>(
+        paramObj: IActivityExecuteParams<ER>,
+        options: OT
     ) {
-        if (config == undefined || Array.isArray(config)) {
-            return config as C;
+        if (options == undefined) {
+            return options as OT;
         }
-        const gb = this.globalBuiltObject;
-        let mContext = this.ctx || {};
-
-        const extraExecuteParams = this.getExtraExecuteParams();
-
-        const paramObject: IActivityExecuteParams<ER,EE> = {
-            $gCtx: this.globalCtx,
-            $ctx: mContext,
-            $c: gb.properties.properties,
-            $m: gb.methods.properties,
-            $v: this.globalVariables,
-            $parent: this.parent,
-            $res: undefined,
-            $a: gb.activities.properties,
-            ...paramObj,
-            ...extraExecuteParams
-        };
-
-        return replaceVariable(config).call(this, paramObject) as C;
+        const mParamObject: IActivityExecuteParams<ER, EE> =
+            this.getExecuteParamsObject(paramObj);
+        const extraKeys = this.getReplaceVariableParamKeys(mParamObject);
+        return replaceVariable(options, {
+            deep: this.isDeepReplace,
+            replaceArray: this.isReplaceArray,
+            extraKeys,
+        }).call(this, mParamObject) as OT;
     }
 
     protected getProperty<P = any>(

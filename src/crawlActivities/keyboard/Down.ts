@@ -1,6 +1,6 @@
 import { KeyDownOptions, KeyInput } from "puppeteer";
+import { IActivityExecuteParams } from "../../types/activity";
 import PageChildActivity from "../PageChildActivity";
-import { IActivityRunParams } from "../../types/activity";
 
 export interface KeyboardDownActivityOptions {
     key: KeyInput;
@@ -12,11 +12,9 @@ export default class KeyboardDownActivity<
     R = any
 > extends PageChildActivity<C, R, KeyboardDownActivityOptions> {
     buildTask() {
-        return (_paramObj: IActivityRunParams) => {
-            return this.page!.keyboard.down(
-                this.options.key,
-                this.options.options
-            );
+        return (paramObj: IActivityExecuteParams) => {
+            const { key, options } = this.getReplacedOptions(paramObj);
+            return this.page!.keyboard.down(key, options);
         };
     }
 }

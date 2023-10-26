@@ -1,16 +1,15 @@
-import { KeyInput } from "puppeteer";
+import { IActivityExecuteParams } from "../../types/activity";
 import PageChildActivity from "../PageChildActivity";
-import { IActivityRunParams } from "../../types/activity";
 
 export default class KeyboardUpActivity<C = any, R = any> extends PageChildActivity<
     C,
     R
 > {
     buildTask(
-        options: KeyInput,
     ) {
-                return (paramObj: IActivityRunParams) => {
-            return this.page!.keyboard.up(this.options);
+        return (paramObj: IActivityExecuteParams) => {
+            const options = this.getReplacedOptions(paramObj);
+            return this.page!.keyboard.up(options);
         };
     }
 }

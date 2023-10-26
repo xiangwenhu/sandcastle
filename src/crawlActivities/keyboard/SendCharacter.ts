@@ -1,6 +1,5 @@
-import { KeyInput } from "puppeteer";
+import { IActivityExecuteParams } from "../../types/activity";
 import PageChildActivity from "../PageChildActivity";
-import { IActivityRunParams } from "../../types/activity";
 
 export interface KeyboardSendCharacterActivityOptions {
     char: string;
@@ -11,8 +10,9 @@ export default class KeyboardSendCharacterActivity<
     R = any
 > extends PageChildActivity<C, R, KeyboardSendCharacterActivityOptions> {
     buildTask() {
-        return (_paramObj: IActivityRunParams) => {
-            return this.page!.keyboard.sendCharacter(this.options.char);
+        return (paramObj: IActivityExecuteParams) => {
+            const { char } = this.getReplacedOptions(paramObj);
+            return this.page!.keyboard.sendCharacter(char);
         };
     }
 }

@@ -1,6 +1,6 @@
 import { HTTPResponse } from "puppeteer";
 import PageChildActivity from "./PageChildActivity";
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 
 export interface WaitForResponseActivityOptions {
     urlOrPredicate: string | ((res: HTTPResponse) => boolean | Promise<boolean>)
@@ -14,8 +14,8 @@ export default class WaitForResponseActivity<
     R = any
 > extends PageChildActivity<C, R, WaitForResponseActivityOptions> {
     buildTask() {
-        return this.task = async (paramObject: IActivityRunParams) => {
-            const { urlOrPredicate, options } = this.options;
+        return this.task = async (paramObject: IActivityExecuteParams) => {
+            const { urlOrPredicate, options } = this.getReplacedOptions(paramObject);
             const res = await this.page!.waitForResponse(urlOrPredicate, options);
             return res?.json()
         }

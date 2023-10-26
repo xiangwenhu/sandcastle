@@ -1,5 +1,5 @@
 import { Viewport } from "puppeteer";
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
 export type SetViewportActivityOptions = Viewport
@@ -10,8 +10,8 @@ export default class SetViewportActivity<
 > extends PageChildActivity<C, R, SetViewportActivityOptions> {
 
     buildTask() {
-        return this.task = (paramObj: IActivityRunParams) => {
+        return (this.task = (paramObj: IActivityExecuteParams) => {
             return this.page!.setViewport(this.options)
-        }
+        })
     }
 }

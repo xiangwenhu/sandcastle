@@ -1,12 +1,12 @@
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
 export default class IsClosedActivity<
-C = any,
-R = any
+    C = any,
+    R = any
 > extends PageChildActivity<C, R> {
     buildTask() {
-        return this.task = (paramObject: IActivityRunParams) => {
+        return this.task = (paramObject: IActivityExecuteParams) => {
             return this.page!.isClosed()
         }
     }

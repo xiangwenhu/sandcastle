@@ -1,6 +1,6 @@
 import { WaitForOptions } from "puppeteer";
+import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
-import { IActivityRunParams } from "../types/activity";
 
 export type ReloadActivityOptions = WaitForOptions;
 
@@ -10,8 +10,9 @@ export default class ReloadActivity<
 > extends PageChildActivity<C, R, ReloadActivityOptions> {
 
     buildTask() {
-        return this.task = (paramObject: IActivityRunParams) => {
-            return this.page!.reload(this.options)
-        }
+        return (this.task = (paramObj: IActivityExecuteParams) => {
+            const options = this.getReplacedOptions(paramObj);
+            return this.page!.reload(options)
+        })
     }
 }

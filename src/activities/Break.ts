@@ -1,4 +1,4 @@
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams } from "../types/activity";
 import Activity from "./Activity";
 
 export interface BreakActivityOptions {
@@ -14,7 +14,9 @@ export default class BreakActivity<C = any> extends Activity<
     BreakActivityOptions
 > {
     buildTask() {
-        return (paramObj: IActivityRunParams) =>
-            Promise.resolve(this.options.message);
+        return (paramObj: IActivityExecuteParams) => {
+            const options = this.getReplacedOptions(paramObj);
+            Promise.resolve(options.message);
+        }
     }
 }

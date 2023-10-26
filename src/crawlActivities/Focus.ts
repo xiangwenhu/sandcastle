@@ -1,4 +1,4 @@
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
 export type FocusActivityOptions = {
@@ -11,8 +11,9 @@ export default class FocusActivity<C = any, R = any> extends PageChildActivity<
     FocusActivityOptions
 > {
     buildTask() {
-        return (this.task = (paramObj: IActivityRunParams) => {
-            return this.page!.focus(this.options.selector);
+        return (this.task = (paramObj: IActivityExecuteParams) => {
+            const { selector } = this.getReplacedOptions(paramObj);
+            return this.page!.focus(selector);
         });
     }
 }

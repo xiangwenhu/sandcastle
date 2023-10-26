@@ -1,5 +1,6 @@
 import { IActivityConfig, ITryCatchActivityConfig } from './../../src/types/activity';
-import createActivity from "../../src/factory/activity"
+import { createActivity } from "../../src/factory/activity";
+
 
 const activityProps: ITryCatchActivityConfig = {
     type: 'sequence',

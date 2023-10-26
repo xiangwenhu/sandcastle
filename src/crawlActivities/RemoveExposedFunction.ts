@@ -1,5 +1,4 @@
-import { PDFOptions } from "puppeteer";
-import { IActivityRunParams } from "../types/activity";
+import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
 export type RemoveExposedActivityOptions = {
@@ -11,9 +10,9 @@ export default class RemoveExposedFunctionActivity<
     R = any
 > extends PageChildActivity<C, R, RemoveExposedActivityOptions> {
     buildTask() {
-        return (this.task = (paramObj: IActivityRunParams) => {
-            const rName = this.replaceVariable(this.options.name, paramObj);
-            return this.page!.removeExposedFunction(rName);
+        return (this.task = (paramObj: IActivityExecuteParams) => {
+            const options = this.getReplacedOptions(paramObj);
+            return this.page!.removeExposedFunction(options.name);
         });
     }
 }

@@ -1,6 +1,6 @@
 import { Point, Protocol } from "puppeteer";
+import { IActivityExecuteParams } from "../../types/activity";
 import PageChildActivity from "../PageChildActivity";
-import { IActivityRunParams } from "../../types/activity";
 
 export interface MouseDropActivityOptions {
     target: Point; data: Protocol.Input.DragData
@@ -11,8 +11,8 @@ export default class MouseDropActivity<
     R = any
 > extends PageChildActivity<C, R, MouseDropActivityOptions> {
     buildTask() {
-        return (paramObj: IActivityRunParams) => {
-            const { target, data } = this.options;
+        return (paramObj: IActivityExecuteParams) => {
+            const { target, data } = this.getReplacedOptions(paramObj);
             return this.page!.mouse.drop(target, data);
         };
     }
