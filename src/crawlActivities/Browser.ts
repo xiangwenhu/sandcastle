@@ -25,7 +25,7 @@ export default class BrowserActivity<
             } catch (err) {
                 throw this.createActivityError(err)
             } finally {
-                if (!!this.#browser) {
+                if (!!this.#browser && this.#browser.connected) {
                     await this.#browser.close();
                 }
             }

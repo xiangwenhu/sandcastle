@@ -83,8 +83,8 @@ register("c.page.waitForResponse", WaitForResponseActivity);
 register("c.page.waitForSelector", WaitForSelectorActivity);
 register("c.page.cookies", CookiesActivity);
 register("c.page.goto", GotoActivity);
-register("c.page.$eval", $EvalActivity),
-    register("c.page.$$eval", $$EvalActivity);
+register("c.page.$eval", $EvalActivity);
+register("c.page.$$eval", $$EvalActivity);
 register("c.page.focus", FocusActivity);
 register("c.page.hover", HoverActivity);
 register("c.page.clearValue", ClearValueActivity);
