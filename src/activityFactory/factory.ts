@@ -11,7 +11,7 @@ import {
     IFactoryP$HConfigValue,
     PropertyConfigItem,
 } from "./factory.type";
-import { ActivityType } from "../types/activityMap";
+import { ActivityType } from "../types/activityConfig";
 
 const configMap = new Map<string, IFactoryConfigValue>();
 
@@ -148,7 +148,7 @@ function createMaybeCodeActivity({
     name,
     globalContext,
     addReturn
-}: { addReturn?: boolean; actConfig: string | IActivityConfig<any, any, any>, name: string, globalContext: any }) {
+}: { addReturn?: boolean; actConfig: string | IActivityConfig<any, any>, name: string, globalContext: any }) {
     return isString(actConfig)
         ? createSingle(
             {

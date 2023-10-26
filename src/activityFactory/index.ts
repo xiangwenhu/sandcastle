@@ -24,7 +24,7 @@ import RemoveFileActivity from "../activities/fs/RemoveFile";
 import WriteFileActivity from "../activities/fs/WriteFile";
 import CreateVariableActivity from "../activities/variable/CreateVariable";
 import DeleteVariableActivity from "../activities/variable/DeleteVariable";
-import { ActivityType } from "../types/activityMap";
+import { ActivityType } from "../types/activityConfig";
 
 
 const factory = {
