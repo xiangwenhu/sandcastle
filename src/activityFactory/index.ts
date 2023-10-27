@@ -1,4 +1,4 @@
-import { IFunctionActivityConfig, IfElseActivityConfig } from "../types/activity";
+import { ActivityType, IFunctionActivityConfig, ITryCatchActivityConfig, IfElseActivityConfig } from "../types/activity";
 import { register as _register, create, createChildren } from "./factory";
 import { ActivityConstructor, IFactoryP$HConfigValue } from "./factory.type";
 
@@ -24,7 +24,6 @@ import RemoveFileActivity from "../activities/fs/RemoveFile";
 import WriteFileActivity from "../activities/fs/WriteFile";
 import CreateVariableActivity from "../activities/variable/CreateVariable";
 import DeleteVariableActivity from "../activities/variable/DeleteVariable";
-import { ActivityType } from "../types/activityConfig";
 
 
 const factory = {
@@ -64,7 +63,7 @@ register("break", BreakActivity,);
 register("terminate", TerminateActivity);
 register("tryCatch", TryCatchActivity, {
     before({ factory, globalContext, config, activity }) {
-        const ifConfig = config as IFunctionActivityConfig;
+        const ifConfig = config as ITryCatchActivityConfig;
         const act = (activity! as any);
         act.catch = factory.create(ifConfig.catch, globalContext) as SequenceActivity;
     }

@@ -2,7 +2,7 @@ import { get, has, isFunction, isString } from "lodash";
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 import { GLOBAL_BUILTIN } from "../const";
-import { IActivityConfig } from "../types/activity";
+import { ActivityType, IActivityConfig } from "../types/activity";
 import { GlobalBuiltInObject } from "../types/factory";
 import {
     ActivityConstructor,
@@ -11,7 +11,6 @@ import {
     IFactoryP$HConfigValue,
     PropertyConfigItem,
 } from "./factory.type";
-import { ActivityType } from "../types/activityConfig";
 
 const configMap = new Map<string, IFactoryConfigValue>();
 

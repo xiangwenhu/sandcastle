@@ -39,6 +39,8 @@ export default class ForActivity<C = any, R = any> extends SequenceActivity<
                             [indexName]: $index,
                         });
                     } catch (err: any) {
+                        console.log("for:error", $index, $item);
+                        console.log("for:error", err)
                         if (!continueOnError) {
                             reject((err));
                             break;

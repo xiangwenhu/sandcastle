@@ -1,11 +1,10 @@
-import { ExtendParams, IActivityConfig } from "../types/activity";
+import { ActivityType, ExtendParams, IActivityConfig } from "../types/activity";
 import factory from "../crawlActivityFactory";
 import GlobalBuiltInObjectClass from "./builtIn";
 import { GLOBAL_BUILTIN, GLOBAL_MESSENGER, GLOBAL_VARIABLES } from "../const";
 import Activity from "../activities/Activity";
 import { GlobalBuiltInObject } from "../types/factory";
 import Messenger from "../messenger";
-import { ActivityType } from "../types/activityConfig";
 export * from "./builtIn";
 
 const createActivityHOC =

@@ -21,7 +21,8 @@ import { createActivityError } from "./util";
  * C context
  * R res
  * O options
- * E taskOptions 的宽展
+ * ER IActivityRunParams 的扩展
+ * EE IActivityExecuteParams 的扩展
  */
 class Activity<
     C = any,
