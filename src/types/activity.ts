@@ -1,15 +1,5 @@
 import Activity from "../activities/Activity";
-import {
-    GLOBAL_BUILTIN,
-    GLOBAL_LOGGER,
-    GLOBAL_MESSENGER,
-    GLOBAL_TERMINATED,
-    GLOBAL_TERMINATED_MESSAGE,
-    GLOBAL_VARIABLES,
-} from "../const";
-import Messenger from "../messenger";
-
-import { GlobalBuiltInObject } from "./factory";
+import { GLOBAL_BUILTIN_CONTEXT } from "../const";
 
 import { BreakActivityOptions } from "../activities/Break";
 import { CodeActivityOptions } from "../activities/Code";
@@ -75,6 +65,8 @@ import { MouseDropActivityOptions } from "../crawlActivities/mouse/Drop";
 import { MouseMoveActivityOptions } from "../crawlActivities/mouse/Move";
 import { MouseUpActivityOptions } from "../crawlActivities/mouse/Up";
 import { MouseWheelActivityOptions } from "../crawlActivities/mouse/Wheel";
+import GlobalBuiltinContext from "../globalBuiltinContext";
+import { type } from "os";
 
 export declare type ActConfigFor<Type extends ActivityType> =
     Type extends keyof ActivityConfigMap
@@ -304,14 +296,9 @@ export interface ActivityFactoryFactory<P extends IActivityConfig = any> {
     createChildren: ActivityChildrenFactory<P>;
 }
 
-export interface GlobalActivityContext {
-    [GLOBAL_TERMINATED]?: boolean;
-    [GLOBAL_TERMINATED_MESSAGE]?: string;
-    [GLOBAL_BUILTIN]?: GlobalBuiltInObject;
-    [GLOBAL_VARIABLES]?: Record<string, any>;
-    [GLOBAL_MESSENGER]?: Messenger;
-    [GLOBAL_LOGGER]?: any;
-}
+export type GlobalActivityContext =  {
+    [GLOBAL_BUILTIN_CONTEXT]: GlobalBuiltinContext
+} & Record<PropertyKey, any>
 
 export type ExtendParams = Record<string, any>;
 

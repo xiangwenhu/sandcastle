@@ -2,8 +2,6 @@ import _ from "lodash";
 import { TerminateError } from "../ActivityError";
 import {
     ACTIVITY_TASK_BUILTIN_PARAMS_KEYS,
-    GLOBAL_TERMINATED,
-    GLOBAL_TERMINATED_MESSAGE,
 } from "../const";
 import { EnumActivityStatus } from "../types/enum";
 import {
@@ -60,19 +58,21 @@ class Activity<
     }
 
     private getExecuteParamsObject(paramsObject: IActivityRunParams<ER>) {
-        const { globalBuiltObject: gb, globalCtx } = this;
+        const { globalBuiltInCtx, globalCtx } = this;
         let mContext = this.ctx || {};
+
+        const bObject = globalBuiltInCtx.toObject();
 
         const extraExecuteParams = this.getExtraExecuteParams();
         const argObject: IActivityExecuteParams<ER, EE> = {
             $gCtx: globalCtx,
             $ctx: mContext,
-            $c: gb.properties.properties,
-            $m: gb.methods.properties,
+            $c: bObject.$c,
+            $m: bObject.$m,
             $v: this.globalVariables,
             $parent: this.parent,
             $res: undefined,
-            $a: gb.activities.properties,
+            $a: bObject.$a,
             ...paramsObject,
             ...extraExecuteParams,
         };
@@ -89,9 +89,9 @@ class Activity<
         paramsObject: IActivityRunParams<ER> = this
             .defaultTaskRunParam as IActivityRunParams<ER>
     ) {
-        const { globalCtx, waiting } = this;
+        const { globalBuiltInCtx, waiting } = this;
         // 如果已经终止
-        if (globalCtx[GLOBAL_TERMINATED]) {
+        if (globalBuiltInCtx.terminated) {
             return;
         }
 
@@ -123,8 +123,8 @@ class Activity<
             const afterRes = await this.runAfter.call(self, argObject);
 
             if (this.type == "terminate") {
-                globalCtx[GLOBAL_TERMINATED] = true;
-                globalCtx[GLOBAL_TERMINATED_MESSAGE] = res as string;
+                globalBuiltInCtx.terminated = true;
+                globalBuiltInCtx.terminatedMessage = res as string;
                 // 执行后
                 throw new TerminateError(
                     res as string,

@@ -1,27 +1,7 @@
 import { PuppeteerLaunchOptions } from "puppeteer";
 import { EnumActivityStatus } from "../types/enum";
 
-export const PROPERTY_BROWSER: unique symbol = Symbol();
-export const PROPERTY_PAGE: unique symbol = Symbol();
-
-
-// 全局对象上的属性
-// 终止状态
-export const GLOBAL_TERMINATED = Symbol("g-terminated");
-// 终止消息
-export const GLOBAL_TERMINATED_MESSAGE = Symbol("g-terminated-message");
-// 内置对象
-export const GLOBAL_BUILTIN: unique symbol = Symbol("g-builtIn");
-// 内置变量
-export const GLOBAL_VARIABLES: unique symbol = Symbol("g-variables");
-// 信使
-export const GLOBAL_MESSENGER: unique symbol = Symbol("g-messenger");
-// 日志
-export const GLOBAL_LOGGER: unique symbol = Symbol('g-logger');
-
-export const PROPERTY_KEYS = {
-    BROWSER: PROPERTY_BROWSER,
-};
+export const GLOBAL_BUILTIN_CONTEXT: unique symbol = Symbol("g-builtin-context");
 
 export const DEFAULT_LAUNCH_OPTIONS: PuppeteerLaunchOptions = {
     headless: "new",
@@ -44,7 +24,7 @@ export const ACTIVITY_TASK_BUILTIN_PARAMS_KEYS = [
     "$ctx", // 上下文
     "$c", // 内置变量
     "$m", // 内置方法
-    "$v",
+    "$v", // 变量，用户创建
     "$parent", // 父节点
     "$preRes", // 上一个活动的返回值
     "$res", // 本活动执行完毕的返回值
@@ -53,7 +33,6 @@ export const ACTIVITY_TASK_BUILTIN_PARAMS_KEYS = [
 ];
 
 export const UNDEFINED_HOC = () => undefined;
-
 
 export const ACTIVITY_STATUS_MAP = {
     [EnumActivityStatus.UNINITIALIZED]: "未初始化",
@@ -64,4 +43,4 @@ export const ACTIVITY_STATUS_MAP = {
     [EnumActivityStatus.EXECUTED]: "执行完毕",
     [EnumActivityStatus.EXCEPTION]: "异常",
     [EnumActivityStatus.TERMINATED]: "终止",
-}
+};

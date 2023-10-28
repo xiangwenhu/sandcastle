@@ -1,21 +1,24 @@
 import { ActivityType, ExtendParams, IActivityConfig } from "../types/activity";
 import factory from "../crawlActivityFactory";
-import GlobalBuiltInObjectClass from "./builtIn";
-import { GLOBAL_BUILTIN, GLOBAL_MESSENGER, GLOBAL_VARIABLES } from "../const";
 import Activity from "../activities/Activity";
-import { GlobalBuiltInObject } from "../types/factory";
 import Messenger from "../messenger";
-export * from "./builtIn";
+import GlobalBuiltinContext from "../globalBuiltinContext";
+import { ICreateInstanceOptions } from "../types/factory";
+import { GLOBAL_BUILTIN_CONTEXT } from "../const";
 
 const createActivityHOC =
-    (builtIn: GlobalBuiltInObject) =>
+    (globalBuiltinContext: GlobalBuiltinContext) =>
     <C, R, O, ER extends ExtendParams, EE extends ExtendParams>(
         activityConfig: IActivityConfig,
         globalContext: Record<PropertyKey, any> = {}
     ) => {
-        globalContext[GLOBAL_BUILTIN] = builtIn;
-        globalContext[GLOBAL_VARIABLES] = {};
-        globalContext[GLOBAL_MESSENGER] = new Messenger();
+        Object.defineProperty(globalContext, GLOBAL_BUILTIN_CONTEXT, {
+            configurable: false,
+            get() {
+                return globalBuiltinContext;
+            },
+        });
+
         const activity = factory.create(
             activityConfig,
             globalContext
@@ -23,11 +26,18 @@ const createActivityHOC =
         return activity;
     };
 
-export function createInstance() {
-    const builtIn = new GlobalBuiltInObjectClass();
-    const createActivity = createActivityHOC(builtIn.getBuiltIn());
+export function createInstance(options: ICreateInstanceOptions = {}) {
+    const gBCtx = new GlobalBuiltinContext();
+    gBCtx.logger = options.logger || console;
+    gBCtx.messenger = options.messenger || new Messenger();
+    const createActivity = createActivityHOC(gBCtx);
+
+    const registerConstant = gBCtx.registerConstant.bind(gBCtx);
+    const registerMethod = gBCtx.registerMethod.bind(gBCtx);
+
     return {
-        builtIn,
+        registerConstant,
+        registerMethod,
         createActivity,
         create<T>(
             type: ActivityType,
@@ -39,18 +49,9 @@ export function createInstance() {
         },
     };
 }
-
 const instance = createInstance();
 
-export const batchRegisterMethods = instance.builtIn.batchRegisterMethods.bind(
-    instance.builtIn
-);
-export const batchRegisterVariables =
-    instance.builtIn.batchRegisterVariables.bind(instance.builtIn);
-export const registerMethod = instance.builtIn.registerMethod.bind(
-    instance.builtIn
-);
-export const registerVariable = instance.builtIn.registerVariable.bind(
-    instance.builtIn
-);
 export const createActivity = instance.createActivity;
+export const registerConstant = instance.registerConstant;
+export const registerMethod = instance.registerMethod;
+export const create = instance.create;

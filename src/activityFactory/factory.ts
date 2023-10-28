@@ -1,9 +1,7 @@
 import { get, has, isFunction, isString } from "lodash";
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
-import { GLOBAL_BUILTIN } from "../const";
 import { ActivityType, IActivityConfig } from "../types/activity";
-import { GlobalBuiltInObject } from "../types/factory";
 import {
     ActivityConstructor,
     IFactoryConfigValue,
@@ -15,7 +13,7 @@ import {
 const configMap = new Map<string, IFactoryConfigValue>();
 
 export function register<A extends ActivityConstructor>(
-    type:  ActivityType,
+    type: ActivityType,
     _class_: A,
     phConfig: IFactoryP$HConfigValue = {}
 ) {
@@ -36,13 +34,16 @@ export function createChildren(
     return props.map((p) => createSingle(p, globalContext));
 }
 
-const BUILTIN_PARAMS: PropertyConfigItem[] = [{
-    name: "context",
-    default: {}
-}, {
-    name: "options",
-    default: {}
-}];
+const BUILTIN_PARAMS: PropertyConfigItem[] = [
+    {
+        name: "context",
+        default: {},
+    },
+    {
+        name: "options",
+        default: {},
+    },
+];
 const BUILTIN_BUILD_PARAMS: PropertyConfigItem[] = [];
 const BUILTIN_PROPERTIES: PropertyConfigItem[] = [
     "name",
@@ -146,21 +147,27 @@ function createMaybeCodeActivity({
     actConfig,
     name,
     globalContext,
-    addReturn
-}: { addReturn?: boolean; actConfig: string | IActivityConfig<any, any>, name: string, globalContext: any }) {
+    addReturn,
+}: {
+    addReturn?: boolean;
+    actConfig: string | IActivityConfig<any, any>;
+    name: string;
+    globalContext: any;
+}) {
     return isString(actConfig)
         ? createSingle(
-            {
-                type: "code",
-                options: { code: addReturn ? `return ${actConfig}` : actConfig },
-                name: `${name}`,
-                useParentCtx: true
-            },
-            globalContext
-        )
+              {
+                  type: "code",
+                  options: {
+                      code: addReturn ? `return ${actConfig}` : actConfig,
+                  },
+                  name: `${name}`,
+                  useParentCtx: true,
+              },
+              globalContext
+          )
         : createSingle(actConfig, globalContext);
 }
-
 
 function createSingle<A extends Activity>(
     actConfig: IActivityConfig,
@@ -204,25 +211,28 @@ function createSingle<A extends Activity>(
         );
     }
     // 创建before
-    before && (activity.before = createMaybeCodeActivity({
-        actConfig: before,
-        globalContext,
-        name: `${actConfig.name} before`
-    }));
+    before &&
+        (activity.before = createMaybeCodeActivity({
+            actConfig: before,
+            globalContext,
+            name: `${actConfig.name} before`,
+        }));
 
     // 创建after
-    after && (activity.after = createMaybeCodeActivity({
-        actConfig: after,
-        globalContext,
-        name: `${actConfig.name} after`
-    }));
+    after &&
+        (activity.after = createMaybeCodeActivity({
+            actConfig: after,
+            globalContext,
+            name: `${actConfig.name} after`,
+        }));
     // assert
-    assert && (activity.assert = createMaybeCodeActivity({
-        actConfig: assert,
-        globalContext,
-        name: `${actConfig.name} assert`,
-        addReturn: true
-    }));
+    assert &&
+        (activity.assert = createMaybeCodeActivity({
+            actConfig: assert,
+            globalContext,
+            name: `${actConfig.name} assert`,
+            addReturn: true,
+        }));
 
     if (isFunction(beforeHandler)) {
         beforeHandler.call(null, paramsObject);
@@ -237,12 +247,9 @@ function createSingle<A extends Activity>(
     }
 
     //TODO:: Proxy限制访问的属性
-    if (
-        isString(actConfig.toVariable) &&
-        actConfig.toVariable.toString() !== ""
-    ) {
-        const g: GlobalBuiltInObject = globalContext[GLOBAL_BUILTIN];
-        g.activities.properties[actConfig.toVariable.toString()] = activity;
+    if (isString(actConfig.toVariable) && actConfig.toVariable.trim() !== "") {
+        const name = actConfig.toVariable.trim();
+        activity.globalBuiltInCtx.registerActivityReference(name, activity);
     }
 
     return activity as A;

@@ -1,19 +1,19 @@
 import * as uuid from "uuid";
-import Activity from "./Activity";
+import { GLOBAL_BUILTIN_CONTEXT } from "../const";
 import { ExtendParams, GlobalActivityContext, IActivityExecuteParams, IActivityRunParams, IActivityTaskFunction } from "../types/activity";
 import { EnumActivityStatus } from "../types/enum";
+import { IMessenger } from "../types/messenger";
 import { firstToLower } from "../util";
-import { GlobalBuiltInObject } from "../types/factory";
+import Activity from "./Activity";
 import { createTaskExecuteDefaultParams, createTaskRunDefaultParams } from "./util";
-import { GLOBAL_BUILTIN, GLOBAL_MESSENGER, GLOBAL_VARIABLES } from "../const"
-import Messenger from "../messenger";
 
 class ActivityBase<C = any, R = any, O = any,
     ER extends ExtendParams = {},
     EE extends ExtendParams = {}
 >  {
-    get messenger(): Messenger | undefined {
-        return this.globalCtx[GLOBAL_MESSENGER];
+
+    get messenger(): IMessenger {
+        return this.globalBuiltInCtx?.messenger
     }
 
     pre: Activity<C, R, O, ER, EE> | undefined = undefined;
@@ -38,7 +38,7 @@ class ActivityBase<C = any, R = any, O = any,
     }
 
 
-    public globalCtx: GlobalActivityContext = {};
+    public globalCtx: GlobalActivityContext = {} as GlobalActivityContext;
 
     #task: IActivityTaskFunction<ER, EE> | undefined;
     set task(val: IActivityTaskFunction<ER, EE> | undefined) {
@@ -52,9 +52,8 @@ class ActivityBase<C = any, R = any, O = any,
     }
     accessor checkStatus: boolean = true;
 
-    protected get globalBuiltObject(): GlobalBuiltInObject {
-        // @ts-ignore
-        return this.globalCtx[GLOBAL_BUILTIN];
+    get globalBuiltInCtx() {
+        return this.globalCtx[GLOBAL_BUILTIN_CONTEXT];
     }
 
     protected get defaultTaskRunParam(): IActivityRunParams<ER> {
@@ -66,8 +65,7 @@ class ActivityBase<C = any, R = any, O = any,
     }
 
     protected get globalVariables(): Record<string, any> {
-        // @ts-ignore
-        return this.globalCtx[GLOBAL_VARIABLES];
+        return this.globalBuiltInCtx.$v;
     }
 
     public accessor useParentCtx: boolean = false;
