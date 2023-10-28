@@ -14,7 +14,9 @@ export default class GotoActivity<C = any, R = any> extends PageChildActivity<
 > {
     buildTask() {
         return (this.task = (paramObj: IActivityExecuteParams) => {
-            const { url, options } = this.getReplacedOptions(paramObj);
+            const { url, options = {
+                waitUntil: "load"
+            } } = this.getReplacedOptions(paramObj);
             return this.action("goto", url, options);
         });
     }

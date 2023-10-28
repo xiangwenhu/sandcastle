@@ -1,6 +1,10 @@
 import _ from "lodash";
-import { ActivityError, TerminateError } from "../ActivityError";
-import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS, GLOBAL_TERMINATED, GLOBAL_TERMINATED_MESSAGE } from "../const";
+import { TerminateError } from "../ActivityError";
+import {
+    ACTIVITY_TASK_BUILTIN_PARAMS_KEYS,
+    GLOBAL_TERMINATED,
+    GLOBAL_TERMINATED_MESSAGE,
+} from "../const";
 import { EnumActivityStatus } from "../types/enum";
 import {
     ExtendParams,
@@ -17,7 +21,8 @@ import { createActivityError } from "./util";
  * C context
  * R res
  * O options
- * E taskOptions 的宽展
+ * ER IActivityRunParams 的扩展
+ * EE IActivityExecuteParams 的扩展
  */
 class Activity<
     C = any,
@@ -84,7 +89,7 @@ class Activity<
         paramsObject: IActivityRunParams<ER> = this
             .defaultTaskRunParam as IActivityRunParams<ER>
     ) {
-        const globalCtx = this.globalCtx;
+        const { globalCtx, waiting } = this;
         // 如果已经终止
         if (globalCtx[GLOBAL_TERMINATED]) {
             return;
@@ -107,7 +112,10 @@ class Activity<
             // 执行前
             await this.runBefore.call(self, argObject);
 
-            const res: R = await this.task!.call(self, argObject);
+            // 可以不等待活动执行完毕，默认为true
+            const res: R = waiting
+                ? await this.task!.call(self, argObject)
+                : this.task!.call(self, argObject);
             this.status = EnumActivityStatus.EXECUTED;
 
             // 执行后
@@ -135,7 +143,7 @@ class Activity<
     }
 
     buildTask(...args: any[]): IActivityTaskFunction<ER, EE> {
-        return () => { };
+        return () => {};
     }
 
     build(...args: any[]) {

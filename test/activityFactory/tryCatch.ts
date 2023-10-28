@@ -1,8 +1,8 @@
-import { IActivityConfig, ITryCatchActivityConfig } from './../../src/types/activity';
+import { ActConfigFor, IActivityConfig, ITryCatchActivityConfig } from './../../src/types/activity';
 import { createActivity } from "../../src/factory/activity";
 
 
-const activityProps: ITryCatchActivityConfig = {
+const activityProps: ActConfigFor<"tryCatch"> = {
     type: 'sequence',
     name: 'tryCatch测试',
     children: [{

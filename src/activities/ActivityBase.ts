@@ -21,6 +21,9 @@ class ActivityBase<C = any, R = any, O = any,
     before: Activity<C, R, O, ER, EE> | undefined = undefined;
     after: Activity<C, R, O, ER, EE> | undefined = undefined;
 
+    // 是否等待活动结束执行完毕
+    accessor waiting: boolean = true;
+
     accessor parent: Activity | undefined;
     public name: string | undefined;
     public type: string;

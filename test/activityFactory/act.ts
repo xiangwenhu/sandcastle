@@ -1,4 +1,4 @@
-import { IActivityConfig } from "./../../src/types/activity";
+import { ActivityOptionsFor, IActivityConfig } from "./../../src/types/activity";
 import { createActivity }  from "../../src/factory/activity";
 
 const activityProps: IActivityConfig = {
@@ -17,7 +17,7 @@ const activityProps: IActivityConfig = {
                 code: function (paramsObject: any) {
                     console.log("paramsObject:", paramsObject);
                 }
-            },
+            } as ActivityOptionsFor<"code">,
         },
     ],
 };

@@ -5,7 +5,7 @@ import PageChildActivity from "./PageChildActivity";
 import { isFunction } from 'lodash';
 import { ActivityError } from '../ActivityError';
 
-export type ActionActivityTaskOptions = {
+export type ActionActivityOptions = {
     action: keyof Page;
     args: any[];
 }
@@ -13,7 +13,7 @@ export type ActionActivityTaskOptions = {
 export default class ActionActivity<
     C = any,
     R = any
-> extends PageChildActivity<C, R, ActionActivityTaskOptions> {
+> extends PageChildActivity<C, R, ActionActivityOptions> {
 
     buildTask() {
         return this.task = (paramObj: IActivityExecuteParams) => {

@@ -2,7 +2,7 @@ import { get, has, isFunction, isString } from "lodash";
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 import { GLOBAL_BUILTIN } from "../const";
-import { IActivityConfig } from "../types/activity";
+import { ActivityType, IActivityConfig } from "../types/activity";
 import { GlobalBuiltInObject } from "../types/factory";
 import {
     ActivityConstructor,
@@ -15,7 +15,7 @@ import {
 const configMap = new Map<string, IFactoryConfigValue>();
 
 export function register<A extends ActivityConstructor>(
-    type:  string,
+    type:  ActivityType,
     _class_: A,
     phConfig: IFactoryP$HConfigValue = {}
 ) {
@@ -147,7 +147,7 @@ function createMaybeCodeActivity({
     name,
     globalContext,
     addReturn
-}: { addReturn?: boolean; actConfig: string | IActivityConfig<any, any, any>, name: string, globalContext: any }) {
+}: { addReturn?: boolean; actConfig: string | IActivityConfig<any, any>, name: string, globalContext: any }) {
     return isString(actConfig)
         ? createSingle(
             {

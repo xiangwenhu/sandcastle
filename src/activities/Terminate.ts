@@ -1,6 +1,5 @@
-import BreakActivity from "./Break";
+import BreakActivity, { BreakActivityOptions } from "./Break";
 
-export default class TerminateActivity<C = any> extends BreakActivity<C> {
-  
+export type TerminateActivityOptions = BreakActivityOptions;
 
-}
+export default class TerminateActivity<C = any> extends BreakActivity<C> {}

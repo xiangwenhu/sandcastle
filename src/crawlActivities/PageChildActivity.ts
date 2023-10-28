@@ -2,8 +2,9 @@ import { Browser, Page } from "puppeteer";
 import Activity from "../activities/Activity";
 import { isFunction } from "lodash";
 import PageActivity from "./Page";
+import { ExtendParams } from "../types/activity";
 
-export default class PageChildActivity<C = any, R = any, TO = any> extends Activity<C, R, TO>  {
+export default class PageChildActivity<C = any, R = any, TO = any,ER extends ExtendParams = {}, EE extends ExtendParams = {}> extends Activity<C, R, TO, EE, ER>  {
 
     get browser(): Browser | undefined {
         return this.page!.browser();

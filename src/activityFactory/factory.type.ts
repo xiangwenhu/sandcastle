@@ -3,6 +3,7 @@ import { IActivityConfig } from "../types/activity";
 
 export type ActivityConstructor<A extends Activity<any, any, any, any, any> = Activity> = new (
     ctx?: any,
+    options?: any,
     ...args: any[]
 ) => A;
 
