@@ -1,9 +1,31 @@
 import { ActivityError } from "../ActivityError";
 import { EnumActivityStatus } from "../types/enum";
-import { IActivityExecuteParams } from "../types/activity";
+import { IActivityConfig, IActivityExecuteParams } from "../types/activity";
 import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
+import { registerClass } from "../activityFactory/factory";
 
+
+export interface IfElseActivityConfig<C = any, O = any, E = any>
+    extends IActivityConfig {
+    if: IActivityConfig;
+    elseif?: IActivityConfig[];
+    else?: IActivityConfig;
+}
+
+@registerClass("ifElse", {
+    before({ factory, globalContext, config, activity }) {
+        const ifConfig = config as IfElseActivityConfig;
+        const act = (activity! as any);
+        act.if = factory.create(ifConfig.if, globalContext) as SequenceActivity;
+        if (ifConfig.elseif) {
+            act.elseif = factory.createChildren(ifConfig.elseif, globalContext) as SequenceActivity[];
+        }
+        if (ifConfig.else) {
+            act.else = factory.create(ifConfig.else, globalContext) as SequenceActivity;
+        }
+    }
+})
 export default class IFElseActivity<C = any, R = any, O = any> extends Activity<C, R, O> {
     accessor #if: SequenceActivity | undefined = undefined;
     accessor #elseif: SequenceActivity[] | undefined = undefined;

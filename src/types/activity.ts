@@ -260,17 +260,7 @@ export interface IActivityConfig<C = any, O = any, E = any> {
 
 export type ActivityType = keyof ActivityConfigMap;
 
-export interface IfElseActivityConfig<C = any, O = any, E = any>
-    extends IActivityConfig {
-    if: IActivityConfig;
-    elseif?: IActivityConfig[];
-    else?: IActivityConfig;
-}
 
-export interface ITryCatchActivityConfig<C = any, O = any, E = any>
-    extends IActivityConfig {
-    catch: IActivityConfig;
-}
 
 export interface IFunctionActivityConfig<C = any, O = any, E = any>
     extends IActivityConfig {

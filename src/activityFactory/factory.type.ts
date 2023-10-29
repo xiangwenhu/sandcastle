@@ -1,7 +1,7 @@
 import Activity from "../activities/Activity";
 import { IActivityConfig } from "../types/activity";
 
-export type ActivityConstructor<A extends Activity<any, any, any, any, any> = Activity> = new (
+export type ActivityConstructor<A extends Activity<any, any, any, any, any> = Activity<any, any, any, any, any>> = new (
     ctx?: any,
     options?: any,
     ...args: any[]

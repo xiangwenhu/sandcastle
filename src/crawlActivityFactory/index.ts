@@ -1,4 +1,4 @@
-import factory, { register } from "../activityFactory";
+import { register, factory } from "../activityFactory";
 import $Activity from "../crawlActivities/$";
 import $$Activity from "../crawlActivities/$$";
 import $$EvalActivity from "../crawlActivities/$$Eval";

@@ -2,6 +2,7 @@ import { get, has, isFunction, isString } from "lodash";
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 import { ActivityType, IActivityConfig } from "../types/activity";
+import { firstToLower } from "../util";
 import {
     ActivityConstructor,
     IFactoryConfigValue,
@@ -21,6 +22,31 @@ export function register<A extends ActivityConstructor>(
         _class_,
         ...phConfig,
     });
+}
+
+export function registerClass<A extends ActivityConstructor>(
+    type?: string,
+    phConfig: IFactoryP$HConfigValue = {}
+) {
+    return function (target: A, context: ClassDecoratorContext<any>) {
+        if (context.kind !== "class") {
+            throw new Error("classDecorator 只能用于装饰class");
+        }
+
+        if (!isFunction(target)) {
+            throw new Error("target 必须是继承Activity的class");
+        }
+        const ttType =
+            type ||
+            firstToLower(target.name.replace("Activity", ""));
+
+        context.addInitializer(function () {
+            configMap.set(ttType, {
+                _class_: target,
+                ...phConfig,
+            });
+        });
+    };
 }
 
 export function create(props: IActivityConfig, globalContext: any = {}) {
@@ -254,3 +280,8 @@ function createSingle<A extends Activity>(
 
     return activity as A;
 }
+
+export const factory = {
+    create,
+    createChildren,
+};

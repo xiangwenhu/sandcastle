@@ -1,3 +1,4 @@
+import { registerClass } from "../activityFactory/factory";
 import { IActivityExecuteParams } from "../types/activity";
 import Activity from "./Activity";
 
@@ -8,6 +9,7 @@ export interface BreakActivityOptions {
 /**
  * 终止，可以终止的Activity:
  */
+@registerClass()
 export default class BreakActivity<C = any> extends Activity<
     C,
     string,

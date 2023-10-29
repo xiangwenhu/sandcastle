@@ -2,11 +2,13 @@ import fs from "fs";
 import fsp from "fs/promises";
 import { IActivityExecuteParams } from "../../types/activity";
 import Activity from "../Activity";
+import { registerClass } from "../../activityFactory/factory";
 
 export interface RemoveFileActivityOptions {
     dist: string;
 }
 
+@registerClass("fs.removeFile")
 export default class RemoveFileActivity<C = any> extends Activity<C, string, RemoveFileActivityOptions> {
     buildTask() {
         return async (paramObj: IActivityExecuteParams) => {

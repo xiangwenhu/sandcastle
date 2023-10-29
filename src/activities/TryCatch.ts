@@ -1,10 +1,28 @@
 import { TerminateError } from "../ActivityError";
-import { IActivityExecuteParams } from "../types/activity";
+import { registerClass } from "../activityFactory/factory";
+import { IActivityConfig, IActivityExecuteParams } from "../types/activity";
 import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
 
-export default class TryCatchActivity<C = any, R = any> extends SequenceActivity<C, R>  {
+export interface ITryCatchActivityConfig<C = any, O = any, E = any>
+    extends IActivityConfig {
+    catch: IActivityConfig;
+}
 
+@registerClass("tryCatch", {
+    before({ factory, globalContext, config, activity }) {
+        const ifConfig = config as ITryCatchActivityConfig;
+        const act = activity! as any;
+        act.catch = factory.create(
+            ifConfig.catch,
+            globalContext
+        ) as SequenceActivity;
+    },
+})
+export default class TryCatchActivity<
+    C = any,
+    R = any
+> extends SequenceActivity<C, R> {
     public catch: Activity | null = null;
 
     buildTask() {
@@ -20,10 +38,15 @@ export default class TryCatchActivity<C = any, R = any> extends SequenceActivity
                     if (err instanceof TerminateError) {
                         return err;
                     }
-                    throw new TerminateError(this.globalBuiltInCtx.terminatedMessage || (err && err.message) || '未知异常', this)
+                    throw new TerminateError(
+                        this.globalBuiltInCtx.terminatedMessage ||
+                            (err && err.message) ||
+                            "未知异常",
+                        this
+                    );
                 }
-                await this.catch!.run(paramObj)
+                await this.catch!.run(paramObj);
             }
-        }
+        };
     }
 }
