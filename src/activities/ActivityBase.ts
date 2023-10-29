@@ -16,8 +16,8 @@ class ActivityBase<C = any, R = any, O = any,
         return this.globalBuiltInCtx?.messenger
     }
 
-    pre: Activity<C, R, O, ER, EE> | undefined = undefined;
-    next: Activity<C, R, O, ER, EE> | undefined = undefined;
+    pre: Activity<C, R, O> | undefined = undefined;
+    next: Activity<C, R, O> | undefined = undefined;
     before: Activity<C, R, O, ER, EE> | undefined = undefined;
     after: Activity<C, R, O, ER, EE> | undefined = undefined;
 
@@ -36,7 +36,6 @@ class ActivityBase<C = any, R = any, O = any,
         this.#status = val;
         this.messenger?.emit("status", this.status, this);
     }
-
 
     public globalCtx: GlobalActivityContext = {} as GlobalActivityContext;
 
@@ -62,10 +61,6 @@ class ActivityBase<C = any, R = any, O = any,
 
     protected get defaultTaskExecuteParam(): IActivityExecuteParams<ER, EE> {
         return createTaskExecuteDefaultParams() as IActivityExecuteParams<ER, EE>;
-    }
-
-    protected get globalVariables(): Record<string, any> {
-        return this.globalBuiltInCtx.$v;
     }
 
     public accessor useParentCtx: boolean = false;

@@ -1,13 +1,13 @@
 import { IActivityConfig } from './../../src/types/activity';
-import { registerMethod, registerVariable, createActivity } from "../../src/factory/activity"
+import { addMethod, addConstant, createActivity } from "../../src/factory/activity"
 
-registerMethod("getName",
+addMethod("getName",
     function getName() {
         return "name"
     }
 );
 
-registerVariable("money", 1000);
+addConstant("money", 1000);
 
 const activityProps: IActivityConfig = {
     type: "sequence",

@@ -131,11 +131,11 @@ TODO::
 - [x] 注册函数和变量
 ```typescript  
 // 使用 默认属性为 $c, 方法为 $m
-registerMethod("getName",function getName() {return "name"});
-registerVariable("money", 1000);
+addMethod("getName",function getName() {return "name"});
+addVariable("money", 1000);
 // 批量使用如下
-batchRegisterVariables
-batchRegisterMethods
+batchaddVariables
+batchaddMethods
 ```
 - [ ] 注册的函数和变量 只读
 - [ ] 类型推导，已知type，推导具体的 IActivityConfig

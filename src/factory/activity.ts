@@ -32,12 +32,8 @@ export function createInstance(options: ICreateInstanceOptions = {}) {
     gBCtx.messenger = options.messenger || new Messenger();
     const createActivity = createActivityHOC(gBCtx);
 
-    const registerConstant = gBCtx.registerConstant.bind(gBCtx);
-    const registerMethod = gBCtx.registerMethod.bind(gBCtx);
-
     return {
-        registerConstant,
-        registerMethod,
+        ...gBCtx.getMethods(),
         createActivity,
         create<T>(
             type: ActivityType,
@@ -52,6 +48,14 @@ export function createInstance(options: ICreateInstanceOptions = {}) {
 const instance = createInstance();
 
 export const createActivity = instance.createActivity;
-export const registerConstant = instance.registerConstant;
-export const registerMethod = instance.registerMethod;
 export const create = instance.create;
+
+export const addConstant = instance.addConstant;
+export const addMethod = instance.addMethod;
+export const addVariable = instance.addVariable;
+export const addActivityReference = instance.addActivityReference;
+
+export const removeConstant = instance.removeConstant;
+export const removeMethod = instance.removeMethod;
+export const removeVariable = instance.removeVariable;
+export const removeActivityReference = instance.removeActivityReference;

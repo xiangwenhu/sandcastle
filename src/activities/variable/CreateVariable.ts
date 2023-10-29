@@ -10,7 +10,7 @@ export default class CreateVariableActivity<C = any> extends Activity<C, any, Cr
     buildTask() {
         return (paramObj: IActivityExecuteParams) => {
             const { name, value } = this.getReplacedOptions(paramObj);
-            this.globalVariables[name] = value;
+            this.globalBuiltInCtx.addVariable(name, value);
         };
     }
 }

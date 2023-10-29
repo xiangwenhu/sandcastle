@@ -61,7 +61,7 @@ class Activity<
         const { globalBuiltInCtx, globalCtx } = this;
         let mContext = this.ctx || {};
 
-        const bObject = globalBuiltInCtx.toObject();
+        const bObject = globalBuiltInCtx.getObject();
 
         const extraExecuteParams = this.getExtraExecuteParams();
         const argObject: IActivityExecuteParams<ER, EE> = {
@@ -69,7 +69,7 @@ class Activity<
             $ctx: mContext,
             $c: bObject.$c,
             $m: bObject.$m,
-            $v: this.globalVariables,
+            $v: bObject.$v,
             $parent: this.parent,
             $res: undefined,
             $a: bObject.$a,

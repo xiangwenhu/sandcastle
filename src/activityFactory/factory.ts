@@ -249,7 +249,7 @@ function createSingle<A extends Activity>(
     //TODO:: Proxy限制访问的属性
     if (isString(actConfig.toVariable) && actConfig.toVariable.trim() !== "") {
         const name = actConfig.toVariable.trim();
-        activity.globalBuiltInCtx.registerActivityReference(name, activity);
+        activity.globalBuiltInCtx.addActivityReference(name, activity);
     }
 
     return activity as A;

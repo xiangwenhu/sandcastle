@@ -9,7 +9,7 @@ export default class DeleteVariableActivity<C = any> extends Activity<C, any, De
     buildTask() {
         return (paramObj: IActivityExecuteParams) => {
             const { name } = this.getReplacedOptions(paramObj);
-            delete this.globalVariables[name];
+            this.globalBuiltInCtx.removeVariable(name);
         };
     }
 }

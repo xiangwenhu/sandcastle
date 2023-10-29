@@ -1,4 +1,3 @@
-import _ from "lodash";
 import Activity from "../activities/Activity";
 import { ILogger } from "../types/logger";
 import { IMessenger } from "../types/messenger";
@@ -26,10 +25,6 @@ class GlobalBuiltinContext {
      */
     #$a: Record<string, Activity> = {};
 
-    get $v(){
-        return this.#$v;
-    }
-
     /**
      * 日志
      */
@@ -38,7 +33,7 @@ class GlobalBuiltinContext {
     // @ts-ignore
     public accessor messenger: IMessenger;
 
-    toObject() {
+    getObject() {
         const self = this;
         return {
             get $m() {
@@ -56,33 +51,55 @@ class GlobalBuiltinContext {
         };
     }
 
-    registerVariable(name: string, value: any) {
-        _.merge(this.#$v, {
-            [name]: value,
-        });
+    getMethods() {
+        return {
+            addVariable: this.addVariable,
+            removeVariable: this.removeVariable,
+            addMethod: this.addMethod,
+            removeMethod: this.removeMethod,
+            addConstant: this.addConstant,
+            removeConstant: this.removeConstant,
+            addActivityReference: this.addActivityReference,
+            removeActivityReference: this.removeActivityReference,
+        };
     }
 
-    registerMethod(name: string, value: Function) {
-        _.merge(this.#$m, {
-            [name]: value,
-        });
-    }
+    addVariable = (name: string, value: any) => {
+        this.#$v[name] = value;
+    };
 
-    registerConstant(name: string, value: any) {
+    removeVariable = (name: string) => {
+        delete this.#$v[name];
+    };
+
+    addMethod = (name: string, value: Function) => {
+        this.#$m[name] = value;
+    };
+
+    removeMethod = (name: string) => {
+        delete this.#$m[name];
+    };
+
+    addConstant = (name: string, value: any) => {
         Object.defineProperty(this.#$c, name, {
             configurable: false,
             get() {
                 return value;
             },
         });
-    }
+    };
 
-    registerActivityReference(name: string, activity: Activity) {
-        _.merge(this.#$a, {
-            [name]: activity,
-        });
-    }
-    
+    removeConstant = (name: string) => {
+        delete this.#$c[name];
+    };
+
+    addActivityReference = (name: string, activity: Activity) => {
+        this.#$a[name] = activity;
+    };
+
+    removeActivityReference = (name: string) => {
+        delete this.#$a[name];
+    };
 }
 
 export default GlobalBuiltinContext;
