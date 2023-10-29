@@ -1,10 +1,10 @@
 import { ActivityType, ExtendParams, IActivityConfig } from "../types/activity";
-import factory from "../crawlActivityFactory";
 import Activity from "../activities/Activity";
 import Messenger from "../messenger";
 import GlobalBuiltinContext from "../globalBuiltinContext";
 import { ICreateInstanceOptions } from "../types/factory";
 import { GLOBAL_BUILTIN_CONTEXT } from "../const";
+import { factory } from "../activityFactory";
 
 const createActivityHOC =
     (globalBuiltinContext: GlobalBuiltinContext) =>

@@ -1,8 +1,6 @@
 import _ from "lodash";
 import { TerminateError } from "../ActivityError";
-import {
-    ACTIVITY_TASK_BUILTIN_PARAMS_KEYS,
-} from "../const";
+import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS } from "../const";
 import { EnumActivityStatus } from "../types/enum";
 import {
     ExtendParams,
@@ -65,16 +63,16 @@ class Activity<
 
         const extraExecuteParams = this.getExtraExecuteParams();
         const argObject: IActivityExecuteParams<ER, EE> = {
+            ...paramsObject,
+            ...extraExecuteParams,
             $gCtx: globalCtx,
             $ctx: mContext,
             $c: bObject.$c,
             $m: bObject.$m,
             $v: bObject.$v,
+            $a: bObject.$a,
             $parent: this.parent,
             $res: undefined,
-            $a: bObject.$a,
-            ...paramsObject,
-            ...extraExecuteParams,
         };
         return argObject;
     }

@@ -14,7 +14,7 @@ import {
 const configMap = new Map<string, IFactoryConfigValue>();
 
 export function register<A extends ActivityConstructor>(
-    type: ActivityType,
+    type: ActivityType | string,
     _class_: A,
     phConfig: IFactoryP$HConfigValue = {}
 ) {
@@ -37,8 +37,7 @@ export function registerClass<A extends ActivityConstructor>(
             throw new Error("target 必须是继承Activity的class");
         }
         const ttType =
-            type ||
-            firstToLower(target.name.replace("Activity", ""));
+            type || firstToLower(target.name.replace("Activity", ""));
 
         context.addInitializer(function () {
             configMap.set(ttType, {
@@ -285,3 +284,15 @@ export const factory = {
     create,
     createChildren,
 };
+
+export function use(
+    fn: (useFnOptions: {
+        factory: typeof factory;
+        register: typeof register;
+    }) => void
+) {
+    fn.call(null, {
+        factory,
+        register,
+    });
+}

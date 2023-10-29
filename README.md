@@ -111,8 +111,9 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 
 
 
-## logger
-TODO::
+## logger [✅]
+默认使用console，可以自定义logger.
+
 
 ## 消息
 TODO::
@@ -123,9 +124,8 @@ TODO::
 
 ## TODO::
 - [x] 活动CodeActivity执行中，如何提供内置的变量或者方法
-    * 动态创建的函数，传入this, 使用with语句
-    * 额外参数，展开所有属性
-     改良版本，`$c`注册的变量，`$m` 注册的方法
+    * 动态函数 + 扩展运算符
+     `$c`:常量，`$m` 方法
 - [x] 集合?变量?的操作和管理
     * 比如for循环
 - [x] 注册函数和变量
@@ -157,4 +157,6 @@ batchaddMethods
 - [x] globalContext的改进
   * 内置globalBuiltinContext
 - [x] 支持多实例
-- [ ] register活动修改为装饰器
+- [x] register活动支持装饰器
+- [ ] 保证paramObject的数据安全
+- [ ] 类似use，支持扩展Activities
