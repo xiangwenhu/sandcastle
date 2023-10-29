@@ -1,6 +1,7 @@
 import Activity from "../activities/Activity";
 import { ILogger } from "../types/logger";
 import { IMessenger } from "../types/messenger";
+import { addReadyOnlyProperty } from "../util";
 
 class GlobalBuiltinContext {
     public terminated: boolean = false;
@@ -73,7 +74,7 @@ class GlobalBuiltinContext {
     };
 
     addMethod = (name: string, value: Function) => {
-        this.#$m[name] = value;
+        addReadyOnlyProperty(this.#$m, name, value);
     };
 
     removeMethod = (name: string) => {
@@ -81,12 +82,7 @@ class GlobalBuiltinContext {
     };
 
     addConstant = (name: string, value: any) => {
-        Object.defineProperty(this.#$c, name, {
-            configurable: false,
-            get() {
-                return value;
-            },
-        });
+        addReadyOnlyProperty(this.#$c, name, value);
     };
 
     removeConstant = (name: string) => {
@@ -94,7 +90,7 @@ class GlobalBuiltinContext {
     };
 
     addActivityReference = (name: string, activity: Activity) => {
-        this.#$a[name] = activity;
+        addReadyOnlyProperty(this.#$a, name, activity);
     };
 
     removeActivityReference = (name: string) => {

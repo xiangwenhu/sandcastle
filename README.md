@@ -137,7 +137,8 @@ addVariable("money", 1000);
 batchaddVariables
 batchaddMethods
 ```
-- [ ] 注册的函数和变量 只读
+- [x] 注册的函数和变量 只读
+  除 `$v`外, `$c`, `$m`, `$a` 添加的属性为只读
 - [ ] 类型推导，已知type，推导具体的 IActivityConfig
 - [x] ctx指向问题, useParentCtx即可使用父节点的ctx替换自身的ctx
   - [x] For
@@ -153,5 +154,7 @@ batchaddMethods
 - [x] 改进或者删除AssertSequence
 - [x] 给父节点打名称，通过名称访问
 - [x] options 改进变量替换
-- [ ] globalContext的改进??
-  * 单独Activity，可以设置globalContext?
+- [x] globalContext的改进
+  * 内置globalBuiltinContext
+- [x] 支持多实例
+- [ ] register活动修改为装饰器
