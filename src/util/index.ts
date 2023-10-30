@@ -12,3 +12,14 @@ export function extractOwnOtherKeys(obj: Record<PropertyKey, any>, keys: Propert
     const keysList = Reflect.ownKeys(obj);
     return _.difference(keysList, keys) as string[]
 }
+
+
+
+export function addReadyOnlyProperty(obj: Object, property: string, value: any) {
+    Object.defineProperty(obj, property, {
+        configurable: false,
+        get() {
+            return value;
+        },
+    });
+}

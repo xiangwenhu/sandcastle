@@ -1,3 +1,4 @@
+import { registerClass } from "../activityFactory/factory";
 import { IActivityExecuteParams } from "../types/activity";
 import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
@@ -14,6 +15,7 @@ interface ER {
     $index: number;
 }
 
+@registerClass()
 export default class ForActivity<C = any, R = any> extends SequenceActivity<
     C,
     R,

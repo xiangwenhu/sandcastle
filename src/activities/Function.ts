@@ -1,12 +1,19 @@
-import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
+import { isFunction } from "lodash";
+import { registerClass } from "../activityFactory/factory";
+import { IActivityExecuteParams, IFunctionActivityConfig } from "../types/activity";
 import Activity from "./Activity";
 
 export interface FunctionActivityOptions {
 }
 
-/**
- * 终止，可以终止的Activity:
- */
+@registerClass("function", {
+    after({ activity, config }) {
+        const c = config as IFunctionActivityConfig;
+        if (isFunction(c.task)) {
+            activity!.task = c.task;
+        }
+    }
+})
 export default class FunctionActivity<C = any> extends Activity<
     C,
     string,

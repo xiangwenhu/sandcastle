@@ -1,4 +1,4 @@
-import { ActivityError } from "../ActivityError";
+import { registerClass } from "../activityFactory/factory";
 import { IActivityExecuteParams } from "../types/activity";
 import SequenceActivity from "./Sequence";
 
@@ -13,6 +13,7 @@ interface ER {
     $index: number;
 }
 
+@registerClass()
 export default class ParallelForActivity<
     C = any,
     R = any

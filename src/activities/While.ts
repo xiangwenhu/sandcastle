@@ -2,7 +2,9 @@ import { ActivityError } from "../ActivityError";
 import { EnumActivityStatus } from "../types/enum";
 import { IActivityExecuteParams } from "../types/activity";
 import SequenceActivity from "./Sequence";
+import { registerClass } from "../activityFactory/factory";
 
+@registerClass()
 export default class WhileActivity<C = any, R = any> extends SequenceActivity<
     C,
     R

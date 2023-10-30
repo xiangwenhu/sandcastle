@@ -111,8 +111,9 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 
 
 
-## logger
-TODO::
+## logger [✅]
+默认使用console，可以自定义logger.
+
 
 ## 消息
 TODO::
@@ -123,21 +124,21 @@ TODO::
 
 ## TODO::
 - [x] 活动CodeActivity执行中，如何提供内置的变量或者方法
-    * 动态创建的函数，传入this, 使用with语句
-    * 额外参数，展开所有属性
-     改良版本，`$c`注册的变量，`$m` 注册的方法
+    * 动态函数 + 扩展运算符
+     `$c`:常量，`$m` 方法
 - [x] 集合?变量?的操作和管理
     * 比如for循环
 - [x] 注册函数和变量
 ```typescript  
 // 使用 默认属性为 $c, 方法为 $m
-registerMethod("getName",function getName() {return "name"});
-registerVariable("money", 1000);
+addMethod("getName",function getName() {return "name"});
+addVariable("money", 1000);
 // 批量使用如下
-batchRegisterVariables
-batchRegisterMethods
+batchaddVariables
+batchaddMethods
 ```
-- [ ] 注册的函数和变量 只读
+- [x] 注册的函数和变量 只读
+  除 `$v`外, `$c`, `$m`, `$a` 添加的属性为只读
 - [ ] 类型推导，已知type，推导具体的 IActivityConfig
 - [x] ctx指向问题, useParentCtx即可使用父节点的ctx替换自身的ctx
   - [x] For
@@ -153,5 +154,9 @@ batchRegisterMethods
 - [x] 改进或者删除AssertSequence
 - [x] 给父节点打名称，通过名称访问
 - [x] options 改进变量替换
-- [ ] globalContext的改进??
-  * 单独Activity，可以设置globalContext?
+- [x] globalContext的改进
+  * 内置globalBuiltinContext
+- [x] 支持多实例
+- [x] register活动支持装饰器
+- [ ] 保证paramObject的数据安全
+- [ ] 类似use，支持扩展Activities

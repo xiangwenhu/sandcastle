@@ -1,11 +1,13 @@
 import { isString } from "lodash";
 import Activity from "./Activity";
 import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
+import { registerClass } from "../activityFactory/factory";
 
 export interface DelayActivityOptions {
     timeout: number;
 }
 
+@registerClass()
 export default class DelayActivity<C = any, R = any> extends Activity<
     C,
     R,

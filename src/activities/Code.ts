@@ -1,20 +1,20 @@
 import { isBoolean, isFunction, isString } from "lodash";
 import { ActivityError } from "../ActivityError";
-import { EnumActivityStatus } from "../types/enum";
+import { registerClass } from "../activityFactory/factory";
+import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS } from "../const";
 import { createOneParamAsyncFunction } from "../factory/function";
 import {
     IActivityExecuteParams,
     IActivityTaskFunction,
 } from "../types/activity";
-import Activity from "./Activity";
-import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS } from "../const";
-import _ from "lodash";
 import { extractOwnOtherKeys } from "../util";
+import Activity from "./Activity";
 
 export interface CodeActivityOptions {
     code: string | Function;
 }
 
+@registerClass()
 export default class CodeActivity<C = any, R = any> extends Activity<
     C,
     R,
