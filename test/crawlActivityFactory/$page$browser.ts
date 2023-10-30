@@ -1,10 +1,10 @@
-import { IActivityConfig, IActivityExecuteParams, IFunctionActivityConfig } from '../../src/types/activity';
-import { createActivity } from "../../src/factory/activity";
-import "../../src/crawlActivityFactory";
 import { PageActivityEE } from '../../src/crawlActivities/Page';
+import "../../src/crawlActivityFactory";
+import { createActivity } from "../../src/factory/activity";
+import { ActConfigFor, IActivityExecuteParams, IFunctionActivityConfig } from '../../src/types/activity';
 
 
-const activityProps: IActivityConfig = {
+const activityProps: ActConfigFor<"c.browser"> = {
     type: "c.browser",
     name: "创建浏览器",
     options: {
@@ -28,7 +28,7 @@ const activityProps: IActivityConfig = {
         }
         ]
     }]
-};
+}
 
 const activity = createActivity(activityProps);
 

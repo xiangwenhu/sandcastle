@@ -1,4 +1,4 @@
-import { Browser, launch } from "puppeteer";
+import { Browser, PuppeteerLaunchOptions, launch } from "puppeteer";
 import SequenceActivity from "../activities/Sequence";
 import { IActivityExecuteParams } from "../types/activity";
 
@@ -6,10 +6,12 @@ export interface BrowserActivityEE {
     $browser: Browser;
 }
 
+export type BrowserActivityOptions = PuppeteerLaunchOptions | undefined;
+
 export default class BrowserActivity<C = any, R = any> extends SequenceActivity<
     C,
     R,
-    any,
+    BrowserActivityOptions,
     any,
     BrowserActivityEE
 > {
@@ -20,7 +22,9 @@ export default class BrowserActivity<C = any, R = any> extends SequenceActivity<
     }
 
     buildTask() {
-        return (this.task = async (paramObj: IActivityExecuteParams<BrowserActivityEE>) => {
+        return (this.task = async (
+            paramObj: IActivityExecuteParams<BrowserActivityEE>
+        ) => {
             try {
                 const options = this.getReplacedOptions(paramObj);
                 this.#browser = await launch(options);

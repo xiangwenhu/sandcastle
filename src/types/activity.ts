@@ -67,6 +67,7 @@ import { MouseMoveActivityOptions } from "../crawlActivities/mouse/Move";
 import { MouseUpActivityOptions } from "../crawlActivities/mouse/Up";
 import { MouseWheelActivityOptions } from "../crawlActivities/mouse/Wheel";
 import GlobalBuiltinContext from "../globalBuiltinContext";
+import { BrowserActivityOptions } from "../crawlActivities/Browser";
 
 export declare type ActConfigFor<Type extends ActivityType> =
     Type extends keyof ActivityConfigMap
@@ -76,7 +77,7 @@ export declare type ActConfigFor<Type extends ActivityType> =
 export interface DefaultActivityOptions {}
 // export declare type ActivityOptionsFor<Type extends keyof ActivityOptionsMap | keyof SVGElementTagNameMap> = Type extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[Type] : Type extends keyof SVGElementTagNameMap ? SVGElementTagNameMap[Type] : never;
 
-export interface ActivityConfigMap {
+export type ActivityConfigMap =  {
     break: IActivityConfig<any, BreakActivityOptions>;
     code: IActivityConfig<any, CodeActivityOptions>;
     delay: IActivityConfig<any, DelayActivityOptions>;
@@ -99,114 +100,114 @@ export interface ActivityConfigMap {
     "v.create": IActivityConfig<any, CreateVariableActivityOptions>;
     "v.delete": IActivityConfig<any, DeleteVariableActivityOptions>;
 
-    // "c.browser": IActivityConfig<any, BreakActivityOptions>;
-    // "c.page": IActivityConfig<any, DefaultActivityOptions>;
-    // "c.page.click": IActivityConfig<any, ClickActivityOptions>;
-    // "c.page.close": IActivityConfig<any, DefaultActivityOptions>;
-    // "c.page.content": IActivityConfig<any, DefaultActivityOptions>;
-    // "c.page.evaluate": IActivityConfig<any, EvaluateActivityOptions>;
-    // "c.page.eClick": IActivityConfig<any, EvaluateClickActivityOptions>;
-    // "c.page.fetch": IActivityConfig<any, FetchActivityOptions>;
-    // "c.page.goBack": IActivityConfig<any, GoBackActivityOptions>;
-    // "c.page.goForward": IActivityConfig<any, GoForwardActivityOptions>;
-    // "c.page.isClosed": IActivityConfig<any, CodeActivityOptions>;
-    // "c.page.reload": IActivityConfig<any, ReloadActivityOptions>;
-    // "c.page.setCookie": IActivityConfig<any, CodeActivityOptions>;
-    // "c.page.setUserAgent": IActivityConfig<any, SetUserAgentActivityOptions>;
-    // "c.page.title": IActivityConfig<any, DefaultActivityOptions>;
-    // "c.page.type": IActivityConfig<any, TypeActivityOptions>;
-    // "c.page.url": IActivityConfig<any, DefaultActivityOptions>;
-    // "c.page.waitForNavigation": IActivityConfig<
-    //     any,
-    //     WaitForNavigationActivityOptions
-    // >;
-    // "c.page.waitForRequest": IActivityConfig<
-    //     any,
-    //     WaitForRequestActivityOptions
-    // >;
-    // "c.page.waitForResponse": IActivityConfig<
-    //     any,
-    //     WaitForResponseActivityOptions
-    // >;
-    // "c.page.waitForSelector": IActivityConfig<
-    //     any,
-    //     WaitForSelectorActivityOptions
-    // >;
-    // "c.page.cookies": IActivityConfig<any, DefaultActivityOptions>;
-    // "c.page.goto": IActivityConfig<any, GotoActivityOptions>;
-    // "c.page.$eval": IActivityConfig<any, $EvalActivityOptions>;
-    // "c.page.$$eval": IActivityConfig<any, $$EvalActivityOptions>;
-    // "c.page.focus": IActivityConfig<any, FocusActivityOptions>;
-    // "c.page.hover": IActivityConfig<any, HoverActivityOptions>;
-    // "c.page.clearValue": IActivityConfig<any, ClearValueActivityOptions>;
-    // "c.page.uploadFile": IActivityConfig<any, UploadFileActivityOptions>;
-    // "c.page.$": IActivityConfig<any, $ActivityOptions>;
-    // "c.page.$$)": IActivityConfig<any, $$ActivityOptions>;
+    "c.browser": IActivityConfig<any, BrowserActivityOptions>;
+    "c.page": IActivityConfig<any, DefaultActivityOptions>;
+    "c.page.click": IActivityConfig<any, ClickActivityOptions>;
+    "c.page.close": IActivityConfig<any, DefaultActivityOptions>;
+    "c.page.content": IActivityConfig<any, DefaultActivityOptions>;
+    "c.page.evaluate": IActivityConfig<any, EvaluateActivityOptions>;
+    "c.page.eClick": IActivityConfig<any, EvaluateClickActivityOptions>;
+    "c.page.fetch": IActivityConfig<any, FetchActivityOptions>;
+    "c.page.goBack": IActivityConfig<any, GoBackActivityOptions>;
+    "c.page.goForward": IActivityConfig<any, GoForwardActivityOptions>;
+    "c.page.isClosed": IActivityConfig<any, CodeActivityOptions>;
+    "c.page.reload": IActivityConfig<any, ReloadActivityOptions>;
+    "c.page.setCookie": IActivityConfig<any, CodeActivityOptions>;
+    "c.page.setUserAgent": IActivityConfig<any, SetUserAgentActivityOptions>;
+    "c.page.title": IActivityConfig<any, DefaultActivityOptions>;
+    "c.page.type": IActivityConfig<any, TypeActivityOptions>;
+    "c.page.url": IActivityConfig<any, DefaultActivityOptions>;
+    "c.page.waitForNavigation": IActivityConfig<
+        any,
+        WaitForNavigationActivityOptions
+    >;
+    "c.page.waitForRequest": IActivityConfig<
+        any,
+        WaitForRequestActivityOptions
+    >;
+    "c.page.waitForResponse": IActivityConfig<
+        any,
+        WaitForResponseActivityOptions
+    >;
+    "c.page.waitForSelector": IActivityConfig<
+        any,
+        WaitForSelectorActivityOptions
+    >;
+    "c.page.cookies": IActivityConfig<any, DefaultActivityOptions>;
+    "c.page.goto": IActivityConfig<any, GotoActivityOptions>;
+    "c.page.$eval": IActivityConfig<any, $EvalActivityOptions>;
+    "c.page.$$eval": IActivityConfig<any, $$EvalActivityOptions>;
+    "c.page.focus": IActivityConfig<any, FocusActivityOptions>;
+    "c.page.hover": IActivityConfig<any, HoverActivityOptions>;
+    "c.page.clearValue": IActivityConfig<any, ClearValueActivityOptions>;
+    "c.page.uploadFile": IActivityConfig<any, UploadFileActivityOptions>;
+    "c.page.$": IActivityConfig<any, $ActivityOptions>;
+    "c.page.$$)": IActivityConfig<any, $$ActivityOptions>;
 
-    // // keyboard
-    // "c.page.keyboard.down": IActivityConfig<any, KeyboardDownActivityOptions>;
-    // "c.page.keyboard.up": IActivityConfig<any, KeyboardUpActivityOptions>;
-    // "c.page.keyboard.sendCharacter": IActivityConfig<
-    //     any,
-    //     KeyboardSendCharacterActivityOptions
-    // >;
-    // "c.page.keyboard.type": IActivityConfig<any, KeyboardTypeActivityOptions>;
-    // "c.page.keyboard.press": IActivityConfig<any, KeyboardUpActivityOptions>;
+    // keyboard
+    "c.page.keyboard.down": IActivityConfig<any, KeyboardDownActivityOptions>;
+    "c.page.keyboard.up": IActivityConfig<any, KeyboardUpActivityOptions>;
+    "c.page.keyboard.sendCharacter": IActivityConfig<
+        any,
+        KeyboardSendCharacterActivityOptions
+    >;
+    "c.page.keyboard.type": IActivityConfig<any, KeyboardTypeActivityOptions>;
+    "c.page.keyboard.press": IActivityConfig<any, KeyboardUpActivityOptions>;
 
-    // // mouse
-    // "c.page.mouse.click": IActivityConfig<any, MouseClickActivityOptions>;
-    // "c.page.mouse.down": IActivityConfig<any, MouseDownActivityOptions>;
-    // "c.page.mouse.drag": IActivityConfig<any, MouseDragActivityOptions>;
-    // "c.page.mouse.dragAndDrop": IActivityConfig<
-    //     any,
-    //     MouseDragAndDropActivityOptions
-    // >;
-    // "c.page.mouse.dragEnter": IActivityConfig<
-    //     any,
-    //     MouseDragEnterActivityOptions
-    // >;
-    // "c.page.mouse.dragOver": IActivityConfig<any, MouseDragOverActivityOptions>;
-    // "c.page.mouse.drop": IActivityConfig<any, MouseDropActivityOptions>;
-    // "c.page.mouse.move": IActivityConfig<any, MouseMoveActivityOptions>;
-    // "c.page.mouse.reset": IActivityConfig<any, DefaultActivityOptions>;
-    // "c.page.mouse.up": IActivityConfig<any, MouseUpActivityOptions>;
-    // "c.page.mouse.wheel": IActivityConfig<any, MouseWheelActivityOptions>;
-    // "c.page.exposeFunction": IActivityConfig<
-    //     any,
-    //     ExposeFunctionActivityOptions
-    // >;
-    // "c.page.removeExposedFunction": IActivityConfig<
-    //     any,
-    //     RemoveExposedFunctionActivityOptions
-    // >;
-    // "c.page.pdf": IActivityConfig<any, PdfActivityOptions>;
-    // "c.page.screenshot": IActivityConfig<any, ScreenshotActivityOptions>;
-    // "c.page.setViewport": IActivityConfig<any, SetViewportActivityOptions>;
-    // "c.page.setRequestInterception": IActivityConfig<
-    //     any,
-    //     SetRequestInterceptionActivityOptions
-    // >;
-    // "c.page.setExtraHTTPHeaders": IActivityConfig<
-    //     any,
-    //     SetExtraHTTPHeadersActivityOptions
-    // >;
-    // "c.page.setGeolocation": IActivityConfig<
-    //     any,
-    //     SetGeolocationActivityOptions
-    // >;
-    // "c.page.addScriptTag": IActivityConfig<any, AddScriptTagActivityOptions>;
-    // "c.page.addStyleTag": IActivityConfig<any, AddStyleTagActivityOptions>;
-    // "c.page.select": IActivityConfig<any, SelectActivityOptions>;
+    // mouse
+    "c.page.mouse.click": IActivityConfig<any, MouseClickActivityOptions>;
+    "c.page.mouse.down": IActivityConfig<any, MouseDownActivityOptions>;
+    "c.page.mouse.drag": IActivityConfig<any, MouseDragActivityOptions>;
+    "c.page.mouse.dragAndDrop": IActivityConfig<
+        any,
+        MouseDragAndDropActivityOptions
+    >;
+    "c.page.mouse.dragEnter": IActivityConfig<
+        any,
+        MouseDragEnterActivityOptions
+    >;
+    "c.page.mouse.dragOver": IActivityConfig<any, MouseDragOverActivityOptions>;
+    "c.page.mouse.drop": IActivityConfig<any, MouseDropActivityOptions>;
+    "c.page.mouse.move": IActivityConfig<any, MouseMoveActivityOptions>;
+    "c.page.mouse.reset": IActivityConfig<any, DefaultActivityOptions>;
+    "c.page.mouse.up": IActivityConfig<any, MouseUpActivityOptions>;
+    "c.page.mouse.wheel": IActivityConfig<any, MouseWheelActivityOptions>;
+    "c.page.exposeFunction": IActivityConfig<
+        any,
+        ExposeFunctionActivityOptions
+    >;
+    "c.page.removeExposedFunction": IActivityConfig<
+        any,
+        RemoveExposedFunctionActivityOptions
+    >;
+    "c.page.pdf": IActivityConfig<any, PdfActivityOptions>;
+    "c.page.screenshot": IActivityConfig<any, ScreenshotActivityOptions>;
+    "c.page.setViewport": IActivityConfig<any, SetViewportActivityOptions>;
+    "c.page.setRequestInterception": IActivityConfig<
+        any,
+        SetRequestInterceptionActivityOptions
+    >;
+    "c.page.setExtraHTTPHeaders": IActivityConfig<
+        any,
+        SetExtraHTTPHeadersActivityOptions
+    >;
+    "c.page.setGeolocation": IActivityConfig<
+        any,
+        SetGeolocationActivityOptions
+    >;
+    "c.page.addScriptTag": IActivityConfig<any, AddScriptTagActivityOptions>;
+    "c.page.addStyleTag": IActivityConfig<any, AddStyleTagActivityOptions>;
+    "c.page.select": IActivityConfig<any, SelectActivityOptions>;
 
-    // "c.page.action": IActivityConfig<any, ActionActivityOptions>;
-    // "c.page.property": IActivityConfig<any, PropertyActivity>;
-}
+    "c.page.action": IActivityConfig<any, ActionActivityOptions>;
+    "c.page.property": IActivityConfig<any, PropertyActivity>;
+};
 
 export interface IActivityConfig<C = any, O = any, E = any> {
     /**
      * 类型
      */
-    type: ActivityType | string;
+    type: ActivityType;
     /**
      * 上下文
      */
