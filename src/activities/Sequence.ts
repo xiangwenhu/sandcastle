@@ -1,4 +1,3 @@
-import { ActivityError } from "../ActivityError";
 import { registerClass } from "../activityFactory/factory";
 import { ExtendParams, IActivityExecuteParams } from "../types/activity";
 import BreakActivity from "./Break";

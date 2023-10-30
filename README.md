@@ -116,10 +116,11 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 
 
 ## 消息
-TODO::
+默认使用console，可以自定义logger.
+
 
 ## 可视化进度
-TODO::
+已通过messenger传递状态，已提供getProgress生成状态树。
 
 
 ## TODO::
@@ -139,7 +140,6 @@ batchaddMethods
 ```
 - [x] 注册的函数和变量 只读
   除 `$v`外, `$c`, `$m`, `$a` 添加的属性为只读
-- [ ] 类型推导，已知type，推导具体的 IActivityConfig
 - [x] ctx指向问题, useParentCtx即可使用父节点的ctx替换自身的ctx
   - [x] For
   - [x] IFElse
@@ -158,5 +158,8 @@ batchaddMethods
   * 内置globalBuiltinContext
 - [x] 支持多实例
 - [x] register活动支持装饰器
+- [x] 类似use，支持扩展Activities
+- [x] BrowserActivity和PageActivity给IActivityExecuteParams分别暴露 `$browser`和`$page`
+- [ ] 增强提示，类型推导，已知type，推导具体的 IActivityConfig (尤其是options)
 - [ ] 保证paramObject的数据安全
-- [ ] 类似use，支持扩展Activities
+- [ ] puppeteer-extra ?? 

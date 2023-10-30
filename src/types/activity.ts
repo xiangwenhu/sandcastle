@@ -262,9 +262,9 @@ export type ActivityType = keyof ActivityConfigMap;
 
 
 
-export interface IFunctionActivityConfig<C = any, O = any, E = any>
-    extends IActivityConfig {
-    task: IActivityTaskFunction;
+export interface IFunctionActivityConfig<C = any, O = any, E= any, ER extends ExtendParams = {}, EE extends ExtendParams = {}>
+    extends IActivityConfig<C, O, E> {
+    task: IActivityTaskFunction<ER, EE>;
 }
 
 export interface ActivityFactory<

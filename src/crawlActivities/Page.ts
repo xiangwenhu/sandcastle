@@ -1,15 +1,23 @@
 import { Browser, Page } from "puppeteer";
 import SequenceActivity from "../activities/Sequence";
-import BrowserActivity from "./Browser";
-import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
-import { ActivityError } from "../ActivityError";
+import { IActivityExecuteParams } from "../types/activity";
+import BrowserActivity, { BrowserActivityEE } from "./Browser";
 
-export default class PageActivity<C = any, R = any> extends SequenceActivity<C, R>  {
+export interface PageActivityEE extends BrowserActivityEE{
+    $page: Page;
+}
 
+export default class PageActivity<C = any, R = any> extends SequenceActivity<
+    C,
+    R,
+    any,
+    any,
+    PageActivityEE
+> {
     #page: Page | undefined = undefined;
 
     get page() {
-        return this.#page
+        return this.#page;
     }
 
     get browser(): Browser | undefined {
@@ -17,16 +25,16 @@ export default class PageActivity<C = any, R = any> extends SequenceActivity<C, 
     }
 
     buildTask() {
-        return this.task = async (paramObject: IActivityExecuteParams) => {
+        return (this.task = async (paramObject: IActivityExecuteParams<PageActivityEE>) => {
             try {
                 this.#page = await this.browser!.newPage();
+                paramObject.$page = this.#page;
                 const superTask = super.buildTask();
                 const res = await superTask.call(this, paramObject);
                 return res;
             } catch (err: any) {
-                throw this.createActivityError(err)
+                throw this.createActivityError(err);
             }
-        }
+        });
     }
-
 }

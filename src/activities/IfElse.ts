@@ -5,7 +5,6 @@ import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
 import { registerClass } from "../activityFactory/factory";
 
-
 export interface IfElseActivityConfig<C = any, O = any, E = any>
     extends IActivityConfig {
     if: IActivityConfig;

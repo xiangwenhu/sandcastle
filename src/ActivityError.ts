@@ -8,7 +8,7 @@ class ActivityError extends Error {
     constructor(message: string, activity: Activity<any, any, any, any, any>) {
         super(message);
         this.activity = activity;
-        this.name = "ActivityError";
+        this.name = "activityError";
     }
 }
 
@@ -17,7 +17,7 @@ class TerminateError extends ActivityError  {
     constructor(message: string, activity: Activity<any, any, any, any, any>) {
         super(message, activity);
         this.activity = activity;
-        this.name = "TerminateError";
+        this.name = "terminateError";
     }
 }
 

@@ -50,5 +50,4 @@ export async function downloadFileWithRetry(url: string, dist: string, options: 
 } = DEFAULT_OPTIONS) {
     await ensureDir(dist)
     return downloadFile(url, dist, _.merge({}, options.requestConfig), options.timeout)
-
 }
