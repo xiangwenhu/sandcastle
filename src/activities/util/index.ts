@@ -38,9 +38,12 @@ export function createActivityError(
     if (_.isString(err)) {
         return new ActivityError(err, act);
     } else if (_.isObject(err)) {
-        const name = (err as Record<string, any>)?.name;
-        if (ACTIVITY_ERROR_NAME.includes(name)) {
-            return err;
+        // const name = (err as Record<string, any>)?.name;
+        // if (ACTIVITY_ERROR_NAME.includes(name)) {
+        //     return err;
+        // }
+        if (err instanceof ActivityError) {
+            throw err;
         }
         if (_.has(err, "message")) {
             return new ActivityError(`${_.get(err, "message")}`, act);
