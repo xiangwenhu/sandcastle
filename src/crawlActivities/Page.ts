@@ -1,9 +1,9 @@
 import { Browser, Page } from "puppeteer";
 import SequenceActivity from "../activities/Sequence";
-import { IActivityExecuteParams } from "../types/activity";
+import { ExtendParams, IActivityExecuteParams } from "../types/activity";
 import BrowserActivity, { BrowserActivityEE } from "./Browser";
 
-export interface PageActivityEE extends BrowserActivityEE{
+export interface PageActivityEE extends ExtendParams{
     $page: Page;
 }
 

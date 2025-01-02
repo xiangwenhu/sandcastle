@@ -4,8 +4,7 @@ import { IActivityConfig, IActivityExecuteParams } from "../types/activity";
 import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
 
-export interface ITryCatchActivityConfig<C = any, O = any, E = any>
-    extends IActivityConfig {
+export interface ITryCatchActivityConfig<C = any, O = any, E = any> extends IActivityConfig {
     catch: IActivityConfig;
 }
 
@@ -40,8 +39,8 @@ export default class TryCatchActivity<
                     }
                     throw new TerminateError(
                         this.globalBuiltInCtx.terminatedMessage ||
-                            (err && err.message) ||
-                            "未知异常",
+                        (err && err.message) ||
+                        "未知异常",
                         this
                     );
                 }

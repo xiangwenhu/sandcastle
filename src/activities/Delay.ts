@@ -4,7 +4,7 @@ import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 import { registerActivity } from "../activityFactory/factory";
 
 export interface DelayActivityOptions {
-    timeout: number;
+    timeout: number | string;
 }
 
 @registerActivity()

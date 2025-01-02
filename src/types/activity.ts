@@ -70,6 +70,7 @@ import { MouseUpActivityOptions } from "../crawlActivities/mouse/Up";
 import { MouseWheelActivityOptions } from "../crawlActivities/mouse/Wheel";
 import GlobalBuiltinContext from "../globalBuiltinContext";
 import { BrowserActivityOptions } from "../crawlActivities/Browser";
+import { IfElseActivityConfig } from "../activities/IfElse";
 
 export declare type ActConfigFor<Type extends ActivityType> =
     Type extends keyof ActivityConfigMap
@@ -86,7 +87,7 @@ export type ActivityConfigMap = {
     doWhile: IActivityConfig<any, DelayActivityOptions>;
     for: IActivityConfig<any, ForActivityOptions>;
     function: IFunctionActivityConfig<any, FunctionActivityOptions>;
-    ifElse: IActivityConfig<any, DefaultActivityOptions>;
+    ifElse: IfElseActivityConfig<any, DefaultActivityOptions>;
     parallel: IActivityConfig<any, DefaultActivityOptions>;
     parallelFor: IActivityConfig<any, ParallelForActivityOptions>;
     race: IActivityConfig<any, DefaultActivityOptions>;
@@ -265,9 +266,11 @@ export interface IActivityConfig<C = any, O = any, E = any> {
 export type ActivityType = keyof ActivityConfigMap;
 
 
-export interface IFunctionActivityConfig<C = any, O = any, E = any, ER extends ExtendParams = {}, EE extends ExtendParams = {}>
+
+export interface IFunctionActivityConfig<C = any, O = any, E = any>
     extends IActivityConfig<C, O, E> {
-    task: IActivityTaskFunction<ER, EE>;
+    // task<CE extends ExtendParams, EE extends ExtendParams>: IActivityTaskFunction<CE, EE>;
+    task(paramObject: IActivityExecuteParams<{}, {}>): any
 }
 
 export interface ActivityFactory<
@@ -334,12 +337,11 @@ export type IActivityExecuteParams<
     $res: any;
 
     $a: Record<string, Activity>;
-} & EE &
-    IActivityRunParams<ER>;
+} & EE & IActivityRunParams<ER>;
 
 export interface IActivityTaskFunction<
-    ER extends ExtendParams = {},
-    EE extends ExtendParams = {}
+    ER extends ExtendParams = ExtendParams,
+    EE extends ExtendParams = ExtendParams
 > {
     (paramObject: IActivityExecuteParams<ER, EE>): any;
 }

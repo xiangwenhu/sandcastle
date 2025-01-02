@@ -4,7 +4,7 @@ import { ActConfigFor, ActivityType } from "../types/activity";
 type ActivityConfigWithoutType<Type extends ActivityType> = Omit<ActConfigFor<Type>, 'type'>;
 
 
-export namespace $$ {
+export namespace $ {
     // 辅助函数，用于创建带有正确类型的活动配置
     function createActivity<Type extends ActivityType>(
         type: Type,

@@ -4,13 +4,13 @@ import SequenceActivity from "./Sequence";
 
 export interface ParallelForActivityOptions<V = any> {
     values: V[];
-    itemName: string;
-    indexName: string;
+    itemName?: string;
+    indexName?: string;
 }
 
 interface ER {
-    $item: any;
-    $index: number;
+    item?: any;
+    index?: number;
 }
 
 @registerActivity()

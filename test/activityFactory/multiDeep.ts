@@ -1,50 +1,47 @@
 import { IActivityConfig, IActivityExecuteParams, IFunctionActivityConfig } from './../../src/types/activity';
 import { createActivity } from "../../src/factory/activity";
+import { $ } from '../../src/factory/config';
 
 
 
-const activityProps: IActivityConfig = {
-    type: "for",
+const activityProps = $.for_({
     name: "for1",
     options: {
         values: [{ a: 1 }],
         itemName: "$$item",
-        indexName: "$$index"
+        indexName: "$$index",
+        continueOnError: true
     },
     children: [
-        {
-            type: "for",
+        $.for_({
             name: "for2",
             options: {
                 values: [{ a: 1 }],
                 itemName: "$$$$item",
-                indexName: "$$$$index"
+                indexName: "$$$$index",
+                continueOnError: true
             },
             children: [
-                {
-                    type: "code",
+                $.code({
                     name: "打印all开始时间",
                     options: { code: `console.log('$$item:', $$item,'$$$$item:', $$$$item);` }
-                },
-                {
-                    type: "function",
-                    name: "打印all开始时间",
-                    task(paramObj: any) {
-                        console.log("paramObj:", paramObj);
-                    }
-                } as IFunctionActivityConfig,
+                }),
+                $.function_(
+                    {
+                        name: "打印all开始时间",
+                        task(paramObj: any) {
+                            console.log("paramObj:", paramObj);
+                        }
+                    }),
             ]
 
-        },
-        {
-            type: "code",
+        }),
+        $.code({
             name: "打印all开始时间",
             options: { code: `console.log('$$item:', $$item)` }
-        }, {
-            type: "sequence",
+        }), $.sequence({
             name: "子",
-            children: [{
-                type: "function",
+            children: [$.function_({
                 name: "子子",
                 task: function (paramObj: IActivityExecuteParams<{
                     $$item: any;
@@ -52,10 +49,10 @@ const activityProps: IActivityConfig = {
                 }>) {
                     console.log("paramObj", paramObj.$$item);
                 }
-            } as IFunctionActivityConfig]
-        }
+            })]
+        })
     ]
-};
+});
 
 const activity = createActivity(activityProps);
 

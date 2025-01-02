@@ -1,5 +1,6 @@
 import { IActivityConfig } from './../../src/types/activity';
 import { createActivity } from "../../src/factory/activity";
+import { $ } from '../../src/factory/config';
 
 
 const activityProps: IActivityConfig = {
@@ -10,8 +11,7 @@ const activityProps: IActivityConfig = {
             type: "code",
             name: "打印race开始时间",
             options: { code: `console.log('all开始时间:', new Date())` }
-        }, {
-            type: "race",
+        }, $.race({
             context: {
                 name: "race"
             },
@@ -31,7 +31,7 @@ const activityProps: IActivityConfig = {
                 type: "delay",
                 options: { timeout: 6000 }
             }]
-        },
+        }),
         {
             type: "code",
             name: "打印race结束时间",

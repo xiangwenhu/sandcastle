@@ -4,7 +4,7 @@ import PageChildActivity from "./PageChildActivity";
 
 export interface GotoActivityOptions {
     url: string;
-    options: GoToOptions | undefined;
+    options?: GoToOptions | undefined;
 }
 
 export default class GotoActivity<C = any, R = any> extends PageChildActivity<

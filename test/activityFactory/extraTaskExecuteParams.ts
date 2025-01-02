@@ -28,7 +28,7 @@ export default class CCodeActivity<C = any, R = any> extends Activity<
     {},
     EE
 > {
-    buildTask() {
+   buildTask() {
         const { code } = this.options;
         if (isFunction(code)) {
             return (paramObject: IActivityExecuteParams<{}, EE>) =>
@@ -59,7 +59,7 @@ export default class CCodeActivity<C = any, R = any> extends Activity<
             );
         }
         this.status = EnumActivityStatus.BUILDING;
-        const g = this.globalBuiltObject;
+        const g = this.globalCtx;
         const $c = g.properties.placeholder || "$c";
         const $m = g.methods.placeholder || "$m";
 

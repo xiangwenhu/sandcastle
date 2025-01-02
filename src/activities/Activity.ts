@@ -140,15 +140,15 @@ class Activity<
         return {} as EE;
     }
 
-    buildTask(...args: any[]): IActivityTaskFunction<ER, EE> {
-        return () => {};
+    buildTask(...args: any[]): IActivityTaskFunction<ER> {
+        return () => {} ;
     }
 
     build(...args: any[]) {
         this.status = EnumActivityStatus.BUILDING;
         const task = this.buildTask(
             ...args
-        ) as unknown as IActivityTaskFunction<ER, EE>;
+        ) as unknown as IActivityTaskFunction<ER>;
         if (task) {
             this.task = task;
         }
