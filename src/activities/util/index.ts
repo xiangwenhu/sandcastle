@@ -43,7 +43,7 @@ export function createActivityError(
         //     return err;
         // }
         if (err instanceof ActivityError) {
-            throw err;
+            return err;
         }
         if (_.has(err, "message")) {
             return new ActivityError(`${_.get(err, "message")}`, act);
