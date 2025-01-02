@@ -28,6 +28,7 @@ export function createTaskExecuteDefaultParams(): IActivityExecuteParams {
     };
 }
 
+const ACTIVITY_ERROR_NAME = ["activityError", "terminateError"];
 export function createActivityError(
     this: Activity<any, any, any, any, any>,
     err: any,
@@ -37,8 +38,12 @@ export function createActivityError(
     if (_.isString(err)) {
         return new ActivityError(err, act);
     } else if (_.isObject(err)) {
+        // const name = (err as Record<string, any>)?.name;
+        // if (ACTIVITY_ERROR_NAME.includes(name)) {
+        //     return err;
+        // }
         if (err instanceof ActivityError) {
-            return err;
+            throw err;
         }
         if (_.has(err, "message")) {
             return new ActivityError(`${_.get(err, "message")}`, act);

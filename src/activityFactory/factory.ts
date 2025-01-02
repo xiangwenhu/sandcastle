@@ -24,7 +24,7 @@ export function register<A extends ActivityConstructor>(
     });
 }
 
-export function registerClass<A extends ActivityConstructor>(
+export function registerActivity<A extends ActivityConstructor>(
     type?: string,
     phConfig: IFactoryP$HConfigValue = {}
 ) {

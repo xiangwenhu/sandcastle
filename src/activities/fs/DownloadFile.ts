@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import { downloadFileWithRetry } from "../../util/loader";
 import Activity from "../Activity";
 import { IActivityExecuteParams } from "../../types/activity";
-import { registerClass } from "../../activityFactory/factory";
+import { registerActivity } from "../../activityFactory/factory";
 
 export interface DownloadFileActivityOptions {
     url: string;
@@ -14,7 +14,7 @@ export interface DownloadFileActivityOptions {
     };
 }
 
-@registerClass("fs.downloadFile")
+@registerActivity("fs.downloadFile")
 export default class DownloadFileActivity<C = any> extends Activity<
     C,
     string,

@@ -1,11 +1,11 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { IActivityExecuteParams } from "../types/activity";
 import Activity from "./Activity";
-import { registerClass } from "../activityFactory/factory";
+import { registerActivity } from "../activityFactory/factory";
 
 export type RequestActivityOptions = AxiosRequestConfig;
 
-@registerClass()
+@registerActivity()
 export default class RequestActivity<C = any, R = any> extends Activity<C, R, RequestActivityOptions> {
     buildTask() {
         return (paramObj: IActivityExecuteParams) => {

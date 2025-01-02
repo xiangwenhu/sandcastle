@@ -2,7 +2,7 @@ import { ObjectEncodingOptions, OpenMode } from "fs";
 import fsp from "fs/promises";
 import { IActivityExecuteParams } from "../../types/activity";
 import Activity from "../Activity";
-import { registerClass } from "../../activityFactory/factory";
+import { registerActivity } from "../../activityFactory/factory";
 
 export interface ReadFileActivityOptions {
     dist: string;
@@ -15,7 +15,7 @@ export interface ReadFileActivityOptions {
     | null;
 }
 
-@registerClass("fs.readFile")
+@registerActivity("fs.readFile")
 export default class ReadFileActivity<C = any> extends Activity<C, string, ReadFileActivityOptions> {
     buildTask() {
         return async (paramObj: IActivityExecuteParams) => {

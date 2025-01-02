@@ -90,7 +90,7 @@ class Activity<
         const { globalBuiltInCtx, waiting } = this;
         // 如果已经终止
         if (globalBuiltInCtx.terminated) {
-            return;
+            throw new TerminateError(globalBuiltInCtx.terminatedMessage!, this)
         }
 
         if (this.status < EnumActivityStatus.BUILDED) {
@@ -216,6 +216,12 @@ class Activity<
             act = act.parent;
         }
         return undefined;
+    }
+
+    abort(message: string = '用户终止') {
+        const { globalBuiltInCtx } = this;
+        globalBuiltInCtx.terminated = true;
+        globalBuiltInCtx.terminatedMessage = message;
     }
 }
 

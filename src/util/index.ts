@@ -13,8 +13,6 @@ export function extractOwnOtherKeys(obj: Record<PropertyKey, any>, keys: Propert
     return _.difference(keysList, keys) as string[]
 }
 
-
-
 export function addReadyOnlyProperty(obj: Object, property: string, value: any) {
     Object.defineProperty(obj, property, {
         configurable: false,

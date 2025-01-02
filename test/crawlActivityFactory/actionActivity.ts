@@ -1,16 +1,16 @@
 import { IActivityConfig } from '../../src/types/activity';
 import { createActivity } from "../../src/factory/activity";
 import "../../src/crawlActivityFactory";
+import { $$ } from '../../src/factory/config';
 
 
-const activityProps: IActivityConfig = {
-    type: "c.browser",
+const activityProps: IActivityConfig = $$.c.browser({
     name: "创建浏览器",
     options: {
         headless: false
     },
-    children: [{
-        type: "sequence",
+    children: [$$.sequence({
+        // type: "sequence",
         name: "顺序",
         children: [{
             type: "c.page",
@@ -70,8 +70,8 @@ const activityProps: IActivityConfig = {
             ]
         }
         ]
-    }]
-};
+    })]
+});
 
 const activity = createActivity(activityProps);
 
