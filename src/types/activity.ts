@@ -17,6 +17,8 @@ import { RemoveFileActivityOptions } from "../activities/fs/RemoveFile";
 import { WriteFileActivityOptions } from "../activities/fs/WriteFile";
 import { CreateVariableActivityOptions } from "../activities/variable/CreateVariable";
 import { DeleteVariableActivityOptions } from "../activities/variable/DeleteVariable";
+
+// 一下是爬网相关
 import { $ActivityOptions } from "../crawlActivities/$";
 import { $$ActivityOptions } from "../crawlActivities/$$";
 import { $$EvalActivityOptions } from "../crawlActivities/$$Eval";
@@ -71,19 +73,19 @@ import { BrowserActivityOptions } from "../crawlActivities/Browser";
 
 export declare type ActConfigFor<Type extends ActivityType> =
     Type extends keyof ActivityConfigMap
-        ? ActivityConfigMap[Type]
-        : DefaultActivityOptions;
+    ? ActivityConfigMap[Type]
+    : DefaultActivityOptions;
 
-export interface DefaultActivityOptions {}
+export interface DefaultActivityOptions { }
 // export declare type ActivityOptionsFor<Type extends keyof ActivityOptionsMap | keyof SVGElementTagNameMap> = Type extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[Type] : Type extends keyof SVGElementTagNameMap ? SVGElementTagNameMap[Type] : never;
 
-export type ActivityConfigMap =  {
+export type ActivityConfigMap = {
     break: IActivityConfig<any, BreakActivityOptions>;
     code: IActivityConfig<any, CodeActivityOptions>;
     delay: IActivityConfig<any, DelayActivityOptions>;
     doWhile: IActivityConfig<any, DelayActivityOptions>;
     for: IActivityConfig<any, ForActivityOptions>;
-    function: IActivityConfig<any, FunctionActivityOptions>;
+    function: IFunctionActivityConfig<any, FunctionActivityOptions>;
     ifElse: IActivityConfig<any, DefaultActivityOptions>;
     parallel: IActivityConfig<any, DefaultActivityOptions>;
     parallelFor: IActivityConfig<any, ParallelForActivityOptions>;
@@ -142,7 +144,7 @@ export type ActivityConfigMap =  {
     "c.page.clearValue": IActivityConfig<any, ClearValueActivityOptions>;
     "c.page.uploadFile": IActivityConfig<any, UploadFileActivityOptions>;
     "c.page.$": IActivityConfig<any, $ActivityOptions>;
-    "c.page.$$)": IActivityConfig<any, $$ActivityOptions>;
+    "c.page.$$": IActivityConfig<any, $$ActivityOptions>;
 
     // keyboard
     "c.page.keyboard.down": IActivityConfig<any, KeyboardDownActivityOptions>;
@@ -203,6 +205,7 @@ export type ActivityConfigMap =  {
     "c.page.property": IActivityConfig<any, PropertyActivity>;
 };
 
+
 export interface IActivityConfig<C = any, O = any, E = any> {
     /**
      * 类型
@@ -262,8 +265,7 @@ export interface IActivityConfig<C = any, O = any, E = any> {
 export type ActivityType = keyof ActivityConfigMap;
 
 
-
-export interface IFunctionActivityConfig<C = any, O = any, E= any, ER extends ExtendParams = {}, EE extends ExtendParams = {}>
+export interface IFunctionActivityConfig<C = any, O = any, E = any, ER extends ExtendParams = {}, EE extends ExtendParams = {}>
     extends IActivityConfig<C, O, E> {
     task: IActivityTaskFunction<ER, EE>;
 }
@@ -287,7 +289,7 @@ export interface ActivityFactoryFactory<P extends IActivityConfig = any> {
     createChildren: ActivityChildrenFactory<P>;
 }
 
-export type GlobalActivityContext =  {
+export type GlobalActivityContext = {
     [GLOBAL_BUILTIN_CONTEXT]: GlobalBuiltinContext
 } & Record<PropertyKey, any>
 
@@ -343,3 +345,4 @@ export interface IActivityTaskFunction<
 }
 
 export type ActEventName = "status" | "error" | "break" | "terminate";
+

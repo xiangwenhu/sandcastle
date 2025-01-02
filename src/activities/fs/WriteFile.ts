@@ -4,7 +4,7 @@ import { isPlainObject } from "lodash";
 import { IActivityExecuteParams } from "../../types/activity";
 import { ensureDir } from "../../util/fs";
 import Activity from "../Activity";
-import { registerClass } from "../../activityFactory/factory";
+import { registerActivity } from "../../activityFactory/factory";
 
 export interface WriteFileActivityOptions {
     dist: string;
@@ -18,7 +18,7 @@ export interface WriteFileActivityOptions {
         | null;
 }
 
-@registerClass("fs.writeFile")
+@registerActivity("fs.writeFile")
 export default class WriteFileActivity<C = any> extends Activity<
     C,
     string,

@@ -1,9 +1,9 @@
-import { registerClass } from "../activityFactory/factory";
+import { registerActivity } from "../activityFactory/factory";
 import { IActivityExecuteParams } from "../types/activity";
 import ContainerActivity from "./ContainerActivity";
 
 
-@registerClass()
+@registerActivity()
 export default class ParallelActivity<C = any, R = any> extends ContainerActivity<C, R>  {
 
     buildTask() {

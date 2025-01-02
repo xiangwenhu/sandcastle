@@ -2,50 +2,44 @@ import { IActivityConfig } from "./../../src/types/activity";
 import { createActivity } from "../../src/factory/activity";
 import { EnumActivityStatus } from "../../src/types/enum";
 import getProgress from "../../src/progress";
+import { $$ }  from "../../src/factory/config"
 
-const activityProps: IActivityConfig = {
-    type: "sequence",
+const activityProps: IActivityConfig = $$.sequence({
     name: "如果ctx.count小于5,加加",
     context: {
         count: 1,
     },
-    assert: {
+    assert:  $$.code({
         useParentCtx: true,
-        type: "code",
         name: "sequence assert",
         options: { code: "return $ctx.count < 5" },
-    },
+    }),
     children: [
-        {
+        $$.code({
             useParentCtx: true,
-            type: "code",
             name: "输出count",
             options: { code: 'console.log("count:" + $ctx.count)' },
-        },
-        {
-            type: "delay",
+        }),
+        $$.delay({
             name: "睡1500ms",
-            options: { timeout: 1500 },
-        },
-        {
+            options: { timeout: 1500 , },
+        }),
+        $$.code({
             useParentCtx: true,
-            type: "code",
             name: "count加1",
             options: { code: "$ctx.count++" },
-        },
-        {
-            type: "delay",
+        }),
+        $$.delay({
             name: "睡1500ms",
             options: { timeout: 1500 },
-        },
-        {
+        }),
+        $$.code({
             useParentCtx: true,
-            type: "code",
             name: "输出count",
             options: { code: 'console.log("count:" + $ctx.count)' },
-        },
+        }),
     ],
-};
+});
 
 const activity = createActivity(activityProps);
 

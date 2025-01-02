@@ -1,9 +1,9 @@
-import { registerClass } from "../activityFactory/factory";
+import { registerActivity } from "../activityFactory/factory";
 import { ExtendParams, IActivityExecuteParams } from "../types/activity";
 import BreakActivity from "./Break";
 import ContainerActivity from "./ContainerActivity";
 
-@registerClass()
+@registerActivity()
 export default class SequenceActivity<
     C = any,
     R = any,

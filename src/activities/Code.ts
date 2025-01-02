@@ -1,6 +1,6 @@
 import { isBoolean, isFunction, isString } from "lodash";
 import { ActivityError } from "../ActivityError";
-import { registerClass } from "../activityFactory/factory";
+import { registerActivity } from "../activityFactory/factory";
 import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS } from "../const";
 import { createOneParamAsyncFunction } from "../factory/function";
 import {
@@ -14,7 +14,7 @@ export interface CodeActivityOptions {
     code: string | Function;
 }
 
-@registerClass()
+@registerActivity()
 export default class CodeActivity<C = any, R = any> extends Activity<
     C,
     R,

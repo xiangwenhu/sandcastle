@@ -1,7 +1,9 @@
 import { PageActivityEE } from '../../src/crawlActivities/Page';
 import "../../src/crawlActivityFactory";
 import { createActivity } from "../../src/factory/activity";
+import { $$ } from '../../src/factory/config';
 import { ActConfigFor, IActivityExecuteParams, IFunctionActivityConfig } from '../../src/types/activity';
+
 
 
 const activityProps: ActConfigFor<"c.browser"> = {
@@ -10,24 +12,21 @@ const activityProps: ActConfigFor<"c.browser"> = {
     options: {
         headless: false
     },
-    children: [{
-        type: "sequence",
+    children: [$$.sequence({
         name: "顺序",
-        children: [{
-            type: "c.page",
+        children: [$$.c.page({
             name: "快手页面啊",
             children: [
-                {
-                    type: "function",
+                $$.function_({
                     name: "代码",
-                    task(paramObject: IActivityExecuteParams<PageActivityEE>){
+                    task(paramObject: IActivityExecuteParams<PageActivityEE, any>) {
                         console.log("paramObject:", paramObject.$browser);
                     }
-                } as IFunctionActivityConfig
+                })
             ]
-        }
+        })
         ]
-    }]
+    })]
 }
 
 const activity = createActivity(activityProps);

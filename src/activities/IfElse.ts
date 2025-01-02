@@ -3,7 +3,7 @@ import { EnumActivityStatus } from "../types/enum";
 import { IActivityConfig, IActivityExecuteParams } from "../types/activity";
 import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
-import { registerClass } from "../activityFactory/factory";
+import { registerActivity } from "../activityFactory/factory";
 
 export interface IfElseActivityConfig<C = any, O = any, E = any>
     extends IActivityConfig {
@@ -12,7 +12,7 @@ export interface IfElseActivityConfig<C = any, O = any, E = any>
     else?: IActivityConfig;
 }
 
-@registerClass("ifElse", {
+@registerActivity("ifElse", {
     before({ factory, globalContext, config, activity }) {
         const ifConfig = config as IfElseActivityConfig;
         const act = (activity! as any);

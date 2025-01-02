@@ -1,5 +1,5 @@
 import { TerminateError } from "../ActivityError";
-import { registerClass } from "../activityFactory/factory";
+import { registerActivity } from "../activityFactory/factory";
 import { IActivityConfig, IActivityExecuteParams } from "../types/activity";
 import Activity from "./Activity";
 import SequenceActivity from "./Sequence";
@@ -9,7 +9,7 @@ export interface ITryCatchActivityConfig<C = any, O = any, E = any>
     catch: IActivityConfig;
 }
 
-@registerClass("tryCatch", {
+@registerActivity("tryCatch", {
     before({ factory, globalContext, config, activity }) {
         const ifConfig = config as ITryCatchActivityConfig;
         const act = activity! as any;
