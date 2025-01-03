@@ -1,4 +1,4 @@
-import { ActConfigFor, IActivityConfig } from "./../../src/types/activity";
+import { ActConfigFor, IActivityConfig, IActivityExecuteParams } from "./../../src/types/activity";
 import { createActivity } from "../../src/factory/activity";
 import { $ } from "../../src/factory/config";
 import { TerminateError } from "../../src/ActivityError";
@@ -44,16 +44,17 @@ const activityProps: ActConfigFor<"tryCatch"> = {
                     $.code({
                         name: "内部的code1",
                         options: {
-                            code: function (err: any) {
-                                console.log("内部的code1:", err.error.message);
+                            code: function (params: IActivityExecuteParams<{error: any}>) {
+
+                                console.log("内部的code1:", params.$$.error);
                             },
                         },
                     }),
                     $.code({
                         name: "内部的code2",
                         options: {
-                            code: function (err: any) {
-                                console.log("内部的code2:", err.error.message);
+                            code: function (params: IActivityExecuteParams<{error: any}>) {
+                                console.log("内部的code2:", params.$$.error.message);
                             },
                         },
                     }),

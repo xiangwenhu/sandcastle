@@ -1,9 +1,9 @@
 import { IActivityConfig } from '../../src/types/activity';
 import { createActivity } from "../../src/factory/activity";
 import "../../src/crawlActivityFactory";
+import { $ } from '../../src/factory/config';
 
-const activityProps: IActivityConfig = {
-    type: "c.browser",
+const activityProps: IActivityConfig =  $.c.browser({
     name: "创建浏览器",
     options: {
         headless: false
@@ -48,7 +48,7 @@ const activityProps: IActivityConfig = {
         }
         ]
     }]
-};
+});
 
 const activity = createActivity(activityProps);
 

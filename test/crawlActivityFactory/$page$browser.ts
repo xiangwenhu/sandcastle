@@ -2,7 +2,7 @@ import { PageActivityEE } from '../../src/crawlActivities/Page';
 import "../../src/crawlActivityFactory";
 import { createActivity } from "../../src/factory/activity";
 import { $ } from '../../src/factory/config';
-import { ActConfigFor, ExtendParams, IActivityExecuteParams, IFunctionActivityConfig } from '../../src/types/activity';
+import { ActConfigFor, ExtendParams, IActivityExecuteParams,  IFunctionActivityConfig } from '../../src/types/activity';
 
 
 const activityProps: ActConfigFor<"c.browser"> = {
@@ -30,7 +30,7 @@ const activityProps: ActConfigFor<"c.browser"> = {
                 $.function_({
                     name: "代码",
                     async task(paramObject: IActivityExecuteParams<PageActivityEE>) {    
-                        const title = await paramObject.$page.title();        
+                        const title = await paramObject.$$.$page.title();        
                         console.log("page title:", title);
                     }
                 })

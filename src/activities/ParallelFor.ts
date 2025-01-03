@@ -17,10 +17,10 @@ interface ER {
 export default class ParallelForActivity<
     C = any,
     R = any
-> extends SequenceActivity<C, R, ParallelForActivityOptions, ER> {
+> extends SequenceActivity<C, R, ParallelForActivityOptions> {
 
     buildTask() {
-        return (paramObj: IActivityExecuteParams<ER>) => {
+        return (paramObj: IActivityExecuteParams) => {
             const { values, itemName = "$item", indexName = "$index" } = this.getReplacedOptions(paramObj)
 
             const superTask = super.buildTask();

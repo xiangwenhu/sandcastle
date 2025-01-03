@@ -1,7 +1,9 @@
 import { ActConfigFor, ActivityType } from "../types/activity";
 
 // 辅助类型，用于创建不包含 'type' 的活动配置类型
-type ActivityConfigWithoutType<Type extends ActivityType> = Omit<ActConfigFor<Type>, 'type'>;
+type ActivityConfigWithoutType<Type extends ActivityType> = Omit<ActConfigFor<Type>, 'type'> & {
+    type?: ActivityType
+};
 
 
 export namespace $ {

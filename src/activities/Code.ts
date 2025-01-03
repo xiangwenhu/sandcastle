@@ -4,14 +4,16 @@ import { registerActivity } from "../activityFactory/factory";
 import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS } from "../const";
 import { createOneParamAsyncFunction } from "../factory/function";
 import {
-    IActivityExecuteParams,
+    IActivityExecuteParams,    
     IActivityTaskFunction,
 } from "../types/activity";
 import { extractOwnOtherKeys } from "../util";
 import Activity from "./Activity";
 
+
+
 export interface CodeActivityOptions {
-    code: string | Function;
+    code: string | IActivityTaskFunction
 }
 
 @registerActivity()
@@ -25,7 +27,7 @@ export default class CodeActivity<C = any, R = any> extends Activity<
         const { code } = this.options;
         if (isFunction(code)) {
             return (paramObject: IActivityExecuteParams) =>
-                code.call(null,  paramObject);
+                code.call(null, paramObject);
         }
 
         return (paramObject: IActivityExecuteParams) => {

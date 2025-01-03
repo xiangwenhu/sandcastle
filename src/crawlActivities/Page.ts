@@ -10,9 +10,7 @@ export interface PageActivityEE extends ExtendParams{
 export default class PageActivity<C = any, R = any> extends SequenceActivity<
     C,
     R,
-    any,
-    any,
-    PageActivityEE
+    any
 > {
     #page: Page | undefined = undefined;
 
@@ -25,10 +23,10 @@ export default class PageActivity<C = any, R = any> extends SequenceActivity<
     }
 
     buildTask() {
-        return (this.task = async (paramObject: IActivityExecuteParams<PageActivityEE>) => {
+        return (this.task = async (paramObject:  IActivityExecuteParams<PageActivityEE>) => {
             try {
                 this.#page = await this.browser!.newPage();
-                paramObject.$page = this.#page;
+                paramObject.$$.$page = this.#page;
                 const superTask = super.buildTask();
                 const res = await superTask.call(this, paramObject);
                 return res;

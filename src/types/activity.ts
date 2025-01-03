@@ -215,7 +215,7 @@ export interface IActivityConfig<C = any, O = any, E = any> {
     /**
      * 上下文
      */
-    context?: C;
+    context?: C | ((config: IActivityConfig) => C);
     /**
      * 名字
      */
@@ -267,10 +267,9 @@ export type ActivityType = keyof ActivityConfigMap;
 
 
 
-export interface IFunctionActivityConfig<C = any, O = any, E = any>
-    extends IActivityConfig<C, O, E> {
-    // task<CE extends ExtendParams, EE extends ExtendParams>: IActivityTaskFunction<CE, EE>;
-    task(paramObject: IActivityExecuteParams<{}, {}>): any
+export interface IFunctionActivityConfig<C = any, O = any, E = any> extends IActivityConfig<C, O, E> {
+    task:  IActivityTaskFunction;
+    // task(paramObject: IActivityExecuteParams): any
 }
 
 export interface ActivityFactory<
@@ -296,17 +295,24 @@ export type GlobalActivityContext = {
     [GLOBAL_BUILTIN_CONTEXT]: GlobalBuiltinContext
 } & Record<PropertyKey, any>
 
-export type ExtendParams = Record<string, any>;
+export type ExtendParams = Partial<Record<string, any>>;
 
-export type IActivityRunParams<E extends ExtendParams = {}> = {
+export type IActivityRunParams<EA = any, EE = Record<PropertyKey, any>> = {
+    /**
+     * 上一次执行结果
+     */
     $preRes?: any;
-    $extra?: Record<PropertyKey, any>;
-} & E;
+    /**
+     * 额外的属性，主要用于用户
+     */
+    $extra?: EE;
+    /**
+     * 额外的属性，用户活动扩展
+     */
+    $$: EA
+};
 
-export type IActivityExecuteParams<
-    ER extends ExtendParams = {},
-    EE extends ExtendParams = {}
-> = {
+export type IActivityExecuteParams<EA = any, EE = Record<PropertyKey, any>> = {
     /**
      * 上下文
      */
@@ -335,15 +341,14 @@ export type IActivityExecuteParams<
      * 上一个活动的返回值
      */
     $res: any;
-
+    /**
+     * 活动本身
+     */
     $a: Record<string, Activity>;
-} & EE & IActivityRunParams<ER>;
+} & IActivityRunParams<EA, EE>;
 
-export interface IActivityTaskFunction<
-    ER extends ExtendParams = ExtendParams,
-    EE extends ExtendParams = ExtendParams
-> {
-    (paramObject: IActivityExecuteParams<ER, EE>): any;
+export interface IActivityTaskFunction<> {
+    (paramObject: IActivityExecuteParams): any;
 }
 
 export type ActEventName = "status" | "error" | "break" | "terminate";

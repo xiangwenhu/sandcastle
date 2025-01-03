@@ -16,7 +16,7 @@ const activityProps = $.for_({
         $.for_({
             name: "for2",
             options: {
-                values: [{ a: 1 }],
+                values: [{ aaa: 1 }],
                 itemName: "$$$$item",
                 indexName: "$$$$index",
                 continueOnError: true
@@ -24,7 +24,7 @@ const activityProps = $.for_({
             children: [
                 $.code({
                     name: "打印all开始时间",
-                    options: { code: `console.log('$$item:', $$item,'$$$$item:', $$$$item);` }
+                    options: { code: `console.log('$$item:', $$.$$item,'$$$$item:', $$.$$$$item);` }
                 }),
                 $.function_(
                     {
@@ -38,7 +38,7 @@ const activityProps = $.for_({
         }),
         $.code({
             name: "打印all开始时间",
-            options: { code: `console.log('$$item:', $$item)` }
+            options: { code: `console.log('$$.$$item:', $$.$$item)` }
         }), $.sequence({
             name: "子",
             children: [$.function_({
@@ -47,7 +47,7 @@ const activityProps = $.for_({
                     $$item: any;
                     $$index: number;
                 }>) {
-                    console.log("paramObj", paramObj.$$item);
+                    console.log("paramObj", paramObj.$$.$$item);
                 }
             })]
         })

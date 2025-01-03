@@ -10,6 +10,7 @@ export function createTaskRunDefaultParams(): IActivityRunParams {
     return {
         $preRes: undefined,
         $extra: {},
+        $$: {}
     };
 }
 
@@ -30,9 +31,9 @@ export function createTaskExecuteDefaultParams(): IActivityExecuteParams {
 
 const ACTIVITY_ERROR_NAME = ["activityError", "terminateError"];
 export function createActivityError(
-    this: Activity<any, any, any, any, any>,
+    this: Activity<any, any, any>,
     err: any,
-    activity?: Activity<any, any, any, any, any>
+    activity?: Activity<any, any, any>
 ) {
     const act = activity || this;
     if (_.isString(err)) {

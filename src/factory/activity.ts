@@ -8,7 +8,7 @@ import { factory } from "../activityFactory";
 
 const createActivityHOC =
     (globalBuiltinContext: GlobalBuiltinContext) =>
-    <C, R, O, ER extends ExtendParams, EE extends ExtendParams>(
+    <C, R, O>(
         activityConfig: IActivityConfig,
         globalContext: Record<PropertyKey, any> = {}
     ) => {
@@ -22,7 +22,7 @@ const createActivityHOC =
         const activity = factory.create(
             activityConfig,
             globalContext
-        ) as any as Activity<C, R, O, ER, EE>;
+        ) as any as Activity<C, R, O>;
         return activity;
     };
 

@@ -5,27 +5,23 @@ import SequenceActivity from "./Sequence";
 
 export interface ForActivityOptions {
     values: any[];
-    itemName: string;
-    indexName: string;
-    continueOnError: boolean;
+    itemName?: string;
+    indexName?: string;
+    continueOnError?: boolean;
 }
 
-interface ER {
-    $item: any;
-    $index: number;
-}
+
 
 @registerActivity()
 export default class ForActivity<C = any, R = any> extends SequenceActivity<
     C,
     R,
-    ForActivityOptions,
-    ER
+    ForActivityOptions
 > {
 
     buildTask() {
-        return (paramObj: IActivityExecuteParams<ER>) => {
-            const that = this as Activity<any, any, any, ER>;
+        return (paramObj: IActivityExecuteParams) => {
+            const that = this as Activity<any, any, any>;
             return new Promise(async (resolve, reject) => {
                 const { values, itemName = '$item', indexName = '$index', continueOnError = false } = this.getReplacedOptions(paramObj);
                 let preRes;
@@ -35,10 +31,12 @@ export default class ForActivity<C = any, R = any> extends SequenceActivity<
                     const $item = values[index];
                     const $index = index;
                     try {
+
+                        paramObj.$$[indexName] = $index;
+                        paramObj.$$[itemName] = $item;
+
                         preRes = await superTask.call(this, {
-                            ...paramObj,
-                            [itemName]: $item,
-                            [indexName]: $index,
+                            ...paramObj
                         });
                     } catch (err: any) {
                         console.log("for:error", $index, $item);

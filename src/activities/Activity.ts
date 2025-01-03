@@ -23,31 +23,29 @@ import { createActivityError } from "./util";
 class Activity<
     C = any,
     R = any,
-    O = any,
-    ER extends ExtendParams = {},
-    EE extends ExtendParams = {}
-> extends ActivityBase<C, R, O, ER, EE> {
+    O = any
+> extends ActivityBase<C, R, O> {
     constructor(ctx: C, public options: O) {
         super(ctx, options);
     }
 
     protected createActivityError = createActivityError;
 
-    protected runBefore(paramObject: IActivityExecuteParams<ER, EE>): unknown {
+    protected runBefore(paramObject: IActivityExecuteParams ): unknown {
         if (!this.before || !(this.before instanceof Activity)) {
             return;
         }
         return this.before.run(paramObject);
     }
 
-    protected runAfter(paramObject: IActivityExecuteParams<ER, EE>): unknown {
+    protected runAfter(paramObject: IActivityExecuteParams ): unknown {
         if (!this.after || !(this.after instanceof Activity)) {
             return;
         }
         return this.after.run(paramObject);
     }
 
-    protected async runAssert(paramObject: IActivityExecuteParams<ER, EE>) {
+    protected async runAssert(paramObject: IActivityExecuteParams ) {
         if (!this.assert || !(this.assert instanceof Activity)) {
             return true;
         }
@@ -55,14 +53,14 @@ class Activity<
         return !!res;
     }
 
-    private getExecuteParamsObject(paramsObject: IActivityRunParams<ER>) {
+    private getExecuteParamsObject(paramsObject: IActivityRunParams) {
         const { globalBuiltInCtx, globalCtx } = this;
         let mContext = this.ctx || {};
 
         const bObject = globalBuiltInCtx.getObject();
 
         const extraExecuteParams = this.getExtraExecuteParams();
-        const argObject: IActivityExecuteParams<ER, EE> = {
+        const argObject: IActivityExecuteParams = {
             ...paramsObject,
             ...extraExecuteParams,
             $gCtx: globalCtx,
@@ -84,8 +82,8 @@ class Activity<
      * @param {其他参数} otherParams
      */
     async run(
-        paramsObject: IActivityRunParams<ER> = this
-            .defaultTaskRunParam as IActivityRunParams<ER>
+        paramsObject: IActivityRunParams = this
+            .defaultTaskRunParam as IActivityRunParams
     ) {
         const { globalBuiltInCtx, waiting } = this;
         // 如果已经终止
@@ -100,7 +98,7 @@ class Activity<
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
-            const argObject: IActivityExecuteParams<ER, EE> =
+            const argObject: IActivityExecuteParams  =
                 this.getExecuteParamsObject(paramsObject);
             const needRun = await this.runAssert(argObject);
             if (!needRun) {
@@ -136,11 +134,11 @@ class Activity<
         }
     }
 
-    getExtraExecuteParams(): EE {
-        return {} as EE;
+    getExtraExecuteParams() {
+        return {} ;
     }
 
-    buildTask(...args: any[]): IActivityTaskFunction<ER> {
+    buildTask(...args: any[]): IActivityTaskFunction {
         return () => {} ;
     }
 
@@ -148,7 +146,7 @@ class Activity<
         this.status = EnumActivityStatus.BUILDING;
         const task = this.buildTask(
             ...args
-        ) as unknown as IActivityTaskFunction<ER>;
+        ) as unknown as IActivityTaskFunction;
         if (task) {
             this.task = task;
         }
@@ -158,7 +156,7 @@ class Activity<
         }
     }
 
-    private getReplaceVariableParamKeys(mParamObject: IActivityRunParams<ER>) {
+    private getReplaceVariableParamKeys(mParamObject: IActivityRunParams) {
         const extraKeys = extractOwnOtherKeys(
             mParamObject,
             ACTIVITY_TASK_BUILTIN_PARAMS_KEYS
@@ -166,18 +164,18 @@ class Activity<
         return extraKeys.concat(extraKeys);
     }
 
-    public getReplacedOptions(paramObj: IActivityExecuteParams<ER>) {
+    public getReplacedOptions(paramObj: IActivityExecuteParams) {
         return this.baseReplaceVariable(paramObj, this.options);
     }
 
     protected baseReplaceVariable<OT>(
-        paramObj: IActivityExecuteParams<ER>,
+        paramObj: IActivityExecuteParams,
         options: OT
     ) {
         if (options == undefined) {
             return options as OT;
         }
-        const mParamObject: IActivityExecuteParams<ER, EE> =
+        const mParamObject: IActivityExecuteParams  =
             this.getExecuteParamsObject(paramObj);
         const extraKeys = this.getReplaceVariableParamKeys(mParamObject);
         return replaceVariable(options, {
@@ -207,7 +205,7 @@ class Activity<
     }
 
     getClosestParent<A = Activity>(targetActivity: Object): A | undefined {
-        let act: Activity<any, any, any, any, any> | undefined = this;
+        let act: Activity<any, any, any> | undefined = this;
 
         while (act != undefined) {
             if (act instanceof (targetActivity as any as Function)) {

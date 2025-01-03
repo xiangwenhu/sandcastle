@@ -7,10 +7,7 @@ import { firstToLower } from "../util";
 import Activity from "./Activity";
 import { createTaskExecuteDefaultParams, createTaskRunDefaultParams } from "./util";
 
-class ActivityBase<C = any, R = any, O = any,
-    ER extends ExtendParams = {},
-    EE extends ExtendParams = {}
->  {
+class ActivityBase<C = any, R = any, O = any> {
 
     get messenger(): IMessenger {
         return this.globalBuiltInCtx?.messenger
@@ -18,8 +15,8 @@ class ActivityBase<C = any, R = any, O = any,
 
     pre: Activity<C, R, O> | undefined = undefined;
     next: Activity<C, R, O> | undefined = undefined;
-    before: Activity<C, R, O, ER, EE> | undefined = undefined;
-    after: Activity<C, R, O, ER, EE> | undefined = undefined;
+    before: Activity<C, R, O> | undefined = undefined;
+    after: Activity<C, R, O> | undefined = undefined;
 
     // 是否等待活动结束执行完毕
     accessor waiting: boolean = true;
@@ -39,8 +36,8 @@ class ActivityBase<C = any, R = any, O = any,
 
     public globalCtx: GlobalActivityContext = {} as GlobalActivityContext;
 
-    #task: IActivityTaskFunction<ER, EE> | undefined;
-    set task(val: IActivityTaskFunction<ER, EE> | undefined) {
+    #task: IActivityTaskFunction | undefined;
+    set task(val: ((paramObject: IActivityExecuteParams) => any) | undefined) {
         this.#task = val;
         if (this.status !== EnumActivityStatus.BUILDED) {
             this.status = EnumActivityStatus.BUILDED;
@@ -55,12 +52,12 @@ class ActivityBase<C = any, R = any, O = any,
         return this.globalCtx[GLOBAL_BUILTIN_CONTEXT];
     }
 
-    protected get defaultTaskRunParam(): IActivityRunParams<ER> {
-        return createTaskRunDefaultParams() as IActivityRunParams<ER>;
+    protected get defaultTaskRunParam(): IActivityRunParams {
+        return createTaskRunDefaultParams() as IActivityRunParams;
     }
 
-    protected get defaultTaskExecuteParam(): IActivityExecuteParams<ER, EE> {
-        return createTaskExecuteDefaultParams() as IActivityExecuteParams<ER, EE>;
+    protected get defaultTaskExecuteParam(): IActivityExecuteParams {
+        return createTaskExecuteDefaultParams() as IActivityExecuteParams;
     }
 
     public accessor useParentCtx: boolean = false;

@@ -1,12 +1,10 @@
 import { ExtendParams } from "../types/activity";
 import Activity from "./Activity";
 
-export default class ContainerActivity<C = any, R = any, O = any, ER extends ExtendParams = {}, EE extends ExtendParams = {}> extends Activity<
+export default class ContainerActivity<C = any, R = any, O = any> extends Activity<
     C,
     R,
-    O,
-    ER,
-    EE
+    O
 > {
     #children: Activity[] = [];
 
