@@ -3,6 +3,7 @@ import {
     IActivityConfig,
     IActivityExecuteParams,
     IActivityTaskFunction,
+    ActivityConfigMap
 } from "../../src/types/activity";
 import { isBoolean, isFunction, isString } from "lodash";
 import Activity from "../../src/activities/Activity";
@@ -15,8 +16,14 @@ import { createActivity } from "../../src/factory/activity";
 import { $ } from "../../src/factory/config";
 
 
+
+
 export interface CodeActivityOptions {
-    code: string;
+    code: string | IActivityTaskFunction;
+}
+
+interface CodeActivityContext {
+    count: number;
 }
 
 interface EE {
@@ -98,26 +105,31 @@ register("ccode", CCodeActivity);
 
 
 
+const ccode = $.$HOC<CodeActivityContext, CodeActivityOptions>("ccode");
 
-const activityProps: IActivityConfig = {
-    type: "ccode" as ActivityType,
+
+const activityProps = ccode({
+    type: "ccode",
     name: "如果ctx.count小于5,加加",
     before: $.code({
         name: "",
         options: {
-            code(param){
-                param.$$.ccc =  1000;
+            code(param) {
+                param.$$.ccc = 1000;
             }
         }
     }),
     toVariable: "sb",
     context: {
-        count: 100,
+        count: 100
     },
     options: {
-        code: "console.log('$tt', $$.$tt, $$.ccc);",
+        // code:    "console.log('$tt', $$.$tt, $$.ccc);",
+        code(params){
+            console.log(params.$$.$tt)
+        }
     },
-};
+});
 
 const activity = createActivity(activityProps);
 

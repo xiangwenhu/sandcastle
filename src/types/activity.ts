@@ -207,11 +207,11 @@ export type ActivityConfigMap = {
 };
 
 
-export interface IActivityConfig<C = any, O = any, E = any> {
+export interface ICommonActivityConfig<T = any,  C = any, O = any, E = any> {
     /**
      * 类型
      */
-    type: ActivityType;
+    type: T;
     /**
      * 上下文
      */
@@ -262,6 +262,13 @@ export interface IActivityConfig<C = any, O = any, E = any> {
      */
     waiting?: boolean;
 }
+
+
+export interface IActivityConfig<C = any, O = any, E = any> extends ICommonActivityConfig<ActivityType, C, O , E> {
+
+}
+
+
 
 export type ActivityType = keyof ActivityConfigMap;
 
