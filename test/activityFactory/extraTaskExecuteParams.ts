@@ -3,7 +3,7 @@ import {
     IActivityConfig,
     IActivityExecuteParams,
     IActivityTaskFunction,
-    ActivityConfigMap
+    ActivityConfigMap,
 } from "../../src/types/activity";
 import { isBoolean, isFunction, isString } from "lodash";
 import Activity from "../../src/activities/Activity";
@@ -14,9 +14,6 @@ import { register } from "../../src/activityFactory";
 
 import { createActivity } from "../../src/factory/activity";
 import { $ } from "../../src/factory/config";
-
-
-
 
 export interface CodeActivityOptions {
     code: string | IActivityTaskFunction;
@@ -39,30 +36,22 @@ export default class CCodeActivity<C = any, R = any> extends Activity<
         const { code } = this.options;
         if (isFunction(code)) {
             return (paramObject: IActivityExecuteParams) => {
-                paramObject.$$.$tt = "tt"
+                paramObject.$$.$tt = "tt";
                 return code.call(null, paramObject);
-
-            }
+            };
         }
         return this.buildWithCode(code);
     }
 
+    getExtraExecuteParamsNames(): [keyof EE] {
+        return ["$tt"];
+    }
 
-
-    /** 
-     * 
-     * 不建议如下使用
-     */
-
-    // getExtraExecuteParamsNames(): [keyof EE] {
-    //     return ["$tt"];
-    // }
-
-    // override getExtraExecuteParams(): EE {
-    //     return {
-    //         $tt: "哈哈",
-    //     };
-    // }
+    override getExtraExecuteParams(): EE {
+        return {
+            $tt: "哈哈",
+        };
+    }
 
     /**
      *
@@ -77,7 +66,7 @@ export default class CCodeActivity<C = any, R = any> extends Activity<
         }
         this.status = EnumActivityStatus.BUILDING;
 
-        // const names = this.getExtraExecuteParamsNames();
+        const names = this.getExtraExecuteParamsNames();
 
         this.task = createOneParamAsyncFunction(code, [
             "$gCtx", // 全局上下文
@@ -92,9 +81,8 @@ export default class CCodeActivity<C = any, R = any> extends Activity<
             "$item",
             "$index",
             "$a",
-            "$$"
-            // ,...names
-
+            "$$",
+            ...names,
         ]) as IActivityTaskFunction;
         this.status = EnumActivityStatus.BUILDED;
         return this.task;
@@ -103,31 +91,18 @@ export default class CCodeActivity<C = any, R = any> extends Activity<
 
 register("ccode", CCodeActivity);
 
-
-
 const ccode = $.$HOC<CodeActivityContext, CodeActivityOptions>("ccode");
-
 
 const activityProps = ccode({
     type: "ccode",
     name: "如果ctx.count小于5,加加",
-    before: $.code({
-        name: "",
-        options: {
-            code(param) {
-                param.$$.ccc = 1000;
-            }
-        }
-    }),
+
     toVariable: "sb",
     context: {
-        count: 100
+        count: 100,
     },
     options: {
-        // code:    "console.log('$tt', $$.$tt, $$.ccc);",
-        code(params){
-            console.log(params.$$.$tt)
-        }
+        code: "console.log('$tt', $tt);",
     },
 });
 

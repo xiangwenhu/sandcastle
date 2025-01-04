@@ -19,4 +19,6 @@ import "../activities/fs/WriteFile";
 import "../activities/variable/CreateVariable";
 import "../activities/variable/DeleteVariable";
 
+import "./crawl";
+
 export * from "./factory";
