@@ -1,36 +1,32 @@
 import { IActivityConfig } from "../../../src/types/activity";
 import { createActivity } from "../../../src/factory/activity";
+import {$} from "../../../src/factory/config"
 
 
-const activityProps: IActivityConfig = {
-    type: "sequence",
+const activityProps: IActivityConfig = $.sequence({
     name: "sequence",
     context: {
         url: "https://www.baidu.com",
     },
     children: [
-        {
-            type: "v.create",
+        $.vCreate({
             name: "创建变量",
             options: { name: "v1", value: "vvv1" },
-        },
-        {
-            type: "code",
+        }),
+        $.code({
             name: "输出",
             options: { code: "console.log($v.v1); return $v" },
-        },
-        {
-            type: "v.delete",
+        }),
+        $.vDelete({
             name: "删除变量",
             options: { name: "v1" },
-        },
-        {
-            type: "code",
+        }),
+        $.code({
             name: "输出",
             options: { code: "console.log($v.v1); return $v" },
-        },
+        }),
     ],
-};
+});
 
 const activity = createActivity(activityProps);
 

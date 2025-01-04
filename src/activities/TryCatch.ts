@@ -7,16 +7,22 @@ import SequenceActivity from "./Sequence";
 export interface ITryCatchActivityConfig<C = any, O = any, E = any>
     extends IActivityConfig {
     catch: IActivityConfig;
+    finally?: IActivityConfig;
 }
 
 @registerActivity("tryCatch", {
     before({ factory, globalContext, config, activity }) {
-        const ifConfig = config as ITryCatchActivityConfig;
+        const catchConfig = config as ITryCatchActivityConfig;
         const act = activity! as any;
-        act.catch = factory.create(
-            ifConfig.catch,
-            globalContext
-        ) as SequenceActivity;
+
+        if (!catchConfig.catch) {
+            throw new Error("tryCatch必行定义catch Activity");
+        }
+        act.catch = factory.create(catchConfig.catch, globalContext);
+
+        if (catchConfig.finally) {
+            act.finally = factory.create(catchConfig.finally, globalContext);
+        }
     },
 })
 export default class TryCatchActivity<
@@ -24,6 +30,7 @@ export default class TryCatchActivity<
     R = any
 > extends SequenceActivity<C, R> {
     public catch: Activity | null = null;
+    public finally: Activity | null = null;
 
     buildTask() {
         // 构建执行函数
@@ -45,7 +52,14 @@ export default class TryCatchActivity<
                         this
                     );
                 }
-                await this.catch!.run(paramObj);
+                await this.catch!.run({
+                    ...paramObj,
+                    error: err,
+                } as any);
+            } finally {
+                if (this.finally) {
+                    await this.finally.run(paramObj);
+                }
             }
         };
     }

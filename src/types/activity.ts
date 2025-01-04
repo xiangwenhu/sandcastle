@@ -70,6 +70,7 @@ import { MouseUpActivityOptions } from "../crawlActivities/mouse/Up";
 import { MouseWheelActivityOptions } from "../crawlActivities/mouse/Wheel";
 import GlobalBuiltinContext from "../globalBuiltinContext";
 import { BrowserActivityOptions } from "../crawlActivities/Browser";
+import { IfElseActivityConfig } from "../activities/IfElse";
 
 export declare type ActConfigFor<Type extends ActivityType> =
     Type extends keyof ActivityConfigMap
@@ -86,7 +87,7 @@ export type ActivityConfigMap = {
     doWhile: IActivityConfig<any, DelayActivityOptions>;
     for: IActivityConfig<any, ForActivityOptions>;
     function: IFunctionActivityConfig<any, FunctionActivityOptions>;
-    ifElse: IActivityConfig<any, DefaultActivityOptions>;
+    ifElse: IfElseActivityConfig<any, DefaultActivityOptions>;
     parallel: IActivityConfig<any, DefaultActivityOptions>;
     parallelFor: IActivityConfig<any, ParallelForActivityOptions>;
     race: IActivityConfig<any, DefaultActivityOptions>;
@@ -206,15 +207,15 @@ export type ActivityConfigMap = {
 };
 
 
-export interface IActivityConfig<C = any, O = any, E = any> {
+export interface ICommonActivityConfig<T = any,  C = any, O = any, E = any> {
     /**
      * 类型
      */
-    type: ActivityType;
+    type: T;
     /**
      * 上下文
      */
-    context?: C;
+    context?: C | ((config: IActivityConfig) => C);
     /**
      * 名字
      */
@@ -262,12 +263,20 @@ export interface IActivityConfig<C = any, O = any, E = any> {
     waiting?: boolean;
 }
 
+
+export interface IActivityConfig<C = any, O = any, E = any> extends ICommonActivityConfig<ActivityType, C, O , E> {
+
+}
+
+
+
 export type ActivityType = keyof ActivityConfigMap;
 
 
-export interface IFunctionActivityConfig<C = any, O = any, E = any, ER extends ExtendParams = {}, EE extends ExtendParams = {}>
-    extends IActivityConfig<C, O, E> {
-    task: IActivityTaskFunction<ER, EE>;
+
+export interface IFunctionActivityConfig<C = any, O = any, E = any> extends IActivityConfig<C, O, E> {
+    task:  IActivityTaskFunction;
+    // task(paramObject: IActivityExecuteParams): any
 }
 
 export interface ActivityFactory<
@@ -293,17 +302,24 @@ export type GlobalActivityContext = {
     [GLOBAL_BUILTIN_CONTEXT]: GlobalBuiltinContext
 } & Record<PropertyKey, any>
 
-export type ExtendParams = Record<string, any>;
+export type ExtendParams = Partial<Record<string, any>>;
 
-export type IActivityRunParams<E extends ExtendParams = {}> = {
+export type IActivityRunParams<EA = any, EE = Record<PropertyKey, any>> = {
+    /**
+     * 上一次执行结果
+     */
     $preRes?: any;
-    $extra?: Record<PropertyKey, any>;
-} & E;
+    /**
+     * 额外的属性，主要用于用户
+     */
+    $extra?: EE;
+    /**
+     * 额外的属性，用户活动扩展
+     */
+    $$: EA
+};
 
-export type IActivityExecuteParams<
-    ER extends ExtendParams = {},
-    EE extends ExtendParams = {}
-> = {
+export type IActivityExecuteParams<EA = any, EE = Record<PropertyKey, any>> = {
     /**
      * 上下文
      */
@@ -332,16 +348,14 @@ export type IActivityExecuteParams<
      * 上一个活动的返回值
      */
     $res: any;
-
+    /**
+     * 活动本身
+     */
     $a: Record<string, Activity>;
-} & EE &
-    IActivityRunParams<ER>;
+} & IActivityRunParams<EA, EE>;
 
-export interface IActivityTaskFunction<
-    ER extends ExtendParams = {},
-    EE extends ExtendParams = {}
-> {
-    (paramObject: IActivityExecuteParams<ER, EE>): any;
+export interface IActivityTaskFunction<> {
+    (paramObject: IActivityExecuteParams): any;
 }
 
 export type ActEventName = "status" | "error" | "break" | "terminate";

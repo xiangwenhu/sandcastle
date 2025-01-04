@@ -1,10 +1,33 @@
-import { ActConfigFor, ActivityType } from "../types/activity";
+import { ActConfigFor, ActivityType, IActivityConfig, ICommonActivityConfig } from "../types/activity";
 
 // 辅助类型，用于创建不包含 'type' 的活动配置类型
-type ActivityConfigWithoutType<Type extends ActivityType> = Omit<ActConfigFor<Type>, 'type'>;
+type ActivityConfigWithoutType<Type extends ActivityType> = Omit<ActConfigFor<Type>, 'type'> & {
+    type?: ActivityType
+};
 
 
-export namespace $$ {
+export namespace $ {
+
+    /**
+     * 自定义类型
+     * @param type 
+     * @param config 
+     * @returns 
+     */
+    export function $<C = any, O = any, E = any, T = any>(type: T, config: ICommonActivityConfig<T, C, O, E>) {
+        return { ...config, type } as ICommonActivityConfig<T, C, O, E>
+    }
+
+    /**
+     * 自定义类型 HOC
+     * @param type 
+     * @returns 
+     */
+    export function $HOC<C = any, O = any, E = any, T = any>(type: T) {
+        return (config: ICommonActivityConfig<T, C, O, E>) => ({ ...config, type }) as ICommonActivityConfig<T, C, O, E>
+    }
+
+
     // 辅助函数，用于创建带有正确类型的活动配置
     function createActivity<Type extends ActivityType>(
         type: Type,
@@ -101,7 +124,7 @@ export namespace $$ {
 
     export namespace c {
 
-        export function page(config: ActivityConfigWithoutType<'c.page'>){
+        export function page(config: ActivityConfigWithoutType<'c.page'>) {
             return createActivity('c.page', config);
         }
 

@@ -7,12 +7,10 @@ import ContainerActivity from "./ContainerActivity";
 export default class SequenceActivity<
     C = any,
     R = any,
-    O = any,
-    ER extends ExtendParams = {},
-    EE extends ExtendParams = {}
-> extends ContainerActivity<C, R, O, ER, EE> {
+    O = any
+> extends ContainerActivity<C, R, O> {
     buildTask() {
-        return (paramObj: IActivityExecuteParams<ER>) =>
+        return (paramObj: IActivityExecuteParams) =>
             new Promise(async (resolve, reject) => {
                 let preRes: any;
                 for (let i = 0; i < this.children.length; i++) {

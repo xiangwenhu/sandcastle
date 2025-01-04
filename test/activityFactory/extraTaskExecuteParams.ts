@@ -1,7 +1,9 @@
 import {
+    ActivityType,
     IActivityConfig,
     IActivityExecuteParams,
     IActivityTaskFunction,
+    ActivityConfigMap
 } from "../../src/types/activity";
 import { isBoolean, isFunction, isString } from "lodash";
 import Activity from "../../src/activities/Activity";
@@ -11,10 +13,17 @@ import { ActivityError } from "../../src/ActivityError";
 import { register } from "../../src/activityFactory";
 
 import { createActivity } from "../../src/factory/activity";
+import { $ } from "../../src/factory/config";
+
+
 
 
 export interface CodeActivityOptions {
-    code: string;
+    code: string | IActivityTaskFunction;
+}
+
+interface CodeActivityContext {
+    count: number;
 }
 
 interface EE {
@@ -24,34 +33,42 @@ interface EE {
 export default class CCodeActivity<C = any, R = any> extends Activity<
     C,
     R,
-    CodeActivityOptions,
-    {},
-    EE
+    CodeActivityOptions
 > {
     buildTask() {
         const { code } = this.options;
         if (isFunction(code)) {
-            return (paramObject: IActivityExecuteParams<{}, EE>) =>
-                code.call(null, paramObject);
+            return (paramObject: IActivityExecuteParams) => {
+                paramObject.$$.$tt = "tt"
+                return code.call(null, paramObject);
+
+            }
         }
         return this.buildWithCode(code);
     }
 
-    getExtraExecuteParamsNames(): [keyof EE] {
-        return ["$tt"];
-    }
 
-    override getExtraExecuteParams(): EE {
-        return {
-            $tt: "哈哈",
-        };
-    }
+
+    /** 
+     * 
+     * 不建议如下使用
+     */
+
+    // getExtraExecuteParamsNames(): [keyof EE] {
+    //     return ["$tt"];
+    // }
+
+    // override getExtraExecuteParams(): EE {
+    //     return {
+    //         $tt: "哈哈",
+    //     };
+    // }
 
     /**
      *
      * @param {代码} code
      */
-    buildWithCode(code: string): IActivityTaskFunction<{}, EE> {
+    buildWithCode(code: string): IActivityTaskFunction {
         if (!isString(code) && !isBoolean(code)) {
             throw new ActivityError(
                 "buildWithCode方法的code参数必须是字符串",
@@ -59,17 +76,14 @@ export default class CCodeActivity<C = any, R = any> extends Activity<
             );
         }
         this.status = EnumActivityStatus.BUILDING;
-        const g = this.globalBuiltObject;
-        const $c = g.properties.placeholder || "$c";
-        const $m = g.methods.placeholder || "$m";
 
-        const names = this.getExtraExecuteParamsNames();
+        // const names = this.getExtraExecuteParamsNames();
 
         this.task = createOneParamAsyncFunction(code, [
             "$gCtx", // 全局上下文
             "$ctx", // 上下文
-            $c, // 内置变量
-            $m, // 内置方法
+            "$c", // 内置变量
+            "$m", // 内置方法
             "$v",
             "$parent", // 父节点
             "$preRes", // 上一个活动的返回值
@@ -78,7 +92,9 @@ export default class CCodeActivity<C = any, R = any> extends Activity<
             "$item",
             "$index",
             "$a",
-            ...names,
+            "$$"
+            // ,...names
+
         ]) as IActivityTaskFunction;
         this.status = EnumActivityStatus.BUILDED;
         return this.task;
@@ -87,17 +103,33 @@ export default class CCodeActivity<C = any, R = any> extends Activity<
 
 register("ccode", CCodeActivity);
 
-const activityProps: IActivityConfig = {
+
+
+const ccode = $.$HOC<CodeActivityContext, CodeActivityOptions>("ccode");
+
+
+const activityProps = ccode({
     type: "ccode",
     name: "如果ctx.count小于5,加加",
+    before: $.code({
+        name: "",
+        options: {
+            code(param) {
+                param.$$.ccc = 1000;
+            }
+        }
+    }),
     toVariable: "sb",
     context: {
-        count: 100,
+        count: 100
     },
     options: {
-        code: "console.log('$tt', $tt);",
+        // code:    "console.log('$tt', $$.$tt, $$.ccc);",
+        code(params){
+            console.log(params.$$.$tt)
+        }
     },
-};
+});
 
 const activity = createActivity(activityProps);
 

@@ -142,6 +142,58 @@ batchaddMethods
 ```
 - [x] 注册的函数和变量 只读
   除 `$v`外, `$c`, `$m`, `$a` 添加的属性为只读
+- [x] Activity.run 参数属性，例如`$preRes`, `$$`等的多级传递性
+```typescript
+export type IActivityRunParams<EA = any, EE = Record<PropertyKey, any>> = {
+    /**
+     * 上一次执行结果
+     */
+    $preRes?: any;
+    /**
+     * 额外的属性，主要用于用户
+     */
+    $extra?: EE;
+    /**
+     * 额外的属性，用户活动扩展
+     */
+    $$: EA
+};
+
+export type IActivityExecuteParams<EA = any, EE = Record<PropertyKey, any>> = {
+    /**
+     * 上下文
+     */
+    $ctx: any;
+    /**
+     * 全局上下文
+     */
+    $gCtx: Record<PropertyKey, any>;
+    /**
+     * 内置常量
+     */
+    $c: Record<string, any>;
+    /**
+     * 内置方法
+     */
+    $m: Record<string, Function>;
+    /**
+     * 全局变量
+     */
+    $v: Record<string, any>;
+    /**
+     * 父节点
+     */
+    $parent: Activity | undefined;
+    /**
+     * 上一个活动的返回值
+     */
+    $res: any;
+    /**
+     * 活动本身
+     */
+    $a: Record<string, Activity>;
+} & IActivityRunParams<EA, EE>;
+```
 - [x] ctx指向问题, useParentCtx即可使用父节点的ctx替换自身的ctx
   - [x] For
   - [x] IFElse
@@ -152,7 +204,6 @@ batchaddMethods
   - [x] While
   - [x] All
   - [x] doWhile
-- [x] Activity.run 参数属性，例如`$preRes`, `$item`等的多级传递性
 - [x] 改进或者删除AssertSequence
 - [x] 给父节点打名称，通过名称访问
 - [x] options 改进变量替换
@@ -161,7 +212,10 @@ batchaddMethods
 - [x] 支持多实例
 - [x] register活动支持装饰器
 - [x] 类似use，支持扩展Activities
-- [x] BrowserActivity和PageActivity给IActivityExecuteParams分别暴露 `$browser`和`$page`
-- [ ] 增强提示，类型推导，已知type，推导具体的 IActivityConfig (尤其是options)
+- [x] BrowserActivity和PageActivity给IActivityExecuteParams分别暴露 `$$.$browser`和`$$.$page`
+- [x] 增强提示，类型推导，已知type，推导具体的 IActivityConfig (尤其是options) 2025-01-03
+  - [x] 一种是 `ActConfigFor<Type extends ActivityType>`
+  - [x] 一种是 `$.for_`
+- [ ] 扩展新的活动后，typescript如何只能提示
 - [ ] 保证paramObject的数据安全
 - [ ] 类似use，支持扩展Activities

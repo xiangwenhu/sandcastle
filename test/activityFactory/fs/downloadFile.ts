@@ -1,23 +1,26 @@
-import { IActivityConfig } from "../../../src/types/activity";
+import { IActivityConfig, IActivityExecuteParams } from "../../../src/types/activity";
 import { createActivity } from "../../../src/factory/activity";
+import { $ } from "../../../src/factory/config";
 
 const activityProps: IActivityConfig = {
     type: "sequence",
     name: "sequence",
     children: [
-        {
-            type: "fs.downloadFile",
+        $.fsDownloadFile({
             name: "读取文件",
             options: {
                 url: "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png",
                 dist: `D:\\data\\tmp2\\cc\\dd\\bd.png`,
             },
-        },
-        {
-            type: "code",
+        }),
+        $.code({
             name: "输出内容",
-            options: { code: 'console.log("res:", $preRes)' },
-        },
+            options: {
+                code(res: IActivityExecuteParams) {
+                    console.log("res:", res.$preRes)
+                }
+            },
+        }),
     ],
 };
 

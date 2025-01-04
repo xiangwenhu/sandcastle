@@ -1,9 +1,9 @@
 import { IActivityConfig } from './../../src/types/activity';
 import { createActivity } from "../../src/factory/activity";
 import "../../src/crawlActivityFactory";
+import { $ } from '../../src/factory/config';
 
-const activityProps: IActivityConfig = {
-    type: "c.browser",
+const activityProps: IActivityConfig = $.c.browser({
     name: "创建浏览器",
     options: {
         headless: true
@@ -29,11 +29,15 @@ const activityProps: IActivityConfig = {
                     type: "c.page.cookies",
                     name: "获取cookie"
                 },
-                {
-                    type: "code",
+                $.code({
+                    type: "break",
                     name: "输出cookie",
-                    options: { code: "console.log('快手res', preRes);" }
-                }
+                    options: {
+                        code(params) {
+                            console.log("code:", params.$preRes)
+                        }
+                    }
+                })
             ]
         },
         {
@@ -57,12 +61,12 @@ const activityProps: IActivityConfig = {
                 {
                     type: "code",
                     name: "输出cookie",
-                    options: { code: "console.log('抖音res', preRes);" }
+                    options: { code: "console.log('抖音res', $preRes);" }
                 }
             ]
         }]
     }]
-};
+});
 
 const activity = createActivity(activityProps);
 

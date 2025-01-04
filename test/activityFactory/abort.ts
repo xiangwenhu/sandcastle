@@ -1,39 +1,38 @@
 import { IActivityConfig } from "./../../src/types/activity";
 import { createActivity } from "../../src/factory/activity";
 import { EnumActivityStatus } from "../../src/types/enum";
-import getProgress from "../../src/progress";
-import { $$ }  from "../../src/factory/config"
+import { $ }  from "../../src/factory/config"
 
-const activityProps: IActivityConfig = $$.sequence({
+const activityProps: IActivityConfig = $.sequence({
     name: "如果ctx.count小于5,加加",
     context: {
         count: 1,
     },
-    assert:  $$.code({
+    assert:  $.code({
         useParentCtx: true,
         name: "sequence assert",
         options: { code: "return $ctx.count < 5" },
     }),
     children: [
-        $$.code({
+        $.code({
             useParentCtx: true,
             name: "输出count",
             options: { code: 'console.log("count:" + $ctx.count)' },
         }),
-        $$.delay({
+        $.delay({
             name: "睡1500ms",
             options: { timeout: 1500 , },
         }),
-        $$.code({
+        $.code({
             useParentCtx: true,
             name: "count加1",
             options: { code: "$ctx.count++" },
         }),
-        $$.delay({
+        $.delay({
             name: "睡1500ms",
             options: { timeout: 1500 },
         }),
-        $$.code({
+        $.code({
             useParentCtx: true,
             name: "输出count",
             options: { code: 'console.log("count:" + $ctx.count)' },
