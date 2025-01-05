@@ -216,6 +216,36 @@ export type IActivityExecuteParams<EA = any, EE = Record<PropertyKey, any>> = {
 - [x] 增强提示，类型推导，已知type，推导具体的 IActivityConfig (尤其是options) 2025-01-03
   - [x] 一种是 `ActConfigFor<Type extends ActivityType>`
   - [x] 一种是 `$.for_`
-- [ ] 扩展新的活动后，typescript如何只能提示
+- [x] 扩展新的活动后，typescript如何职能提示 
+  1. 注册: 注册活动
+  2. $HOC：获取带ts的方法
+```typescript
+register("ccode", CCodeActivity);
+
+const ccode = $.$HOC<CodeActivityContext, CodeActivityOptions>("ccode");
+
+const activityProps = ccode({
+    type: "ccode",
+    name: "如果ctx.count小于5,加加",
+    before: $.code({
+        name: "",
+        options: {
+            code(param) {
+                param.$$.ccc = 1000;
+            }
+        }
+    }),
+    toVariable: "sb",
+    context: {
+        count: 100
+    },
+    options: {
+        // code:    "console.log('$tt', $$.$tt, $$.ccc);",
+        code(params){
+            console.log(params.$ctx.count)
+        }
+    },
+});
+```
 - [ ] 保证paramObject的数据安全
 - [ ] 类似use，支持扩展Activities

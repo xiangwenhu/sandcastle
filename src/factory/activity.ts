@@ -1,30 +1,9 @@
-import { ActivityType, ExtendParams, IActivityConfig } from "../types/activity";
-import Activity from "../activities/Activity";
-import Messenger from "../messenger";
+import { createActivityHOC } from "../activityFactory";
 import GlobalBuiltinContext from "../globalBuiltinContext";
+import Messenger from "../messenger";
+import { ActivityType, IActivityConfig } from "../types/activity";
 import { ICreateInstanceOptions } from "../types/factory";
-import { GLOBAL_BUILTIN_CONTEXT } from "../const";
-import { factory } from "../activityFactory";
 
-const createActivityHOC =
-    (globalBuiltinContext: GlobalBuiltinContext) =>
-    <C, R, O>(
-        activityConfig: IActivityConfig,
-        globalContext: Record<PropertyKey, any> = {}
-    ) => {
-        Object.defineProperty(globalContext, GLOBAL_BUILTIN_CONTEXT, {
-            configurable: false,
-            get() {
-                return globalBuiltinContext;
-            },
-        });
-
-        const activity = factory.create(
-            activityConfig,
-            globalContext
-        ) as any as Activity<C, R, O>;
-        return activity;
-    };
 
 export function createInstance(options: ICreateInstanceOptions = {}) {
     const gBCtx = new GlobalBuiltinContext();

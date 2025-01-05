@@ -10,6 +10,8 @@ import {
     IFactoryP$HConfigValue,
     PropertyConfigItem,
 } from "./factory.type";
+import GlobalBuiltinContext from "../globalBuiltinContext";
+import { GLOBAL_BUILTIN_CONTEXT } from "../const";
 
 const configMap = new Map<string, IFactoryConfigValue>();
 
@@ -58,6 +60,27 @@ export function createChildren(
 ) {
     return props.map((p) => createSingle(p, globalContext));
 }
+
+export const createActivityHOC =
+    (globalBuiltinContext: GlobalBuiltinContext) =>
+    <C, R, O>(
+        activityConfig: IActivityConfig,
+        globalContext: Record<PropertyKey, any> = {}
+    ) => {
+        Object.defineProperty(globalContext, GLOBAL_BUILTIN_CONTEXT, {
+            configurable: false,
+            get() {
+                return globalBuiltinContext;
+            },
+        });
+
+        const activity = create(
+            activityConfig,
+            globalContext
+        ) as any as Activity<C, R, O>;
+        return activity;
+    };
+
 
 const BUILTIN_PARAMS: PropertyConfigItem[] = [
     {
@@ -283,6 +306,7 @@ function createSingle<A extends Activity>(
 export const factory = {
     create,
     createChildren,
+    createActivityHOC
 };
 
 export function use(
