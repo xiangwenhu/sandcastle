@@ -1,5 +1,7 @@
 import { $,createActivity, EnumActivityStatus, IActivityConfig } from '../../src';
 
+import progressManger from "../../src/progress"
+
 const activityProps: IActivityConfig = {
     type: "sequence",
     name: "如果ctx.count小于5,加加",
@@ -35,5 +37,11 @@ const activityProps: IActivityConfig = {
 
 const activity = createActivity(activityProps);
 
+activity.messenger?.on("status", function (status: EnumActivityStatus, act: any) {
+    // console.log( act.type, act.name, ACTIVITY_STATUS_MAP[status])
+    const progress = progressManger.getProgress(activity);
+
+    console.log(progress)
+});
 
 activity.run();
