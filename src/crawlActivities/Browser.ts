@@ -1,4 +1,4 @@
-import { Browser, PuppeteerLaunchOptions, launch } from "puppeteer";
+import { Browser, PuppeteerLaunchOptions, launch } from "puppeteer-core";
 import SequenceActivity from "../activities/Sequence";
 import { IActivityExecuteParams } from "../types/activity";
 

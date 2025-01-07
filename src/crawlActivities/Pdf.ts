@@ -1,4 +1,4 @@
-import { PDFOptions } from "puppeteer";
+import { PDFOptions } from "puppeteer-core";
 import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 

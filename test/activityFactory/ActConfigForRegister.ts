@@ -4,10 +4,9 @@ import { register } from "../../src/activityFactory";
 import {
     IActivityExecuteParams,
     IActivityTaskFunction,
-    ActConfigForRegister
-} from "../../src/types/activity";
-import { $ } from "../../src/factory/config";
-import { createActivity } from "../../src/factory/activity";
+    $,
+    createActivity,
+} from "../../src";
 
 
 export interface CodeActivityOptions {
@@ -60,7 +59,7 @@ const activityProps = ccode({
     },
     options: {
         // code:    "console.log('$tt', $$.$tt, $$.ccc);",
-        code(params){
+        code(params) {
             console.log(params.$ctx.count)
         }
     },

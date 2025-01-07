@@ -1,4 +1,4 @@
-import { WaitForSelectorOptions } from "puppeteer";
+import { WaitForSelectorOptions } from "puppeteer-core";
 import PageChildActivity from "./PageChildActivity";
 import { IActivityExecuteParams } from "../types/activity";
 

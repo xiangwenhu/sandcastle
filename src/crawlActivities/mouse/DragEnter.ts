@@ -1,4 +1,4 @@
-import { Point, Protocol } from "puppeteer";
+import { Point, Protocol } from "puppeteer-core";
 import PageChildActivity from "../PageChildActivity";
 import { IActivityExecuteParams } from "../../types/activity";
 

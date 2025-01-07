@@ -1,4 +1,4 @@
-import { HTTPResponse } from "puppeteer";
+import { HTTPResponse } from "puppeteer-core";
 import PageChildActivity from "./PageChildActivity";
 import { IActivityExecuteParams } from "../types/activity";
 import { isString } from "lodash";

@@ -1,6 +1,4 @@
-
-import { IActivityConfig } from './../../src/types/activity';
-import { createActivity } from "../../src/factory/activity";
+import { $,createActivity, IActivityConfig } from '../../src';
 
 import { AxiosRequestConfig } from 'axios';
 

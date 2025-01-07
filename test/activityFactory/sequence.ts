@@ -1,6 +1,5 @@
-import { IActivityConfig } from "./../../src/types/activity";
-import { createActivity } from "../../src/factory/activity";
-import { EnumActivityStatus } from "../../src/types/enum";
+import { $,createActivity, EnumActivityStatus, IActivityConfig } from '../../src';
+
 import getProgress from "../../src/progress"
 
 const activityProps: IActivityConfig = {

@@ -1,7 +1,4 @@
-import { IActivityConfig } from "./../../src/types/activity";
-import { createActivity } from "../../src/factory/activity";
-import { EnumActivityStatus } from "../../src/types/enum";
-import { $ }  from "../../src/factory/config"
+import { $, EnumActivityStatus, createActivity , IActivityConfig}  from "../../src"
 
 const activityProps: IActivityConfig = $.sequence({
     name: "如果ctx.count小于5,加加",

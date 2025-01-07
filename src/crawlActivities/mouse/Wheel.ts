@@ -1,4 +1,4 @@
-import { MouseWheelOptions } from "puppeteer";
+import { MouseWheelOptions } from "puppeteer-core";
 import { IActivityExecuteParams } from "../../types/activity";
 import PageChildActivity from "../PageChildActivity";
 

@@ -1,5 +1,4 @@
-import { IActivityConfig, IFunctionActivityConfig } from "./../../src/types/activity";
-import { createActivity } from "../../src/factory/activity";
+import { $, IActivityConfig, IFunctionActivityConfig, createActivity } from '../../src';
 
 const activityProps: IActivityConfig = {
     type: "sequence",

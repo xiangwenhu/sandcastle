@@ -24,8 +24,8 @@
 | Terminate      | terminate      | ❌              | ✅    | 终止整个流程                               |
 | TryCatch       | tryCatch       | ✅              | ✅    | try catch                                  |
 | For            | for            | ✅              | ✅    | for                                        |
-| ParallelFor    | parallelFor    | ✅              | ✅    | parallel For  |
-| Function       | function       | ✅              | ✅    | 执行某个函数  |
+| ParallelFor    | parallelFor    | ✅              | ✅    | parallel For                               |
+| Function       | function       | ✅              | ✅    | 执行某个函数                               |
 
 **fs**
 | 类名         | 注册类型        | 是否有children | 状态 | 说明               |
@@ -70,20 +70,20 @@ Page相关API，详情查看[Page class | Puppeteer](https://pptr.dev/api/puppet
 | Focus                  | c.page.focus                  | ❌              | ✅    | page.focus                       |
 | Hover                  | c.page.hover                  | ❌              | ✅    | page.hover                       |
 | UploadFile             | c.page.uploadFile             | ❌              | ✅    | 上传文件                         |
-| clearValue             | c.page.clearValue             | ❌              | ✅    | 清除输入控制的值    |
-| ExposeFunction         | c.page.exposeFunction         | ❌              | ✅    | 暴露函数      |
-| RemoveExposedFunction  | c.page.removeExposedFunction  | ❌              | ✅    | 删除暴露函数 |
-| Pdf                    | c.page.pdf                    | ❌              | ✅    | pdf        |
-| Screenshot             | c.page.screenshot             | ❌              | ✅    | 截屏      |
-| SetViewport            | c.page.setViewport            | ❌              | ✅    | setViewport   |
-| SetRequestInterception | c.page.setRequestInterception | ❌              | ✅    | setRequestInterception |
-| SetExtraHTTPHeaders    | c.page.setExtraHTTPHeaders    | ❌              | ✅    | setExtraHTTPHeaders   |
-| SetGeolocation         | c.page.setGeolocation         | ❌              | ✅    | setGeolocation    |
-| AddStyleTag            | c.page.addStyleTag            | ❌              | ✅    | 添加style         |
-| AddScriptTag           | c.page.addScriptTag           | ❌              | ✅    | 添加script      |
-| Select                 | c.page.select                 | ❌              | ✅    | select选中      |
-| ActionActivity         | c.page.action                 | ❌              | ✅    | 通用page方法操作    |
-| PropertyActivity       | c.page.property               | ❌              | ✅    | 通用page获取属性  |
+| clearValue             | c.page.clearValue             | ❌              | ✅    | 清除输入控制的值                 |
+| ExposeFunction         | c.page.exposeFunction         | ❌              | ✅    | 暴露函数                         |
+| RemoveExposedFunction  | c.page.removeExposedFunction  | ❌              | ✅    | 删除暴露函数                     |
+| Pdf                    | c.page.pdf                    | ❌              | ✅    | pdf                              |
+| Screenshot             | c.page.screenshot             | ❌              | ✅    | 截屏                             |
+| SetViewport            | c.page.setViewport            | ❌              | ✅    | setViewport                      |
+| SetRequestInterception | c.page.setRequestInterception | ❌              | ✅    | setRequestInterception           |
+| SetExtraHTTPHeaders    | c.page.setExtraHTTPHeaders    | ❌              | ✅    | setExtraHTTPHeaders              |
+| SetGeolocation         | c.page.setGeolocation         | ❌              | ✅    | setGeolocation                   |
+| AddStyleTag            | c.page.addStyleTag            | ❌              | ✅    | 添加style                        |
+| AddScriptTag           | c.page.addScriptTag           | ❌              | ✅    | 添加script                       |
+| Select                 | c.page.select                 | ❌              | ✅    | select选中                       |
+| ActionActivity         | c.page.action                 | ❌              | ✅    | 通用page方法操作                 |
+| PropertyActivity       | c.page.property               | ❌              | ✅    | 通用page获取属性                 |
 
 **键盘**
 | 类名                  | 注册类型                      | 是否有children | 状态 | 说明     |
@@ -245,5 +245,9 @@ const activityProps = ccode({
     },
 });
 ```
+- [x] puppeteer-core 替换  puppeteer 和 使用内置 uuid生成库 (2025-01-07)
+- [ ] 演示示例和线上演示
+- [ ] 封装为库
+- [ ] 封装为库：基础版本 + 爬网版本
 - [ ] 保证paramObject的数据安全
-- [ ] puppeteer-extra ?? 
+

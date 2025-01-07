@@ -1,4 +1,4 @@
-import { GeolocationOptions } from "puppeteer";
+import { GeolocationOptions } from "puppeteer-core";
 import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 

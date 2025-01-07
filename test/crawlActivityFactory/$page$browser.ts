@@ -1,9 +1,5 @@
 import { PageActivityEE } from '../../src/crawlActivities/Page';
-import "../../src/crawlActivityFactory";
-import { createActivity } from "../../src/factory/activity";
-import { $ } from '../../src/factory/config';
-import { ActConfigFor, ExtendParams, IActivityExecuteParams,  IFunctionActivityConfig } from '../../src/types/activity';
-
+import { createActivity, $, IActivityExecuteParams, ActConfigFor } from '../../src';
 
 const activityProps: ActConfigFor<"c.browser"> = {
     type: "c.browser",
@@ -11,12 +7,11 @@ const activityProps: ActConfigFor<"c.browser"> = {
     options: {
         headless: false,
         "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
-    
     },
     children: [$.sequence({
         name: "顺序",
         children: [$.c.page({
-            name: "快手页面啊",    
+            name: "快手页面啊",
             children: [
                 $.c.page.goto({
                     name: "",
@@ -29,8 +24,8 @@ const activityProps: ActConfigFor<"c.browser"> = {
                 }),
                 $.function_({
                     name: "代码",
-                    async task(paramObject: IActivityExecuteParams<PageActivityEE>) {    
-                        const title = await paramObject.$$.$page.title();        
+                    async task(paramObject: IActivityExecuteParams<PageActivityEE>) {
+                        const title = await paramObject.$$.$page.title();
                         console.log("page title:", title);
                     }
                 })

@@ -1,12 +1,11 @@
-import { IActivityConfig } from '../../src/types/activity';
-import { createActivity } from "../../src/factory/activity";
-import "../../src/crawlActivityFactory";
+import { IActivityConfig, createActivity} from '../../src';
 
 const activityProps: IActivityConfig = {
     type: "c.browser",
     name: "创建浏览器",
     options: {
-        headless: false
+        headless: false,
+        "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
     },
     children: [{
         type: "parallel",
@@ -36,7 +35,7 @@ const activityProps: IActivityConfig = {
                 }, {
                     type: "c.page.type",
                     options: {
-                        selector: `#kw`, text: "高源",
+                        selector: `#kw`, text: "高山流水",
                         options: {
                             delay: 1 * 1000
                         },

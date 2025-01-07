@@ -1,4 +1,4 @@
-import { ScreenshotOptions } from "puppeteer";
+import { ScreenshotOptions } from "puppeteer-core";
 import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 

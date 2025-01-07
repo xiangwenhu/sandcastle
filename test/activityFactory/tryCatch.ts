@@ -1,7 +1,4 @@
-import { ActConfigFor, IActivityConfig, IActivityExecuteParams } from "./../../src/types/activity";
-import { createActivity } from "../../src/factory/activity";
-import { $ } from "../../src/factory/config";
-import { TerminateError } from "../../src/ActivityError";
+import { $,ActConfigFor,createActivity, IActivityConfig, IActivityExecuteParams } from '../../src';
 
 const activityProps: ActConfigFor<"tryCatch"> = {
     type: "tryCatch",

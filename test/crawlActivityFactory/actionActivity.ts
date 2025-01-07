@@ -1,13 +1,10 @@
-import { IActivityConfig } from '../../src/types/activity';
-import { createActivity } from "../../src/factory/activity";
-import "../../src/crawlActivityFactory";
-import { $ } from '../../src/factory/config';
-
+import { IActivityConfig, createActivity, $ } from '../../src';
 
 const activityProps: IActivityConfig = $.c.browser({
     name: "创建浏览器",
     options: {
-        headless: false
+        headless: false,
+         "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
     },
     children: [$.sequence({
         // type: "sequence",
@@ -44,7 +41,7 @@ const activityProps: IActivityConfig = $.c.browser({
                 }, {
                     type: "c.page.type",
                     options: {
-                        selector: `#kw`, text: "高源",
+                        selector: `#kw`, text: "高山流水",
                         options: {
                             delay: 1 * 1000
                         },

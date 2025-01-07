@@ -1,4 +1,4 @@
-import { EvaluateFuncWith, Page } from "puppeteer";
+import { EvaluateFuncWith, Page } from "puppeteer-core";
 
 const CHECK_ELEMENT_CONTENT_OPTIONS = {
     timeout: 30 * 1000

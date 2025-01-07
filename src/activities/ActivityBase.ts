@@ -1,6 +1,6 @@
-import * as uuid from "uuid";
+import { randomUUID } from "crypto";
 import { GLOBAL_BUILTIN_CONTEXT } from "../const";
-import { ExtendParams, GlobalActivityContext, IActivityExecuteParams, IActivityRunParams, IActivityTaskFunction } from "../types/activity";
+import { GlobalActivityContext, IActivityExecuteParams, IActivityRunParams, IActivityTaskFunction } from "../types/activity";
 import { EnumActivityStatus } from "../types/enum";
 import { IMessenger } from "../types/messenger";
 import { firstToLower } from "../util";
@@ -108,7 +108,7 @@ class ActivityBase<C = any, R = any, O = any> {
         this.type =
             firstToLower(this.constructor.name.replace("Activity", "")) ||
             "activity";
-        this.#id = uuid.v4();
+        this.#id = randomUUID();
         this.status = EnumActivityStatus.INITIALIZED;
     }
 }

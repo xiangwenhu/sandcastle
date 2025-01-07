@@ -1,4 +1,4 @@
-import { GoToOptions } from "puppeteer";
+import { GoToOptions } from "puppeteer-core";
 import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 

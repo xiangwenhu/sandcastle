@@ -1,5 +1,5 @@
 import { isFunction } from 'lodash';
-import { Page } from "puppeteer";
+import { Page } from "puppeteer-core";
 import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 

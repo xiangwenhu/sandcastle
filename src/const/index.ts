@@ -1,4 +1,4 @@
-import { PuppeteerLaunchOptions } from "puppeteer";
+import { PuppeteerLaunchOptions } from "puppeteer-core";
 import { EnumActivityStatus } from "../types/enum";
 
 export const GLOBAL_BUILTIN_CONTEXT: unique symbol = Symbol("g-builtin-context");

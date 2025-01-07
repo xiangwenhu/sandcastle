@@ -1,17 +1,15 @@
-import _ from "lodash";
 import { TerminateError } from "../ActivityError";
 import { ACTIVITY_TASK_BUILTIN_PARAMS_KEYS } from "../const";
-import { EnumActivityStatus } from "../types/enum";
 import {
-    ExtendParams,
     IActivityExecuteParams,
     IActivityRunParams,
-    IActivityTaskFunction,
+    IActivityTaskFunction
 } from "../types/activity";
+import { EnumActivityStatus } from "../types/enum";
 import { extractOwnOtherKeys } from "../util";
 import ActivityBase from "./ActivityBase";
-import { replaceVariable } from "./util/variable";
 import { createActivityError } from "./util";
+import { replaceVariable } from "./util/variable";
 
 /**
  * C context
