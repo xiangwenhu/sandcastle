@@ -1,6 +1,6 @@
 import { isFunction } from "lodash";
 import { IActivityExecuteParams } from "../types/activity";
-import { getFunctionBody } from "../util/function";
+import { AsyncFunctionConstructor, getFunctionBody } from "../util/function";
 import PageChildActivity from "./PageChildActivity";
 
 export interface EvaluateActivityOptions {
@@ -19,10 +19,11 @@ export default class EvaluateActivity<
             let rCode = isFunction(code) ? getFunctionBody(code) : `${code}`;
 
             const res = await this.page!.evaluate(
-                (_code, ..._args) => {
-                    const f = new Function(_code);
+                async (_code, ..._args) => {
+                    const  AsyncFunctionConstructor: FunctionConstructor = (async function fn(){}).constructor as any;
+                    const f = new AsyncFunctionConstructor(_code);
                     console.log("f:", f.toString());
-                    const results = f(..._args);
+                    const results = await f(..._args);
                     return results;
                 },
                 rCode,
