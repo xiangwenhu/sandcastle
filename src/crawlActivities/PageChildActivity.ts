@@ -1,4 +1,4 @@
-import { Browser, Page } from "puppeteer";
+import { Browser, Page } from "puppeteer-core";
 import Activity from "../activities/Activity";
 import { isFunction } from "lodash";
 import PageActivity from "./Page";

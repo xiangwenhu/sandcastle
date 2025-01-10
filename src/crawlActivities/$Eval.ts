@@ -1,4 +1,4 @@
-import { EvaluateFuncWith } from "puppeteer";
+import { EvaluateFuncWith } from "puppeteer-core";
 import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 

@@ -1,4 +1,4 @@
-import { Protocol } from "puppeteer";
+import { Protocol } from "puppeteer-core";
 import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 

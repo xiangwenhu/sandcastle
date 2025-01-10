@@ -1,5 +1,4 @@
-import { IActivityConfig } from './../../src/types/activity';
-import { addMethod, addConstant, createActivity } from "../../src/factory/activity"
+import { addMethod, addConstant, createActivity, IActivityConfig } from "../../src"
 
 addMethod("getName",
     function getName() {

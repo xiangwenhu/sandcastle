@@ -1,4 +1,4 @@
-import { KeyboardTypeOptions } from "puppeteer";
+import { KeyboardTypeOptions } from "puppeteer-core";
 import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 

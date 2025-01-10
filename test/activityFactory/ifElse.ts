@@ -1,7 +1,5 @@
 
-import { IActivityConfig } from './../../src/types/activity';
-import { createActivity } from "../../src/factory/activity";
-import { $ } from '../../src/factory/config';
+import { $, createActivity, IActivityConfig } from '../../src';
 
 const activityProps = $.ifElse({
     name: 'if else 测试',

@@ -1,4 +1,4 @@
-import { HTTPRequest } from "puppeteer";
+import { HTTPRequest } from "puppeteer-core";
 import PageChildActivity from "./PageChildActivity";
 import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
 

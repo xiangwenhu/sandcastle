@@ -1,13 +1,13 @@
 import { isFunction } from "lodash";
 import CodeActivity from "../../src/activities/Code";
-import {
-    IActivityExecuteParams,
-    IActivityTaskFunction
-} from "../../src/types/activity";
 
-import { createActivity } from "../../src/factory/activity";
-import { $ } from "../../src/factory/config";
-import { register } from "../../src/activityFactory";
+import {
+    $, 
+    IActivityExecuteParams,
+    IActivityTaskFunction,
+    createActivity,
+    register
+} from "../../src";
 
 export interface CodeActivityOptions {
     code: string | IActivityTaskFunction;
@@ -58,7 +58,7 @@ const activityProps = ccode({
     },
     options: {
         // code:    "console.log('$tt', $$.$tt, $$.ccc);",
-        code(params){
+        code(params) {
             console.log(params.$ctx.count)
         }
     },

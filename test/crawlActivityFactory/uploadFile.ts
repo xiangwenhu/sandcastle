@@ -1,6 +1,4 @@
-import { IActivityConfig } from '../../src/types/activity';
-import { createActivity } from "../../src/factory/activity";
-import "../../src/crawlActivityFactory";
+import { IActivityConfig, createActivity } from '../../src';
 import { $ } from '../../src/factory/config';
 
 const activityProps: IActivityConfig =  $.c.browser({

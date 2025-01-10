@@ -1,7 +1,4 @@
-import { IActivityConfig } from './../../src/types/activity';
-import { createActivity } from "../../src/factory/activity";
-import "../../src/crawlActivityFactory";
-import { $ } from '../../src/factory/config';
+import { $, createActivity, IActivityConfig } from '../../src';
 
 const activityProps: IActivityConfig = $.c.browser({
     name: "创建浏览器",

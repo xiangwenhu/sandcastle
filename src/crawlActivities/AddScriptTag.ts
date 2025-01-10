@@ -1,4 +1,4 @@
-import { FrameAddScriptTagOptions } from "puppeteer";
+import { FrameAddScriptTagOptions } from "puppeteer-core";
 import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 

@@ -1,6 +1,6 @@
 import PageChildActivity from "./PageChildActivity";
 import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
-import { EvaluateFuncWith } from "puppeteer";
+import { EvaluateFuncWith } from "puppeteer-core";
 
 export interface $$EvalActivityOptions {
     selector: string;

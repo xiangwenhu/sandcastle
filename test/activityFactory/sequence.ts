@@ -1,7 +1,4 @@
-import { IActivityConfig } from "./../../src/types/activity";
-import { createActivity } from "../../src/factory/activity";
-import { EnumActivityStatus } from "../../src/types/enum";
-import getProgress from "../../src/progress"
+import { $,createActivity, EnumActivityStatus, IActivityConfig } from '../../src';
 
 const activityProps: IActivityConfig = {
     type: "sequence",
@@ -38,11 +35,5 @@ const activityProps: IActivityConfig = {
 
 const activity = createActivity(activityProps);
 
-activity.messenger?.on("status", function (status: EnumActivityStatus, act: any) {
-    // console.log( act.type, act.name, ACTIVITY_STATUS_MAP[status])
-    const progress = getProgress(activity);
-
-    console.log(progress)
-});
 
 activity.run();

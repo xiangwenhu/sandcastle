@@ -1,4 +1,4 @@
-import { KeyInput, KeyPressOptions } from "puppeteer";
+import { KeyInput, KeyPressOptions } from "puppeteer-core";
 import { IActivityExecuteParams } from "../../types/activity";
 import PageChildActivity from "../PageChildActivity";
 

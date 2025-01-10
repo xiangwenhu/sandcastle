@@ -1,14 +1,13 @@
-import { HTTPResponse } from "puppeteer";
+import { HTTPResponse } from "puppeteer-core";
 import PageChildActivity from "./PageChildActivity";
 import { IActivityExecuteParams } from "../types/activity";
 import { isString } from "lodash";
 
 
-type HTTPResponseHandler = (res: HTTPResponse) => boolean | Promise<boolean>;
-type HOCHTTPResponseHandler = (paramObject: IActivityExecuteParams) => (res: HTTPResponse) => boolean | Promise<boolean>
+export type HTTPResponseHandler = (res: HTTPResponse, paramObject?: IActivityExecuteParams) => boolean | Promise<boolean>;
 
 export interface WaitForResponseActivityOptions {
-    urlOrPredicate: string | HTTPResponseHandler | HOCHTTPResponseHandler
+    urlOrPredicate: string | HTTPResponseHandler
     options?: {
         timeout?: number;
     },
@@ -29,10 +28,13 @@ export default class WaitForResponseActivity<
             }
             let httRes: HTTPResponse;
             if (!useTaskParams) {
-                httRes = await this.page!.waitForResponse(urlOrPredicate as HTTPResponseHandler, options);
+                httRes = await this.page!.waitForResponse((res => {
+                    return urlOrPredicate.call(this.page!, res)
+                }), options);
             } else {
-                const predicate = (urlOrPredicate as HOCHTTPResponseHandler)(paramObject);
-                httRes = await this.page!.waitForResponse(predicate, options);
+                httRes = await this.page!.waitForResponse((res => {
+                    return urlOrPredicate.call(this.page!, res, paramObject)
+                }), options);
             }
 
             if (useResponse) {

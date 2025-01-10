@@ -2,7 +2,7 @@ import { isString } from "lodash";
 import { ActivityError } from "../ActivityError";
 import PageChildActivity from "./PageChildActivity";
 import { IActivityExecuteParams, IActivityRunParams } from "../types/activity";
-import { KeyInput, KeyPressOptions } from "puppeteer";
+import { KeyInput, KeyPressOptions } from "puppeteer-core";
 
 export interface ClearValueActivityOptions {
     selector: KeyInput,

@@ -1,4 +1,4 @@
-import { Browser, Page } from "puppeteer";
+import { Browser, Page } from "puppeteer-core";
 import SequenceActivity from "../activities/Sequence";
 import { ExtendParams, IActivityExecuteParams } from "../types/activity";
 import BrowserActivity, { BrowserActivityEE } from "./Browser";

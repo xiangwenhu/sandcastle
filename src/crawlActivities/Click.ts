@@ -1,4 +1,4 @@
-import { ClickOptions } from "puppeteer";
+import { ClickOptions } from "puppeteer-core";
 import { IActivityExecuteParams } from "../types/activity";
 import PageChildActivity from "./PageChildActivity";
 
