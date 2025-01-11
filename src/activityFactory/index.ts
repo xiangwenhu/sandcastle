@@ -2,6 +2,7 @@ import "../activities/Break";
 import "../activities/Code";
 import "../activities/Delay";
 import "../activities/DoWhile";
+import "../activities/While";
 import "../activities/For";
 import "../activities/Function";
 import "../activities/IfElse";
