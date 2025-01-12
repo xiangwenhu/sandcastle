@@ -3,7 +3,9 @@ import { IActivityExecuteParams } from "../types/activity";
 import Activity from "./Activity";
 import { registerActivity } from "../activityFactory/factory";
 
-export type RequestActivityOptions = AxiosRequestConfig;
+export type RequestActivityOptions = AxiosRequestConfig & {
+    useDataOnly?: boolean
+};
 
 @registerActivity()
 export default class RequestActivity<C = any, R = any> extends Activity<C, R, RequestActivityOptions> {
@@ -12,7 +14,10 @@ export default class RequestActivity<C = any, R = any> extends Activity<C, R, Re
             const cg = this.getReplacedOptions(
                 paramObj
             );
-            return axios(cg);
+            return axios(cg).then(res => {
+                if (!!this.options.useDataOnly) return res.data;
+                return res
+            });
         };
     }
 }
