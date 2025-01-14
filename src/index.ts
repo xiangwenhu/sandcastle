@@ -4,3 +4,6 @@ export * from "./progress";
 
 // types
 export * from "./types";
+
+
+export * from "./ActivityError"

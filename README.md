@@ -194,7 +194,7 @@ export type IActivityExecuteParams<EA = any, EE = Record<PropertyKey, any>> = {
     $a: Record<string, Activity>;
 } & IActivityRunParams<EA, EE>;
 ```
-- [x] ctx指向问题, useParentCtx即可使用父节点的ctx替换自身的ctx
+- [x] ctx指向问题, useParentCtx即可使用父节点的ctx替换自身的ctx。 assert, before和after也适用
   - [x] For
   - [x] IFElse
   - [x] Parallel

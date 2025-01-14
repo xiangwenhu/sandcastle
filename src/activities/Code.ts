@@ -27,7 +27,7 @@ export default class CodeActivity<C = any, R = any> extends Activity<
         const { code } = this.options;
         if (isFunction(code)) {
             return (paramObject: IActivityExecuteParams) =>
-                code.call(null, paramObject);
+                code.call(this, paramObject);
         }
 
         return (paramObject: IActivityExecuteParams) => {
