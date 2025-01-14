@@ -47,18 +47,21 @@ export default class TryCatchActivity<
                     }
                     throw new TerminateError(
                         this.globalBuiltInCtx.terminatedMessage ||
-                            (err && err.message) ||
-                            "未知异常",
+                        (err && err.message) ||
+                        "未知异常",
                         this
                     );
                 }
-                await this.catch!.run({
+
+                const res = await this.catch!.run({
                     ...paramObj,
-                    error: err,
+                    $err: err,
                 } as any);
+                return res;
             } finally {
                 if (this.finally) {
-                    await this.finally.run(paramObj);
+                    const res = await this.finally.run(paramObj);
+                    if (res != undefined) return res
                 }
             }
         };

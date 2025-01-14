@@ -71,11 +71,12 @@ import { MouseWheelActivityOptions } from "../crawlActivities/mouse/Wheel";
 import GlobalBuiltinContext from "../globalBuiltinContext";
 import { BrowserActivityOptions } from "../crawlActivities/Browser";
 import { IfElseActivityConfig } from "../activities/IfElse";
+import { ActivityError } from "../ActivityError";
 
 export declare type ActConfigFor<Type extends keyof ActivityConfigMap> =
     Type extends keyof ActivityConfigMap
-        ? ActivityConfigMap[Type]
-        : IActivityConfig;
+    ? ActivityConfigMap[Type]
+    : IActivityConfig;
 
 
 // export declare type ActConfigFor   =  ActConfigForRegister<ActivityConfigMap, keyof ActivityConfigMap>;
@@ -86,7 +87,7 @@ export declare type ActConfigForRegister<
     Type extends keyof T
 > = Type extends keyof T ? T[Type] : IActivityConfig;
 
-export interface DefaultActivityOptions {}
+export interface DefaultActivityOptions { }
 // export declare type ActivityOptionsFor<Type extends keyof ActivityOptionsMap | keyof SVGElementTagNameMap> = Type extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[Type] : Type extends keyof SVGElementTagNameMap ? SVGElementTagNameMap[Type] : never;
 
 export type ActivityConfigMap = {
@@ -272,7 +273,7 @@ export interface ICommonActivityConfig<T = any, C = any, O = any, E = any> {
 }
 
 export interface IActivityConfig<C = any, O = any, E = any>
-    extends ICommonActivityConfig<ActivityType, C, O, E> {}
+    extends ICommonActivityConfig<ActivityType, C, O, E> { }
 
 export type ActivityType = keyof ActivityConfigMap;
 
@@ -355,7 +356,13 @@ export type IActivityExecuteParams<EA = any, EE = Record<PropertyKey, any>> = {
      * 活动本身
      */
     $a: Record<string, Activity>;
+    /**
+     * 错误
+     */
+    $err?: ActivityError
 } & IActivityRunParams<EA, EE>;
+
+
 
 export interface IActivityTaskFunction<> {
     (paramObject: IActivityExecuteParams): any;

@@ -29,23 +29,32 @@ class Activity<
 
     protected createActivityError = createActivityError;
 
-    protected runBefore(paramObject: IActivityExecuteParams ): unknown {
+    protected runBefore(paramObject: IActivityExecuteParams): unknown {
         if (!this.before || !(this.before instanceof Activity)) {
             return;
+        }
+        if (this.before?.useParentCtx) {
+             this.before.parent = this;
         }
         return this.before.run(paramObject);
     }
 
-    protected runAfter(paramObject: IActivityExecuteParams ): unknown {
+    protected runAfter(paramObject: IActivityExecuteParams): unknown {
         if (!this.after || !(this.after instanceof Activity)) {
             return;
+        }
+        if (this.after?.useParentCtx) {
+            this.after.parent = this;
         }
         return this.after.run(paramObject);
     }
 
-    protected async runAssert(paramObject: IActivityExecuteParams ) {
+    protected async runAssert(paramObject: IActivityExecuteParams) {
         if (!this.assert || !(this.assert instanceof Activity)) {
             return true;
+        }
+        if (this.assert?.useParentCtx) {
+           this.assert.parent = this;
         }
         const res = await this.assert.run(paramObject);
         return !!res;
@@ -96,7 +105,7 @@ class Activity<
         this.status = EnumActivityStatus.EXECUTING;
         const self = this;
         try {
-            const argObject: IActivityExecuteParams  =
+            const argObject: IActivityExecuteParams =
                 this.getExecuteParamsObject(paramsObject);
             const needRun = await this.runAssert(argObject);
             if (!needRun) {
@@ -133,11 +142,11 @@ class Activity<
     }
 
     getExtraExecuteParams() {
-        return {} ;
+        return {};
     }
 
     buildTask(...args: any[]): IActivityTaskFunction {
-        return () => {} ;
+        return () => { };
     }
 
     build(...args: any[]) {
@@ -173,7 +182,7 @@ class Activity<
         if (options == undefined) {
             return options as OT;
         }
-        const mParamObject: IActivityExecuteParams  =
+        const mParamObject: IActivityExecuteParams =
             this.getExecuteParamsObject(paramObj);
         const extraKeys = this.getReplaceVariableParamKeys(mParamObject);
         return replaceVariable(options, {
