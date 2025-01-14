@@ -21,14 +21,16 @@ export default class DoWhileActivity<C = any, R = any> extends SequenceActivity<
                     let r;
                     let assertR: boolean;
                     do {
-                        // @ts-ignore
-                        r = await superTask.call(this, paramObj);
 
                         // 重复执行，需要调整状态值
                         this.children.forEach(
-                            (c) => (c.status = EnumActivityStatus.BUILDED)
+                            (c) => (c.status = EnumActivityStatus.INITIALIZED)
                         );
-                        this.assert!.status = EnumActivityStatus.BUILDED;
+                        this.assert!.status = EnumActivityStatus.INITIALIZED;
+                        // @ts-ignore
+                        r = await superTask.call(this, paramObj);
+
+
                     } while ((assertR = await this.assert!.run(paramObj)))
                     return resolve(r);
                 } catch (err) {

@@ -21,14 +21,16 @@ export default class WhileActivity<C = any, R = any> extends SequenceActivity<
                     let r;
                     let assertR: boolean;
                     while ((assertR = await this.assert!.run(paramObj))) {
-                        // @ts-ignore
-                        r = await childrenFun.call(this, paramObj);
 
                         // 重复执行，需要调整状态值
                         this.children.forEach(
-                            (c) => (c.status = EnumActivityStatus.BUILDED)
+                            (c) => (c.status = EnumActivityStatus.INITIALIZED)
                         );
-                        this.assert!.status = EnumActivityStatus.BUILDED;
+                        this.assert!.status = EnumActivityStatus.INITIALIZED;
+
+                        // @ts-ignore
+                        r = await childrenFun.call(this, paramObj);
+
                     }
                     return resolve(r);
                 } catch (err) {
