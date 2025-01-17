@@ -7,3 +7,5 @@ export * from "./types";
 
 
 export * from "./ActivityError"
+
+export * from "./util/converter"

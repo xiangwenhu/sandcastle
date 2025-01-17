@@ -1,8 +1,9 @@
 import { $, ActConfigFor, createActivity, IActivityConfig, IActivityExecuteParams, ActivityError } from '../../src';
 
-import converter from '../../src/util/converter';
+import { ObjectJSONConverter} from '../../src/util/converter';
 import Activity from "../../src/activities/Activity"
 
+const converter = new ObjectJSONConverter();
 
 const activityProps: ActConfigFor<"tryCatch"> = {
     type: "tryCatch",
@@ -82,7 +83,7 @@ const activityProps: ActConfigFor<"tryCatch"> = {
         type: "code",
         name: "catch后处理函数",
         options: {
-            code(params){
+            code(params) {
                 console.log("params.$err", params.$err?.message)
             }
         },

@@ -1,13 +1,15 @@
 
 
-function fun(){
-    try{
-        return 1
-    }catch(err){
-        return 2
-    }finally {
-        return  3
-    }
+function commonFun(){
+
 }
 
-console.log(fun());
+
+const obj = {
+    method(){
+
+    },
+    method1: function(){
+
+    }
+}

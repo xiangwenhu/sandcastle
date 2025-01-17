@@ -21,3 +21,6 @@ export function addReadyOnlyProperty(obj: Object, property: string, value: any) 
         },
     });
 }
+
+
+
