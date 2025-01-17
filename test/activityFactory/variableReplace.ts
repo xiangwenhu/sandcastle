@@ -1,4 +1,4 @@
-import { $,createActivity, IActivityConfig } from '../../src';
+import { $, createInstance, IActivityConfig } from '../../src';
 
 import { AxiosRequestConfig } from 'axios';
 
@@ -15,7 +15,7 @@ const activityProps: IActivityConfig = {
         name: "name"
     },
     options: {
-        url: "{{$ctx.url}}", 
+        url: "{{$ctx.url}}",
         data: {
             name: "${$ctx.name}aaaaa",
             arr: ["${$ctx.name}", "{{$ctx.options}}"]
@@ -23,7 +23,8 @@ const activityProps: IActivityConfig = {
     } as AxiosRequestConfig
 }
 
-const activity = createActivity(activityProps);
+const instance = createInstance();
+const activity = instance.createActivity(activityProps);
 
 activity.run().then(res => {
     console.log("res:", res.data);

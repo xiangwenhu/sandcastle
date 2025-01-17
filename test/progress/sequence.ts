@@ -1,4 +1,4 @@
-import { $,createActivity, EnumActivityStatus, IActivityConfig } from '../../src';
+import { $, createInstance, EnumActivityStatus, IActivityConfig } from '../../src';
 
 import progressManger from "../../src/progress"
 
@@ -35,7 +35,9 @@ const activityProps: IActivityConfig = {
     ],
 };
 
-const activity = createActivity(activityProps);
+const instance = createInstance();
+const activity = instance.createActivity(activityProps);
+
 
 activity.messenger?.on("status", function (status: EnumActivityStatus, act: any) {
     // console.log( act.type, act.name, ACTIVITY_STATUS_MAP[status])

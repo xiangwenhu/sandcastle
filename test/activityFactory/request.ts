@@ -1,5 +1,5 @@
 
-import { IActivityConfig, createActivity } from '../../src';
+import { IActivityConfig, createInstance } from '../../src';
 
 const activityProps: IActivityConfig = {
     type: 'request',
@@ -11,8 +11,8 @@ const activityProps: IActivityConfig = {
         url: "{{$gCtx.url}}" // "${ctx.url}"
     }
 }
-
-const activity = createActivity(activityProps, {
+const instance = createInstance();
+const activity = instance.createActivity(activityProps, {
     url: "https://www.jd.com"
 });
 

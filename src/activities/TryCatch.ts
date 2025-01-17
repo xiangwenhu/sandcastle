@@ -40,6 +40,7 @@ export default class TryCatchActivity<
                 const res = await superTask.call(this, paramObj);
                 return res;
             } catch (err: any) {
+
                 // 如果已经终止，不能catch TerminateError
                 if (this.globalBuiltInCtx.terminated) {
                     if (err instanceof TerminateError) {

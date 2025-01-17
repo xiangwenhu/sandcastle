@@ -1,4 +1,4 @@
-import { $,ActConfigFor,createActivity, IActivityConfig, IActivityExecuteParams } from '../../src';
+import { $,ActConfigFor,createInstance, IActivityConfig, IActivityExecuteParams } from '../../src';
 
 const activityProps: ActConfigFor<"tryCatch"> = {
     type: "tryCatch",
@@ -79,7 +79,8 @@ const activityProps: ActConfigFor<"tryCatch"> = {
     },
 };
 
-const activity = createActivity(activityProps);
+const instance = createInstance();
+const activity = instance.createActivity(activityProps);
 
 (async function () {
     const r = await activity.run();

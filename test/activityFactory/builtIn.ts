@@ -1,12 +1,16 @@
-import { addMethod, addConstant, createActivity, IActivityConfig } from "../../src"
+import {IActivityConfig, createInstance } from "../../src"
 
-addMethod("getName",
+
+
+const instance = createInstance();
+
+instance.addMethod("getName",
     function getName() {
         return "name"
     }
 );
 
-addConstant("money", 1000);
+instance.addConstant("money", 1000);
 
 const activityProps: IActivityConfig = {
     type: "sequence",
@@ -20,6 +24,6 @@ const activityProps: IActivityConfig = {
     ]
 };
 
-const activity = createActivity(activityProps);
+const activity = instance.createActivity(activityProps);
 
 activity.run();

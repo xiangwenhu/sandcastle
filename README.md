@@ -246,6 +246,8 @@ const activityProps = ccode({
 });
 ```
 - [x] puppeteer-core 替换  puppeteer 和 使用内置 uuid生成库 (2025-01-07)
+- [ ] 变量添加后，如何智能删除
+- [ ] 考虑一个实例实例化，createActivity创建多个，考虑包装
 - [ ] 演示示例和线上演示
 - [ ] 封装为库
 - [ ] 封装为库：基础版本 + 爬网版本

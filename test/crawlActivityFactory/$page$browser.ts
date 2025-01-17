@@ -1,5 +1,5 @@
 import { PageActivityEE } from '../../src/crawlActivities/Page';
-import { createActivity, $, IActivityExecuteParams, ActConfigFor } from '../../src';
+import { createInstance, $, IActivityExecuteParams, ActConfigFor } from '../../src';
 
 const activityProps: ActConfigFor<"c.browser"> = {
     type: "c.browser",
@@ -37,7 +37,9 @@ const activityProps: ActConfigFor<"c.browser"> = {
 
 
 
-const activity = createActivity(activityProps);
+const instance = createInstance();
+const activity = instance.createActivity(activityProps);
+
 
 activity.run().catch(err => {
     console.log("err", err)

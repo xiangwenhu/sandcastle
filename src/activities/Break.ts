@@ -18,7 +18,7 @@ export default class BreakActivity<C = any> extends Activity<
     buildTask() {
         return (paramObj: IActivityExecuteParams) => {
             const options = this.getReplacedOptions(paramObj);
-            Promise.resolve(options.message);
+            return Promise.resolve(options.message);
         }
     }
 }

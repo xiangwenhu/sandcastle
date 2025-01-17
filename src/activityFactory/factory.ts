@@ -1,4 +1,4 @@
-import { get, has, isFunction, isString } from "lodash";
+import _, { get, has, isFunction, isString } from "lodash";
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 import { ActivityType, IActivityConfig } from "../types/activity";
@@ -67,6 +67,8 @@ export const createActivityHOC =
         activityConfig: IActivityConfig,
         globalContext: Record<PropertyKey, any> = {}
     ) => {
+
+
         Object.defineProperty(globalContext, GLOBAL_BUILTIN_CONTEXT, {
             configurable: false,
             get() {

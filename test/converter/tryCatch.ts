@@ -1,4 +1,4 @@
-import { $, ActConfigFor, createActivity, IActivityConfig, IActivityExecuteParams, ActivityError } from '../../src';
+import { $, ActConfigFor, createInstance, IActivityConfig, IActivityExecuteParams, ActivityError } from '../../src';
 
 import { ObjectJSONConverter} from '../../src/util/converter';
 import Activity from "../../src/activities/Activity"
@@ -99,8 +99,9 @@ const jsonObject = converter.toJSON(activityProps as any);
 const configObject = converter.toObject(jsonObject);
 
 // console.log("configObject:", configObject);
+const instance = createInstance();
 
-const act = createActivity(activityProps);
+const act = instance.createActivity(activityProps);
 
 
 act.run().then(res => console.log("res:", res))

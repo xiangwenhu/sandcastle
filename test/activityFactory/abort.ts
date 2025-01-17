@@ -1,4 +1,4 @@
-import { $, EnumActivityStatus, createActivity , IActivityConfig}  from "../../src"
+import { $, EnumActivityStatus, createInstance , IActivityConfig}  from "../../src"
 
 const activityProps: IActivityConfig = $.sequence({
     name: "如果ctx.count小于5,加加",
@@ -37,7 +37,9 @@ const activityProps: IActivityConfig = $.sequence({
     ],
 });
 
-const activity = createActivity(activityProps);
+
+const instance = createInstance();
+const activity = instance.createActivity(activityProps);
 
 activity.messenger?.on(
     "status",

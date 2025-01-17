@@ -1,4 +1,4 @@
-import { IActivityConfig, createActivity } from '../../src';
+import { IActivityConfig, createInstance } from '../../src';
 import { $ } from '../../src/factory/config';
 
 const activityProps: IActivityConfig =  $.c.browser({
@@ -48,6 +48,8 @@ const activityProps: IActivityConfig =  $.c.browser({
     }]
 });
 
-const activity = createActivity(activityProps);
+const instance = createInstance();
+const activity = instance.createActivity(activityProps);
+
 
 activity.run();
