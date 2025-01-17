@@ -1,5 +1,6 @@
 import { isFunction, isObjectLike, isPlainObject, isString } from 'lodash';
 import { IActivityConfig } from '../types/activity';
+import { isAsyncFunction, isNormalFunction } from './function';
 
 
 /**
@@ -42,12 +43,25 @@ export class ObjectJSONConverter {
     toJSON(config: IActivityConfig) {
         const opt = this.options;
         return JSON.stringify(config, (key: string, value: any) => {
-            if (opt.propertyWhitelist.includes("code") && isFunction(value)) {
-                let funStr = value.toString();
-                if (!funStr.startsWith("function")) {
-                    funStr = `function ${funStr}`
+            if (opt.propertyWhitelist.includes(key)) {
+                let funStr: string = value.toString();
+                // 异步方法
+                if (isAsyncFunction(value)) {
+                    // async method(){} 转为  async function method(){}
+                    if (!funStr.startsWith("async function")) {
+                        funStr = funStr.replace(/^(async)/, "async function")
+                    }
+                    return `${opt.funcPlaceholder},${funStr}`
                 }
-                return `${opt.funcPlaceholder},${funStr}`
+
+                // 普通方法
+                if (isNormalFunction(value)) {
+                    //  method(){} 转为 function method(){}
+                    if (!funStr.startsWith("function")) {
+                        funStr = `function ${funStr}`
+                    }
+                    return `${opt.funcPlaceholder},${funStr}`
+                }
             }
             return value;
         }, "\t")
@@ -63,6 +77,7 @@ export class ObjectJSONConverter {
         return JSON.parse(configStr, (key: string, value: any) => {
             if (opt.propertyWhitelist.includes(key) && isString(value) && value.startsWith(`${opt.funcPlaceholder},`)) {
                 const funStr = value.slice(opt.funcPlaceholder.length + 1);
+                // TODO:: 识别类型，调用各自的构造函数动态构造
                 return eval(`(${funStr})`)
             }
             return value;
@@ -72,4 +87,4 @@ export class ObjectJSONConverter {
 }
 
 
-export default new ObjectJSONConverter()
+// export default new ObjectJSONConverter()

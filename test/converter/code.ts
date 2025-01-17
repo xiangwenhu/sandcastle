@@ -1,6 +1,9 @@
-import converter from '../../src/util/converter';
+import {ObjectJSONConverter } from '../../src/util/converter';
 import { $, createActivity, IActivityConfig } from '../../src';
 import Activity from "../../src/activities/Activity"
+
+
+const converter = new ObjectJSONConverter();
 
 const config: IActivityConfig = $.code({
     type: "code",
