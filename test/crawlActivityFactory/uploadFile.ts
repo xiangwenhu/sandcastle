@@ -48,8 +48,8 @@ const activityProps: IActivityConfig =  $.c.browser({
     }]
 });
 
-const instance = createInstance();
-const activity = instance.createActivity(activityProps);
+const activity = createInstance(activityProps);
+activity.run();
 
 
 activity.run();

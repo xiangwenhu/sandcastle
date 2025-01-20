@@ -64,7 +64,5 @@ const activityProps = ccode({
     },
 });
 
-const instance = createInstance();
-const activity = instance.createActivity(activityProps);
-
+const activity = createInstance(activityProps);
 activity.run();

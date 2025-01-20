@@ -1,11 +1,11 @@
-import { $, EnumActivityStatus, createInstance , IActivityConfig}  from "../../src"
+import { $, createInstance, EnumActivityStatus, IActivityConfig } from "../../src";
 
 const activityProps: IActivityConfig = $.sequence({
     name: "如果ctx.count小于5,加加",
     context: {
         count: 1,
     },
-    assert:  $.code({
+    assert: $.code({
         useParentCtx: true,
         name: "sequence assert",
         options: { code: "return $ctx.count < 5" },
@@ -18,7 +18,7 @@ const activityProps: IActivityConfig = $.sequence({
         }),
         $.delay({
             name: "睡1500ms",
-            options: { timeout: 1500 , },
+            options: { timeout: 1500, },
         }),
         $.code({
             useParentCtx: true,
@@ -38,15 +38,14 @@ const activityProps: IActivityConfig = $.sequence({
 });
 
 
-const instance = createInstance();
-const activity = instance.createActivity(activityProps);
+const activity = createInstance(activityProps);
 
 activity.messenger?.on(
     "status",
     function (status: EnumActivityStatus, act: any) {
         // console.log( act.type, act.name, ACTIVITY_STATUS_MAP[status])
         // const progress = getProgress(activity);
-// 
+        // 
         // console.log(progress);
     }
 );

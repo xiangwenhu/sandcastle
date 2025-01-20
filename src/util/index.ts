@@ -16,6 +16,7 @@ export function extractOwnOtherKeys(obj: Record<PropertyKey, any>, keys: Propert
 export function addReadyOnlyProperty(obj: Object, property: string, value: any) {
     Object.defineProperty(obj, property, {
         configurable: false,
+        enumerable: true,
         get() {
             return value;
         },

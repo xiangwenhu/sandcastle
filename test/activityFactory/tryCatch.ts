@@ -79,10 +79,11 @@ const activityProps: ActConfigFor<"tryCatch"> = {
     },
 };
 
-const instance = createInstance();
-const activity = instance.createActivity(activityProps);
+const activity = createInstance(activityProps);
+activity.run();
 
 (async function () {
     const r = await activity.run();
     console.log("r:", r);
 })();
+

@@ -23,11 +23,12 @@ const activityProps: IActivityConfig = {
 };
 
 
-const instance = createInstance();
-const activity = instance.createActivity(activityProps, {
-    data: {
-        name: "name",
-        age: 18,
-    },
+const activity = createInstance(activityProps, {
+    globalContext: {
+        data: {
+            name: "name",
+            age: 18,
+        },
+    }
 });
 activity.run();

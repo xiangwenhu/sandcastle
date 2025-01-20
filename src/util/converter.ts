@@ -9,7 +9,14 @@ import { isAsyncFunction, isNormalFunction } from './function';
  */
 
 const $$FuncPlaceholder = "__$$__function__$$__";
-const PropertyWhitelist = ["code"];
+const PropertyWhitelist = [
+    "code",
+    // waitForResponse
+    "urlOrPredicate",
+    "predicate",
+    // page.$ , page.$$
+    "pageFunction"
+];
 
 
 interface Options {

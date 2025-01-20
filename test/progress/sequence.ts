@@ -35,13 +35,13 @@ const activityProps: IActivityConfig = {
     ],
 };
 
-const instance = createInstance();
-const activity = instance.createActivity(activityProps);
+const activity = createInstance(activityProps);
+activity.run();
 
 
 activity.messenger?.on("status", function (status: EnumActivityStatus, act: any) {
     // console.log( act.type, act.name, ACTIVITY_STATUS_MAP[status])
-    const progress = progressManger.getProgress(activity);
+    const progress = progressManger.getProgress(activity.activity!);
 
     console.log(progress)
 });

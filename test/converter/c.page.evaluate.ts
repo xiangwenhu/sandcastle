@@ -74,7 +74,6 @@ const configObject = converter.toObject(jsonObject);
 console.log("configObject:", configObject);
 
 
-const instance = createInstance();
-const act = instance.createActivity(configObject);
+const instance = createInstance(configObject);
 
-act.run().then(res => console.log("res:", res))
+instance.run().then(res => console.log("res:", res))

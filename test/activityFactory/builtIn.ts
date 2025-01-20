@@ -1,16 +1,4 @@
-import {IActivityConfig, createInstance } from "../../src"
-
-
-
-const instance = createInstance();
-
-instance.addMethod("getName",
-    function getName() {
-        return "name"
-    }
-);
-
-instance.addConstant("money", 1000);
+import { IActivityConfig, createInstance } from "../../src"
 
 const activityProps: IActivityConfig = {
     type: "sequence",
@@ -24,6 +12,19 @@ const activityProps: IActivityConfig = {
     ]
 };
 
-const activity = instance.createActivity(activityProps);
+const instance = createInstance(activityProps);
 
-activity.run();
+instance.addMethods({
+    "getName":
+        function getName() {
+            return "name"
+        }
+});
+
+instance.addConstants({ "money": 1000 });
+
+// 多次运行
+instance.run().then(() => {
+    instance.run();
+});
+
