@@ -1,4 +1,4 @@
-import { $,createActivity, IActivityConfig } from '../../src';
+import { $,createInstance, IActivityConfig } from '../../src';
 
 
 const activityProps: IActivityConfig = {
@@ -47,6 +47,5 @@ const activityProps: IActivityConfig = {
     }]
 }
 
-const activity = createActivity(activityProps);
-
+const activity = createInstance(activityProps);
 activity.run();

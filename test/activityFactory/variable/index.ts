@@ -1,4 +1,4 @@
-import { IActivityConfig, createActivity , $} from "../../../src";
+import { IActivityConfig, createInstance, $ } from "../../../src";
 
 
 
@@ -27,9 +27,10 @@ const activityProps: IActivityConfig = $.sequence({
     ],
 });
 
-const activity = createActivity(activityProps);
 
-activity
+const instance = createInstance(activityProps);
+
+instance
     .run()
     .then((res) => {
         console.log("res:", res);

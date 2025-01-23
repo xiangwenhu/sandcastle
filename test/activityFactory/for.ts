@@ -1,4 +1,4 @@
-import { $, IActivityConfig, createActivity } from '../../src';
+import { $, IActivityConfig, createInstance } from '../../src';
 
 
 const activityProps: IActivityConfig = $.for_({
@@ -27,6 +27,5 @@ const activityProps: IActivityConfig = $.for_({
     })]
 })
 
-const activity = createActivity(activityProps);
-
+const activity = createInstance(activityProps);
 activity.run();

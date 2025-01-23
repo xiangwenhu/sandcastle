@@ -2,7 +2,7 @@ import { Mode, ObjectEncodingOptions, OpenMode } from "fs";
 import fsp from "fs/promises";
 import { isPlainObject } from "lodash";
 import { IActivityExecuteParams } from "../../types/activity";
-import { ensureDir } from "../../util/fs";
+import { ensureDir, isSubPath, isSubSafePath } from "../../util/fs";
 import Activity from "../Activity";
 import { registerActivity } from "../../activityFactory/factory";
 
@@ -10,12 +10,12 @@ export interface WriteFileActivityOptions {
     dist: string;
     content: any;
     options?:
-        | (ObjectEncodingOptions & {
-              mode?: Mode | undefined;
-              flag?: OpenMode | undefined;
-          })
-        | BufferEncoding
-        | null;
+    | (ObjectEncodingOptions & {
+        mode?: Mode | undefined;
+        flag?: OpenMode | undefined;
+    })
+    | BufferEncoding
+    | null;
 }
 
 @registerActivity("fs.writeFile")
@@ -26,7 +26,11 @@ export default class WriteFileActivity<C = any> extends Activity<
 > {
     buildTask() {
         return async (paramObj: IActivityExecuteParams) => {
-            const { dist, content, options } = this.getReplacedOptions(paramObj)
+            const { dist, content, options } = this.getReplacedOptions(paramObj);
+
+            const isSafePath = isSubSafePath(dist);
+            if (!isSafePath) throw new Error(`不安全的目录:${dist}`);
+
             const data = isPlainObject(content)
                 ? JSON.stringify(content, undefined, "\t")
                 : content;

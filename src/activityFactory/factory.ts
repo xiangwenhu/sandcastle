@@ -1,4 +1,4 @@
-import { get, has, isFunction, isString } from "lodash";
+import _, { get, has, isFunction, isString } from "lodash";
 import Activity from "../activities/Activity";
 import ContainerActivity from "../activities/ContainerActivity";
 import { ActivityType, IActivityConfig } from "../types/activity";
@@ -12,6 +12,8 @@ import {
 } from "./factory.type";
 import GlobalBuiltinContext from "../globalBuiltinContext";
 import { GLOBAL_BUILTIN_CONTEXT } from "../const";
+import { ICreateInstanceOptions } from "../types";
+import Messenger from "../messenger";
 
 const configMap = new Map<string, IFactoryConfigValue>();
 
@@ -61,25 +63,31 @@ export function createChildren(
     return props.map((p) => createSingle(p, globalContext));
 }
 
-export const createActivityHOC =
-    (globalBuiltinContext: GlobalBuiltinContext) =>
-    <C, R, O>(
-        activityConfig: IActivityConfig,
-        globalContext: Record<PropertyKey, any> = {}
-    ) => {
+export function createActivity<C = any, R = any, O = any>(options: ICreateInstanceOptions & {
+    config: IActivityConfig,
+    globalContext?: any,
+}) {
+    const gBCtx = new GlobalBuiltinContext();
+    gBCtx.logger = options.logger || console;
+    gBCtx.messenger = options.messenger || new Messenger();
+
+    const globalContext =  { ...(options.globalContext || {})};
+
+    if (!Object.prototype.hasOwnProperty.call(globalContext, GLOBAL_BUILTIN_CONTEXT)) {
         Object.defineProperty(globalContext, GLOBAL_BUILTIN_CONTEXT, {
             configurable: false,
             get() {
-                return globalBuiltinContext;
+                return gBCtx;
             },
         });
+    }
 
-        const activity = create(
-            activityConfig,
-            globalContext
-        ) as any as Activity<C, R, O>;
-        return activity;
-    };
+    const activity = create(
+        options.config,
+        globalContext
+    ) as any as Activity<C, R, O>;
+    return activity;
+}
 
 
 const BUILTIN_PARAMS: PropertyConfigItem[] = [
@@ -204,16 +212,16 @@ function createMaybeCodeActivity({
 }) {
     return isString(actConfig)
         ? createSingle(
-              {
-                  type: "code",
-                  options: {
-                      code: addReturn ? `return ${actConfig}` : actConfig,
-                  },
-                  name: `${name}`,
-                  useParentCtx: true,
-              },
-              globalContext
-          )
+            {
+                type: "code",
+                options: {
+                    code: addReturn ? `return ${actConfig}` : actConfig,
+                },
+                name: `${name}`,
+                useParentCtx: true,
+            },
+            globalContext
+        )
         : createSingle(actConfig, globalContext);
 }
 
@@ -305,8 +313,7 @@ function createSingle<A extends Activity>(
 
 export const factory = {
     create,
-    createChildren,
-    createActivityHOC
+    createChildren
 };
 
 export function use(

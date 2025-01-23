@@ -15,4 +15,8 @@ export default class Messenger {
     emit(eventName: ActEventName, ...args: any[]) {
         return this.#emitter.emit(eventName, ...args);
     }
+
+    removeAllListeners(name: string | symbol | undefined) {
+        this.#emitter.removeAllListeners(name)
+    }
 }

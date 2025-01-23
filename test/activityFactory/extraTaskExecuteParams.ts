@@ -4,7 +4,7 @@ import {
     EnumActivityStatus,
     IActivityExecuteParams,
     IActivityTaskFunction,
-    createActivity,
+    createInstance,
     createOneParamAsyncFunction,
     register
 } from "../../src";
@@ -103,6 +103,5 @@ const activityProps = ccode({
     },
 });
 
-const activity = createActivity(activityProps);
-
+const activity = createInstance(activityProps);
 activity.run();

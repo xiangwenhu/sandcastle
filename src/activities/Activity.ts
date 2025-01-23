@@ -109,6 +109,8 @@ class Activity<
                 this.getExecuteParamsObject(paramsObject);
             const needRun = await this.runAssert(argObject);
             if (!needRun) {
+                // TODO:: 新增状态？
+                this.status = EnumActivityStatus.EXECUTED;
                 return paramsObject.$preRes;
             }
 

@@ -1,4 +1,4 @@
-import { $, createActivity, IActivityConfig } from '../../src';
+import { $, createInstance, IActivityConfig } from '../../src';
 
 const activityProps: IActivityConfig = $.c.browser({
     name: "创建浏览器",
@@ -65,6 +65,8 @@ const activityProps: IActivityConfig = $.c.browser({
     }]
 });
 
-const activity = createActivity(activityProps);
+const activity = createInstance(activityProps);
+activity.run();
+
 
 activity.run();

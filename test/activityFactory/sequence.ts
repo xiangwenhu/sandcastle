@@ -1,4 +1,4 @@
-import { $,createActivity, EnumActivityStatus, IActivityConfig } from '../../src';
+import { $, createInstance, EnumActivityStatus, IActivityConfig } from '../../src';
 
 const activityProps: IActivityConfig = {
     type: "sequence",
@@ -33,7 +33,5 @@ const activityProps: IActivityConfig = {
     ],
 };
 
-const activity = createActivity(activityProps);
-
-
+const activity = createInstance(activityProps);
 activity.run();

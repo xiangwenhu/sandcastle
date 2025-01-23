@@ -1,5 +1,5 @@
 import { ObjectJSONConverter } from '../../src/util/converter';
-import { $, createActivity, IActivityConfig } from '../../src';
+import { $, createInstance, IActivityConfig } from '../../src';
 import Activity from "../../src/activities/Activity"
 
 
@@ -73,7 +73,7 @@ const configObject = converter.toObject(jsonObject);
 
 console.log("configObject:", configObject);
 
-const act = createActivity(configObject);
 
+const instance = createInstance(configObject);
 
-act.run().then(res => console.log("res:", res))
+instance.run().then(res => console.log("res:", res))

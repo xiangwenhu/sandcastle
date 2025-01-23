@@ -70,7 +70,7 @@ class GlobalBuiltinContext {
     };
 
     removeVariable = (name: string) => {
-        delete this.#$v[name];
+        delete this.#$v[name]
     };
 
     addMethod = (name: string, value: Function) => {
@@ -96,6 +96,30 @@ class GlobalBuiltinContext {
     removeActivityReference = (name: string) => {
         delete this.#$a[name];
     };
+
+    clearConstants = () => {
+        this.#$c = {}
+    }
+
+    clearMethods = () => {
+        this.#$m = {}
+    }
+
+    clearVariable = () => {
+        this.#$v = {};
+    }
+
+    clearActivityReference = () => {
+        this.#$a = {}
+    }
+
+    clear = () => {
+        this.clearConstants();
+        this.clearVariable();
+        this.clearMethods();
+        this.clearActivityReference()
+    }
 }
+
 
 export default GlobalBuiltinContext;

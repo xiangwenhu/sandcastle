@@ -1,5 +1,5 @@
 import { HTTPResponse } from "puppeteer-core";
-import { IActivityConfig, createActivity } from "../../src";
+import { IActivityConfig, createInstance } from "../../src";
 
 const activityProps: IActivityConfig = {
     type: "c.browser",
@@ -74,7 +74,9 @@ const activityProps: IActivityConfig = {
     ],
 };
 
-const activity = createActivity(activityProps);
+const activity = createInstance(activityProps);
+activity.run();
+
 
 activity.run().then((res) => {
     console.log("act res:", res);

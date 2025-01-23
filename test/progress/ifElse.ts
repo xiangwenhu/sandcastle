@@ -1,5 +1,5 @@
 
-import { $, createActivity, EnumActivityStatus, IActivityConfig } from '../../src';
+import { $, createInstance, EnumActivityStatus, IActivityConfig } from '../../src';
 import progressManger from "../../src/progress"
 
 const activityProps = $.ifElse({
@@ -115,11 +115,12 @@ const activityProps = $.ifElse({
 })
 
 
-const activity = createActivity(activityProps);
+const activity = createInstance(activityProps);
+
 
 activity.messenger?.on("status", function (status: EnumActivityStatus, act: any) {
     // console.log( act.type, act.name, ACTIVITY_STATUS_MAP[status])
-    const progress = progressManger.getProgress(activity);
+    const progress = progressManger.getProgress(activity.activity!);
 
     // console.log(progress)
 });

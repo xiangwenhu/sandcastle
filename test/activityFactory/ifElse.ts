@@ -1,5 +1,5 @@
 
-import { $, createActivity, IActivityConfig } from '../../src';
+import { $, createInstance, IActivityConfig } from '../../src';
 
 const activityProps = $.ifElse({
     name: 'if else 测试',
@@ -114,6 +114,5 @@ const activityProps = $.ifElse({
 })
 
 
-const activity = createActivity(activityProps);
-
+const activity = createInstance(activityProps);
 activity.run();

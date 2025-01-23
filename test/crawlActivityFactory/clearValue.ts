@@ -1,4 +1,4 @@
-import { IActivityConfig, createActivity} from '../../src';
+import { IActivityConfig, createInstance} from '../../src';
 
 const activityProps: IActivityConfig = {
     type: "c.browser",
@@ -64,6 +64,8 @@ const activityProps: IActivityConfig = {
     }]
 };
 
-const activity = createActivity(activityProps);
+const activity = createInstance(activityProps);
+activity.run();
+
 
 activity.run();

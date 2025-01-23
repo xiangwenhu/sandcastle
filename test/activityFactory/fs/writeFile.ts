@@ -1,4 +1,4 @@
-import { IActivityConfig, createActivity } from "../../../src";
+import { IActivityConfig, createInstance } from "../../../src";
 
 
 const activityProps: IActivityConfig = {
@@ -22,10 +22,13 @@ const activityProps: IActivityConfig = {
     ],
 };
 
-const activity = createActivity(activityProps, {
-    data: {
-        name: "name",
-        age: 18,
-    },
+
+const activity = createInstance(activityProps, {
+    globalContext: {
+        data: {
+            name: "name",
+            age: 18,
+        },
+    }
 });
 activity.run();

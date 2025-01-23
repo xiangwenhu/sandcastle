@@ -1,7 +1,7 @@
-import { $,createActivity, IActivityConfig } from '../../src';
+import { $, createInstance, IActivityConfig } from '../../src';
 
 
-const activityProps =  $.parallelFor({
+const activityProps = $.parallelFor({
     name: 'parallelFor',
     context: {
         name: "cname"
@@ -22,6 +22,5 @@ const activityProps =  $.parallelFor({
     })]
 })
 
-const activity = createActivity(activityProps);
-
+const activity = createInstance(activityProps);
 activity.run();

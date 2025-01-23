@@ -5,7 +5,7 @@ import {
     $, 
     IActivityExecuteParams,
     IActivityTaskFunction,
-    createActivity,
+    createInstance,
     register
 } from "../../src";
 
@@ -64,6 +64,5 @@ const activityProps = ccode({
     },
 });
 
-const activity = createActivity(activityProps);
-
+const activity = createInstance(activityProps);
 activity.run();
