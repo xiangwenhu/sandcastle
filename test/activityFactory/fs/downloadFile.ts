@@ -8,7 +8,7 @@ const activityProps: IActivityConfig = {
             name: "读取文件",
             options: {
                 url: "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png",
-                dist: `D:\\data\\tmp2\\cc\\dd\\bd.png`,
+                dist: `d:\\projects\\github-my\\sandcastle\\dist\\bd.png`,
             },
         }),
         $.code({
